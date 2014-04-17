@@ -27,6 +27,25 @@ so it is ready for running the Storm topology in the
 You should perform the following on the production server that you are going
 to run [storm-alerts](https://github.com/viki-org/storm-alerts) on.
 
+### On Storm's Logging Configuration
+
+Storm 0.9.x makes use of [slf4j](http://www.slf4j.org/) as the abstract logger
+and [logback](http://logback.qos.ch/) as the concrete logger.
+
+**NOTE:** Whether storm-docker uses the `storm/cluster.xml` file as the actual
+logging configuration file is just a guess, but one I'm relatively confident of
+being correct.
+
+When you build the Docker images (steps are detailed below), the
+`storm/cluster.xml` configuration file will be used as the `cluster.xml` file
+for Storm. This happens to be the configuration file for logback, so you may
+want to review it and change the logging configuration settings.
+
+Additional documentation on logback can be found here:
+
+- [http://logback.qos.ch/manual/index.html](http://logback.qos.ch/manual/index.html)
+- [http://logback.qos.ch/documentation.html](http://logback.qos.ch/documentation.html)
+
 ### Install Docker
 
 For Ubuntu Precise 12.04 (LTS), ensure that your Linux Kernel is a relatively
