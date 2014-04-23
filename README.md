@@ -73,6 +73,10 @@ You should see something like this:
 			Kernel Version: 3.11.0-19-generic
 			WARNING: No swap limit support
 
+**NOTE:** This step changing the Storage Driver to `btrfs` from `aufs` is not
+strictly necessary. In fact, for our athena storm-alerts setup (which runs
+fine), `aufs` is the Storage Driver.
+
 If the value for `Storage Driver` is `aufs` we need to change it to btrfs.
 Edit the `/etc/default/docker` file and edit the `DOCKER_OPTS` line like so:
 
