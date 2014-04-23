@@ -138,3 +138,24 @@ script:
 Do not be alarmed by the `docker rm` commands in the script. Rebuilding the
 Docker images after a `docker rm` is faster than running the `rebuild.sh`
 script for the first time as results are being cached.
+
+## FAQ - Debugging stuff to do with Docker images
+
+**NOTE:** This section is written from my memory (which tends to be vague) so it
+may not be as accurate as the sections above. In fact, you should correct the
+information here should you discover any mistakes.
+
+#### Qn: storm-alerts has been running for some time but for some reason it went down. I do not see the storm-docker images when I run `docker ps` . What's wrong?
+
+**Answer:** Most likely your Docker images were killed using `docker kill` or
+removed using `docker rm`. Do a `docker ps -a` and check if the images are
+around. If the images are around, then they were most likely killed by
+`docker kill`. Otherwise, they were removed using `docker rm`.
+
+In any case, the simplest solution is to execute the `destroy-storm.sh` script
+in this repository, followed by the `rebuild.sh` script then the
+`start-storm.sh` script (this might not work).
+
+If the above fails, use `docker rm` to remove the images, run the `rebuild.sh`
+followed by the `start-storm.sh` scripts. The rebuild process should be pretty
+fast because the docker images are cached.
