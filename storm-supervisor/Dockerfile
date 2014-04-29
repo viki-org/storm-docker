@@ -1,5 +1,5 @@
-FROM wurstmeister/storm
-MAINTAINER Wurstmeister
+FROM viki_data/base-storm-image
+MAINTAINER viki-data data@viki.com
 
 EXPOSE 6700
 EXPOSE 6701
@@ -11,7 +11,3 @@ EXPOSE 22
 RUN /usr/bin/config-supervisord.sh supervisor
 RUN /usr/bin/config-supervisord.sh logviewer
 CMD /usr/bin/start-supervisor.sh
-
-
-
-

@@ -10,6 +10,11 @@ At Viki, we use this repository for setting up the
 In fact, our Storm `alerts` topology runs within the docker images built from
 this repository.
 
+## System Requirements
+
+- **GNU** Make >= 3.8.2 (Required for .RECIPEPREFIX)
+- Docker
+
 ## Setup for running storm-alerts within storm-docker
 
 This section details the steps needed to setup the `storm-docker` repository
@@ -98,9 +103,9 @@ At `$HOME/workspace`:
 
 ### Building the Docker images
 
-Run the `rebuild.sh` script:
+Run the **GNU** `make` command. The default goal builds the docker images:
 
-    ./rebuild.sh
+    make
 
 If this is the first time the Docker images are being built, this script will
 take some time to complete.

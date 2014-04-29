@@ -1,5 +1,5 @@
-FROM wurstmeister/storm
-MAINTAINER Wurstmeister
+FROM viki_data/base-storm-image
+MAINTAINER viki-data data@viki.com
 
 RUN /usr/bin/config-supervisord.sh nimbus 
 RUN /usr/bin/config-supervisord.sh drpc
