@@ -3,15 +3,15 @@
 .RECIPEPREFIX = >
 
 # Default build target
-all: build-storm-docker-images
+all: build-storm-docker-containers
 
-.PHONY: build-storm-docker-images build-base-storm-docker-image
+.PHONY: build-storm-docker-containers build-base-storm-docker-container
 
-build-storm-docker-images: build-base-storm-docker-image
+build-storm-docker-containers: build-base-storm-docker-container
 > docker build -t="viki_data/storm" storm
 > docker build -t="viki_data/storm-nimbus" storm-nimbus
 > docker build -t="viki_data/storm-supervisor" storm-supervisor
 > docker build -t="viki_data/storm-ui" storm-ui
 
-build-base-storm-docker-image:
-> docker build -t="viki_data/base-storm-image" base-storm-image
+build-base-storm-docker-container:
+> docker build -t="viki_data/base-storm" base-storm

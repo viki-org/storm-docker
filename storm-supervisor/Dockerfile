@@ -1,4 +1,4 @@
-FROM viki_data/base-storm-image
+FROM viki_data/base-storm
 MAINTAINER viki-data data@viki.com
 
 EXPOSE 6700

@@ -7,8 +7,8 @@ and contains some edits that are specific to the
 
 At Viki, we use this repository for setting up the
 [storm-alerts](https://github.com/viki-org/storm-alerts) repository.
-In fact, our Storm `alerts` topology runs within the docker images built from
-this repository.
+In fact, our Storm `alerts` topology runs within the docker containers built
+from this repository.
 
 ## System Requirements
 
@@ -33,7 +33,7 @@ and [logback](http://logback.qos.ch/) as the concrete logger.
 logging configuration file is just a guess, but one I'm relatively confident of
 being correct.
 
-When you build the Docker images (steps are detailed below), the
+When you build the Docker containers (steps are detailed below), the
 `storm/cluster.xml` configuration file will be used as the `cluster.xml` file
 for Storm. This happens to be the configuration file for logback, so you may
 want to review it and change the logging configuration settings.
@@ -101,16 +101,16 @@ At `$HOME/workspace`:
 
     git clone git@github.com:viki-org/storm-docker.git
 
-### Building the Docker images
+### Building the Docker containers
 
-Run the **GNU** `make` command. The default goal builds the docker images:
+Run the **GNU** `make` command. The default goal builds the docker containers:
 
     make
 
-If this is the first time the Docker images are being built, this script will
+If this is the first time the Docker containers are being built, this script will
 take some time to complete.
 
-### Run the Docker images
+### Run the Docker containers
 
 using the `start-storm.sh` script:
 
@@ -122,10 +122,10 @@ instructions [here](https://github.com/viki-org/storm-alerts) for setting up the
 storm-alerts repository if you intend to deploy the storm-alerts topology to the
 server you just did the above setup on.
 
-## To stop the Docker images
+## To stop the Docker containers
 
 Take a look inside the `destroy-storm.sh` script if you only need to stop
-specific Docker images. This can probably be done using `docker kill`.
+specific Docker containers. This can probably be done using `docker kill`.
 
 If you wish to stop everything (or if you're lazy), run the `destroy-storm.sh`
 script:
@@ -133,26 +133,26 @@ script:
     ./destroy-storm.sh
 
 Do not be alarmed by the `docker rm` commands in the script. Rebuilding the
-Docker images after a `docker rm` is faster than running the `rebuild.sh`
+Docker containers after a `docker rm` is faster than running the `rebuild.sh`
 script for the first time as results are being cached.
 
-## FAQ - Debugging stuff to do with Docker images
+## FAQ - Debugging stuff to do with Docker containers
 
 **NOTE:** This section is written from my memory (which tends to be vague) so it
 may not be as accurate as the sections above. In fact, you should correct the
 information here should you discover any mistakes.
 
-#### Qn: storm-alerts has been running for some time but for some reason it went down. I do not see the storm-docker images when I run `docker ps` . What's wrong?
+#### Qn: storm-alerts has been running for some time but for some reason it went down. I do not see the storm-docker containers when I run `docker ps` . What's wrong?
 
-**Answer:** Most likely your Docker images were killed using `docker kill`
+**Answer:** Most likely your Docker containers were killed using `docker kill`
 (and perhaps followed by `docker rm`). Do a `docker ps -a` and check if the
-images are around. If the images are around, then they were most likely killed
-by `docker kill`. Otherwise, they were removed using `docker rm`.
+containers are around. If the containers are around, then they were most likely
+killed by `docker kill`. Otherwise, they were removed using `docker rm`.
 
 In any case, the simplest solution is to execute the `destroy-storm.sh` script
-in this repository, followed by the `make` command to rebuild the images, then
-the `start-storm.sh` script (this might not work).
+in this repository, followed by the `make` command to rebuild the containers,
+then the `start-storm.sh` script (this might not work).
 
-If the above fails, use `docker rm` to remove the images, run the `make` command
-followed by the `start-storm.sh` scripts. The rebuild process should be pretty
-fast because the docker images are cached.
+If the above fails, use `docker rm` to remove the containers, run the `make`
+command followed by the `start-storm.sh` scripts. The rebuild process should be
+pretty fast because the docker containers are cached.
