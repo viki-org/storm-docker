@@ -10,14 +10,6 @@ At Viki, we use this repository for setting up the
 In fact, our Storm `alerts` topology runs within the docker images built from
 this repository.
 
-## Original introductory text (from [storm-docker](https://github.com/wurstmeister/storm-docker))
-
-Dockerfiles for building a storm cluster.
-Inspired by [https://github.com/ptgoetz/storm-vagrant](https://github.com/ptgoetz/storm-vagrant)
-
-The images are available directly from
-[https://index.docker.io](https://index.docker.io)
-
 ## Setup for running storm-alerts within storm-docker
 
 This section details the steps needed to setup the `storm-docker` repository
