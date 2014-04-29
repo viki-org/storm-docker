@@ -8,7 +8,6 @@ all: build-storm-docker-containers
 .PHONY: build-storm-docker-containers build-base-storm-docker-container
 
 build-storm-docker-containers: build-base-storm-docker-container
-> docker build -t="viki_data/storm" storm
 > docker build -t="viki_data/storm-nimbus" storm-nimbus
 > docker build -t="viki_data/storm-supervisor" storm-supervisor
 > docker build -t="viki_data/storm-ui" storm-ui
