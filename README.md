@@ -43,6 +43,13 @@ Additional documentation on logback can be found here:
 - [http://logback.qos.ch/manual/index.html](http://logback.qos.ch/manual/index.html)
 - [http://logback.qos.ch/documentation.html](http://logback.qos.ch/documentation.html)
 
+### Install lxc
+
+This is required if you wish to gain shell access to running Docker containers,
+as outlined in [this Stackoverflow answer](http://stackoverflow.com/questions/20932357/docker-enter-running-container-with-new-tty).
+
+    sudo apt-get install lxc
+
 ### Install Docker
 
 For Ubuntu Precise 12.04 (LTS), ensure that your Linux Kernel is a relatively
@@ -77,9 +84,14 @@ fine), `aufs` is the Storage Driver.
 If the value for `Storage Driver` is `aufs` we need to change it to btrfs.
 Edit the `/etc/default/docker` file and edit the `DOCKER_OPTS` line like so:
 
-		DOCKER_OPTS="-s btrfs"
+		DOCKER_OPTS="-s btrfs -e lxc"
 
-This tells docker to use btrfs as the filesystem. Restart Docker:
+The `-s btrfs` flag tells Docker to use btrfs as the filesystem.
+The `-e lxc` flag tells Docker to use lxc as the execution driver (this allows
+us to gain shell access to running Docker containers, as outlined in
+[this Stackoverflow answer](http://stackoverflow.com/questions/20932357/docker-enter-running-container-with-new-tty)).
+
+For these changes to take effect, restart the Docker server:
 
 		service docker restart
 
