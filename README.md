@@ -146,7 +146,8 @@ server you just did the above setup on.
 ## To stop the Docker containers
 
 Take a look inside the `destroy-storm.sh` script if you only need to stop
-specific Docker containers. This can probably be done using `docker kill`.
+specific Docker containers. This can probably be done using `docker stop` (or
+`docker kill`).
 
 If you wish to stop everything (or if you're lazy), run the `destroy-storm.sh`
 script:
@@ -165,10 +166,12 @@ information here should you discover any mistakes.
 
 #### Qn: storm-alerts has been running for some time but for some reason it went down. I do not see the storm-docker containers when I run `docker ps` . What's wrong?
 
-**Answer:** Most likely your Docker containers were killed using `docker kill`
-(and perhaps followed by `docker rm`). Do a `docker ps -a` and check if the
-containers are around. If the containers are around, then they were most likely
-killed by `docker kill`. Otherwise, they were removed using `docker rm`.
+**Answer:** Most likely your Docker containers were killed using `docker stop`
+or `docker kill` (and perhaps followed by `docker rm`).
+Do a `docker ps -a` and check if the containers are around. If the containers
+are around, then they were most likely killed by `docker stop` or `docker kill`.
+If you do not see the containers from the output of `docker ps -a`, most
+probably they were removed using `docker rm`.
 
 In any case, the simplest solution is to execute the `destroy-storm.sh` script
 in this repository, followed by the `make` command to rebuild the Docker images,
