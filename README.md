@@ -176,7 +176,3 @@ probably they were removed using `docker rm`.
 In any case, the simplest solution is to execute the `destroy-storm.sh` script
 in this repository, followed by the `make` command to rebuild the Docker images,
 then the `start-storm.sh` script (this might not work).
-
-If the above fails, use `docker rm` to remove the images, run the `make`
-command followed by the `start-storm.sh` scripts. The rebuild process should be
-pretty fast because the Docker images are cached.
