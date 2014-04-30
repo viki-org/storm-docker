@@ -88,7 +88,7 @@ Edit the `/etc/default/docker` file and edit the `DOCKER_OPTS` line like so:
 
     DOCKER_OPTS="-s btrfs -e lxc"
 
-The `-s btrfs` flag tells Docker to use btrfs as the filesystem.
+The `-s btrfs` flag tells Docker to use btrfs as the storage driver.
 The `-e lxc` flag tells Docker to use lxc as the execution driver (this allows
 us to gain shell access to running Docker containers, as outlined in
 [this Stackoverflow answer](http://stackoverflow.com/questions/20932357/docker-enter-running-container-with-new-tty)).
