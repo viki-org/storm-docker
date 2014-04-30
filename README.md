@@ -183,5 +183,5 @@ If that fails, seek help from someone, preferrably in the following order:
 - someone who is experienced in Docker
 
 Alternatively, you could go learn Docker yourself and figure things out.
-The [official Docker documentation](http://docs.docker.io/) is awesome and it'll
-take only one or two afternoons' worth of time to read them.
+The [official Docker documentation](http://docs.docker.io/) is **awesome** and
+it'll take only one or two afternoons' worth of time to read them.
