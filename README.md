@@ -120,15 +120,15 @@ go there:
 
     cd storm-docker
 
-### Building the Docker containers
+### Building the Docker images
 
 Run the **GNU** `make` command (**NOTE:** Ensure that your version of GNU Make
 is at least **3.8.2**, because we are using the `.RECIPEPREFIX` feature
-available since that version). The default goal builds the docker containers:
+available since that version). The default goal builds the Docker images:
 
     make
 
-If this is the first time the Docker containers are being built, this script will
+If this is the first time the Docker images are being built, this script will
 take some time to complete.
 
 ### Run the Docker containers
@@ -154,8 +154,8 @@ script:
     ./destroy-storm.sh
 
 Do not be alarmed by the `docker rm` commands in the script. Rebuilding the
-Docker containers after a `docker rm` is faster than running the `rebuild.sh`
-script for the first time as results are being cached.
+Docker images after a `docker rm` is faster than running the `rebuild.sh` script
+for the first time as results are being cached.
 
 ## FAQ - Debugging stuff to do with Docker containers
 
@@ -171,9 +171,9 @@ containers are around. If the containers are around, then they were most likely
 killed by `docker kill`. Otherwise, they were removed using `docker rm`.
 
 In any case, the simplest solution is to execute the `destroy-storm.sh` script
-in this repository, followed by the `make` command to rebuild the containers,
+in this repository, followed by the `make` command to rebuild the Docker images,
 then the `start-storm.sh` script (this might not work).
 
-If the above fails, use `docker rm` to remove the containers, run the `make`
+If the above fails, use `docker rm` to remove the images, run the `make`
 command followed by the `start-storm.sh` scripts. The rebuild process should be
-pretty fast because the docker containers are cached.
+pretty fast because the Docker images are cached.
