@@ -5,15 +5,24 @@ MAINTAINER viki-data data@viki.com
 
 RUN echo "deb http://archive.ubuntu.com/ubuntu precise universe" >> /etc/apt/sources.list
 RUN apt-get update
-RUN apt-get install -y unzip openjdk-6-jre-headless wget
+RUN apt-get install -y unzip openjdk-6-jre-headless wget supervisor
 
 RUN wget -q -O /opt/zookeeper-3.4.6.tar.gz http://apache.mirrors.pair.com/zookeeper/zookeeper-3.4.6/zookeeper-3.4.6.tar.gz
 RUN tar -xzf /opt/zookeeper-3.4.6.tar.gz -C /opt
 RUN cp /opt/zookeeper-3.4.6/conf/zoo_sample.cfg /opt/zookeeper-3.4.6/conf/zoo.cfg
 
+# Logs folder for supervisord
+RUN mkdir -p /var/log/supervisor
+
+# Append supervisord global settings to /etc/supervisor/supervisord.conf
+RUN echo [supervisord] | tee -a /etc/supervisor/supervisord.conf
+RUN echo nodaemon=true | tee -a /etc/supervisor/supervisord.conf
+
+# Add supervisor configuration file for zookeeper
+ADD supervisord.conf /etc/supervisor/conf.d/zookeeper.conf
+
 ENV JAVA_HOME /usr/lib/jvm/java-6-openjdk-amd64
 
 EXPOSE 2181 2888 3888
 
-ENTRYPOINT ["/opt/zookeeper-3.4.6/bin/zkServer.sh"]
-CMD ["start-foreground"]
+ENTRYPOINT ["supervisord"]
