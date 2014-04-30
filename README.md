@@ -122,7 +122,9 @@ go there:
 
 ### Building the Docker containers
 
-Run the **GNU** `make` command. The default goal builds the docker containers:
+Run the **GNU** `make` command (**NOTE:** Ensure that your version of GNU Make
+is at least **3.8.2**, because we are using the `.RECIPEPREFIX` feature
+available since that version). The default goal builds the docker containers:
 
     make
 
