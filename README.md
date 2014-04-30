@@ -83,7 +83,7 @@ You should see something like this:
 strictly necessary. In fact, for our athena storm-alerts setup (which runs
 fine), `aufs` is the Storage Driver.
 
-If the value for `Storage Driver` is `aufs` we need to change it to btrfs.
+If the value for `Storage Driver` is `aufs` we might want to change it to btrfs.
 Edit the `/etc/default/docker` file and edit the `DOCKER_OPTS` line like so:
 
     DOCKER_OPTS="-s btrfs -e lxc"
