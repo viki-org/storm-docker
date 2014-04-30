@@ -115,6 +115,11 @@ At `$HOME/workspace`:
 
     git clone git@github.com:viki-org/storm-docker.git
 
+The next few commands will be run from the `storm-docker` repository. Let us
+go there:
+
+    cd storm-docker
+
 ### Building the Docker containers
 
 Run the **GNU** `make` command. The default goal builds the docker containers:
