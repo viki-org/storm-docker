@@ -2,13 +2,34 @@ storm-docker
 ============
 
 This repository is forked from https://github.com/wurstmeister/storm-docker
-and contains some edits that are specific to the
+and contains some edits that are specific to running the
 [storm-alerts](https://github.com/viki-org/storm-alerts) repository.
 
-At Viki, we use this repository for setting up the
-[storm-alerts](https://github.com/viki-org/storm-alerts) repository.
-In fact, our Storm `alerts` topology runs within the docker containers built
-from this repository.
+At Viki, we run the [Docker](https://www.docker.io/) images built from this
+repository to obtain configured environments for the following components of the
+[Storm 'alerts' topology](https://github.com/viki-org/storm-alerts):
+
+- Zookeeper
+- Nimbus
+- Storm UI
+- Storm Supervisor
+
+By leveraging the power of [Docker](https://www.docker.io/) to create containers
+on heterogeneous Linux servers and run on all of them as if they were
+homogenous, the rather tedious process of:
+
+- setting up Zookeeper
+- setting up Nimbus
+- setting up Storm UI
+- setting up Storm Supervisor
+- deploying storm-alerts and **hoping that everything will work**
+
+is replaced by:
+
+- setting up this repository (instructions are below; they are much less tedious
+and error prone than manually setting up the individual components stated above.
+Don't believe it? Read the Dockerfiles)
+- deploying storm-alerts and **seeing that things are working** =)
 
 ## System Requirements
 
