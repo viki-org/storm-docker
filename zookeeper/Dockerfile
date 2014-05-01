@@ -9,6 +9,7 @@ RUN apt-get install -y unzip openjdk-6-jre-headless wget supervisor
 
 RUN wget -q -O /opt/zookeeper-3.4.6.tar.gz http://apache.mirrors.pair.com/zookeeper/zookeeper-3.4.6/zookeeper-3.4.6.tar.gz
 RUN tar -xzf /opt/zookeeper-3.4.6.tar.gz -C /opt
+RUN rm /opt/zookeeper-3.4.6.tar.gz
 RUN cp /opt/zookeeper-3.4.6/conf/zoo_sample.cfg /opt/zookeeper-3.4.6/conf/zoo.cfg
 
 # Logs folder for supervisord
