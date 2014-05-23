@@ -35,6 +35,8 @@ Don't believe it? Read the Dockerfiles)
 
 - **GNU** Make >= 3.8.2 (Required for .RECIPEPREFIX)
 - Docker
+- python 2.7.x
+- virtualenv
 
 ## Setup for running storm-alerts within storm-docker
 
@@ -72,6 +74,18 @@ container), as outlined in
 [this Stackoverflow answer](http://stackoverflow.com/questions/20932357/docker-enter-running-container-with-new-tty).
 
     sudo apt-get install lxc
+
+### Python setup
+
+We will be making use of [virtualenv](http://virtualenv.readthedocs.org/en/latest/)
+for running the Storm Supervisor Docker. We also make use of the
+[PyYAML](http://pyyaml.org/) library, and that requires some Python header
+files.
+
+On a Ubuntu-like system:
+
+    sudo apt-get install python-virtualenv
+    sudo apt-get install python-dev
 
 ### Install Docker
 
@@ -151,6 +165,24 @@ available since that version). The default goal builds the Docker images:
 
 If this is the first time the Docker images are being built, this script will
 take some time to complete.
+
+### Configuring storm-supervisor
+
+**NOTE:** The section is critical, especially for a multiple node
+storm-supervisor setup.
+
+Storm Supervisor can be run on a "host" Storm machine (one with Zookeeper,
+Storm Nimbus, Storm UI) or a "slave" machine (which only runs Storm Supervisor).
+There are some differences in our setup for a Storm Supervisor running on a host
+Storm machine versus one running on a slave machine.
+
+Copy the `storm-supervisor.yaml.sample` file in the `config` directory:
+
+    cp config/storm-supervisor.yaml.sample config/storm-supervisor.yaml
+
+And edit the `config/storm-supervisor.yaml` file to fill in the actual values.
+Documentation is available in the `config/storm-supervisor.yaml.sample` file
+on how and what to fill up.
 
 ### Run the Docker containers
 

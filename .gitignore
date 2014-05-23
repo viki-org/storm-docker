@@ -1,4 +1,7 @@
 *~
 *.bundle
+*.pyc
 *.swo
 *.swp
+/config/storm-supervisor.yaml
+/venv

@@ -22,6 +22,7 @@ RUN ln -s $STORM_HOME/bin/storm /usr/bin/storm
 RUN mkdir -v /mnt/storm
 RUN chown -R storm:storm /mnt/storm
 
+ADD storm.yaml.sample $STORM_HOME/conf/storm.yaml.sample
 ADD storm.yaml $STORM_HOME/conf/storm.yaml
 ADD cluster.xml $STORM_HOME/logback/cluster.xml
 ADD config-supervisord.sh /usr/bin/config-supervisord.sh
