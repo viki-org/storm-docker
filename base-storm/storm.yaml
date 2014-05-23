@@ -4,6 +4,11 @@ storm.zookeeper.servers:
 
 nimbus.host: "%nimbus%"
 
+# Use IPv4
+nimbus.childopts: "-Djava.net.preferIPv4Stack=true"
+supervisor.childopts: "-Djava.net.preferIPv4Stack=true"
+worker.childopts: "-Djava.net.preferIPv4Stack=true"
+
 # netty transport
 storm.messaging.transport: "backtype.storm.messaging.netty.Context"
 storm.messaging.netty.buffer_size: 16384
