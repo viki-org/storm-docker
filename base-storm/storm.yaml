@@ -1,4 +1,4 @@
-
+storm.local.dir: "/mnt/storm"
 storm.zookeeper.servers:
     - "%zookeeper%"
 
