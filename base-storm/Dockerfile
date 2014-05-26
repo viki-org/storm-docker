@@ -10,6 +10,7 @@ RUN unzip -o /storm-0.9.0.1.zip -d /usr/share/
 RUN rm storm-0.9.0.1.zip
 
 ENV STORM_HOME /usr/share/storm-0.9.0.1
+RUN echo "STORM_HOME=/usr/share/storm-0.9.0.1" | tee -a /etc/environment
 
 RUN groupadd storm
 RUN useradd --gid storm --home-dir /home/storm --create-home --shell /bin/bash storm
