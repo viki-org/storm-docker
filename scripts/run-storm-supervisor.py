@@ -12,7 +12,7 @@ with open(os.path.join("config", "storm-supervisor.yaml")) as f:
 dockerCmdTemplate = """
   docker run -h {docker_storm_supervisor_host_name}
     --dns 127.0.0.1 --dns 8.8.8.8 --dns 8.8.4.4
-    -p 49000:8000 -p 49022:22
+    -p 49000:8000 -p 127.0.0.1:49022:22
     -p 6700:6700 -p 6701:6701 -p 6702:6702 -p 6703:6703
     --name supervisor
     {docker_links_for_host}
