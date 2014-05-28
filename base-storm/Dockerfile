@@ -24,10 +24,9 @@ RUN mkdir -v /mnt/storm
 RUN chown -R storm:storm /mnt/storm
 
 ADD storm.yaml.sample $STORM_HOME/conf/storm.yaml.sample
-ADD storm.yaml $STORM_HOME/conf/storm.yaml
 ADD cluster.xml $STORM_HOME/logback/cluster.xml
 ADD config-supervisord.sh /usr/bin/config-supervisord.sh
-ADD start-supervisor.sh /usr/bin/start-supervisor.sh
+ADD run-supervisord.py /usr/bin/run-supervisord.py
 
 RUN echo [supervisord] | tee -a /etc/supervisor/supervisord.conf
 RUN echo nodaemon=true | tee -a /etc/supervisor/supervisord.conf

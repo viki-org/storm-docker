@@ -1,24 +1,18 @@
-# Set `is_host` to True if we're running the storm-supervisor on a
-# Storm host machine (which runs Zookeeper, Storm Nimbus, Storm UI).
-# Set this to False otherwise.
-is_host: True
-
-# Hostname for the storm-supervisor Docker container.
-# Set this to something meaningful.
-docker_storm_supervisor_host_name: "machine-A-storm-supervisor"
-
-# External host names; these will be added to /etc/dnsmasq-extra-hosts.
-# We need this section for a multiple storm-supervisor setup, because
-# individual storm-supervisor nodes are recognized using their hostname
-# (instead of IP addresses). Without a way to resolve the hostnames of
-# storm-supervisor nodes to their IP addresses, a multiple storm-supervisor
-# setup simply cannot function.
+# Hosts running storm-supervisor.
 #
-# The IP address -> Hostname mappings here will ultimately be fed to a
-# `dnsmasq` service running in the storm-supervisor Docker. That `dnsmasq`
-# service has knowledge of these mappings and will correctly resolve the
-# aliases inside here during DNS lookups.
-external_hosts:
+# Each item in this array represents a single storm-supervisor node running in
+# a Docker container.
+#
+# Each item should have the following keys:
+#
+# - `ip`: An IP address for the node/machine running storm-supervisor.
+#         NOTE: This IP address must be accessible by ALL storm components.
+#
+# - `aliases`: A list of aliases that can be used to identify the
+#              storm-supervisor node.
+#              The 0th alias will be used as the hostname for the Docker
+#              container running the storm-supervisor.
+storm_supervisor_hosts:
   -
     ip: "10.0.52.1"
     aliases:

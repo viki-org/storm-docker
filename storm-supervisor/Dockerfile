@@ -10,8 +10,6 @@ RUN echo 'bogus-priv' | tee -a /etc/dnsmasq.conf
 RUN echo 'addn-hosts=/etc/dnsmasq-extra-hosts' | tee -a /etc/dnsmasq.conf
 # Add supervisord config for dnsmasq
 ADD dnsmasq.supervisord.conf /etc/supervisor/conf.d/dnsmasq.conf
-# Add Python script for setting up $STORM_HOME/conf/storm.yaml
-ADD setup-and-run-storm-supervisor.py /usr/bin/setup-and-run-storm-supervisor.py
 
 RUN mkdir /var/run/sshd
 RUN apt-get install -y openssh-server
@@ -30,4 +28,5 @@ EXPOSE 22
 
 RUN /usr/bin/config-supervisord.sh supervisor
 RUN /usr/bin/config-supervisord.sh logviewer
-ENTRYPOINT ["/usr/bin/setup-and-run-storm-supervisor.py"]
+
+ENTRYPOINT ["/usr/bin/run-supervisord.py"]
