@@ -19,6 +19,13 @@ dockerCmdTemplate = """
     -d viki_data/storm-supervisor
     {is_host}
     {external_hosts}
+    {storm_zookeeper_servers}
+    {storm_zookeeper_port}
+    {nimbus_host}
+    {nimbus_thrift_port}
+    {drpc_servers}
+    {drpc_port}
+    {drpc_invocations_port}
 """
 
 # Add links if we're running on the host machine
@@ -34,6 +41,35 @@ for hostInfo in stormConfig["external_hosts"]:
     ",".join(hostInfo["aliases"])
   )
 
+# Settings when `--is-host` is not set
+stormZookeeperServers = ""
+stormZookeeperPort = ""
+nimbusHost = ""
+nimbusThriftPort = ""
+drpcServers = ""
+drpcPort = ""
+drpcInvocationsPort = ""
+if isHostFlag == "":
+  stormZookeeperServers = " ".join([
+    "--storm-zookeeper-server {}".format(zkServer) for zkServer in
+      stormConfig["storm.zookeeper.servers"]
+  ])
+  stormZookeeperPort = "--storm-zookeeper-port {}".format(
+    stormConfig["storm.zookeeper.port"]
+  )
+  nimbusHost = "--nimbus-host {}".format(stormConfig["nimbus.host"])
+  nimbusThriftPort = "--nimbus-thrift-port {}".format(
+    stormConfig["nimbus.thrift.port"]
+  )
+  drpcServers = " ".join([
+    "--drpc-server {}".format(drpcServer) for drpcServer in
+      stormConfig["drpc.servers"]
+  ])
+  drpcPort = "--drpc-port {}".format(stormConfig["drpc.port"])
+  drpcInvocationsPort = "--drpc-invocations-port {}".format(
+    stormConfig["drpc.invocations.port"]
+  )
+
 # Fill in the values for the docker command template to generate the actual
 # `docker run` command
 dockerCmd = dockerCmdTemplate.format(
@@ -41,7 +77,14 @@ dockerCmd = dockerCmdTemplate.format(
     stormConfig["docker_storm_supervisor_host_name"],
   docker_links_for_host=dockerLinksForHost,
   is_host=isHostFlag,
-  external_hosts=externalHosts
+  external_hosts=externalHosts,
+  storm_zookeeper_servers=stormZookeeperServers,
+  storm_zookeeper_port=stormZookeeperPort,
+  nimbus_host=nimbusHost,
+  nimbus_thrift_port=nimbusThriftPort,
+  drpc_servers=drpcServers,
+  drpc_port=drpcPort,
+  drpc_invocations_port=drpcInvocationsPort
 )
 
 # strip unnecessary whitespace
