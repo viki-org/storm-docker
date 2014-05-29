@@ -130,15 +130,36 @@ the `config/storm-setup.yaml.sample` file on how to fill up the file.
 
 ### Run the Docker containers
 
-Using the `start-storm.sh` script:
+For a machine that is used to run **all** the following (in separate Docker
+containers):
+
+- Zookeeper
+- Storm Nimbus
+- Storm UI
+- Storm Supervisor
+
+Use the `start-storm.sh` script:
 
     ./start-storm.sh
 
-And now the server is ready for running the
-[storm-alerts](https://github.com/viki-org/storm-alerts) repository. Follow the
-instructions [here](https://github.com/viki-org/storm-alerts) for setting up the
-storm-alerts repository if you intend to deploy the storm-alerts topology to the
-server you just did the above setup on.
+For a machine which should run **some** of the above components (most notably, a
+machine running only Storm Supervisor), refer to the same `start-storm.sh` file
+and look at the individual commands in that script.
+
+To provide a concrete example, the following command will run a
+Storm Supervisor Docker container on **any** machine listed in the
+`storm_supervisor_hosts` section of the `config/storm-setup.yaml` file:
+
+    scripts/run-storm-supervisor.sh \
+      --dns 127.0.0.1 --dns 8.8.8.8 --dns 8.8.8.4 \
+      -p 49000:8000 -p 127.0.0.1:49022:22 \
+      -p 6700:6700 -p 6701:6701 -p 6702:6702 -p 6703:6703 \
+      --name supervisor \
+      -d viki_data/storm-supervisor
+
+Once you've run the desired Docker containers (minimally 1 Zookeeper,
+1 Storm Nimbus, 1 Storm UI, 1 Storm Supervisor), you're ready to deploy a Storm
+topology.
 
 ## To stop the Docker containers
 
