@@ -87,7 +87,7 @@ http://docs.docker.io/installation/ubuntulinux/ for more information).
 Use the following command from the top of the script at http://get.docker.io
 to install Docker
 
-    wget -qO- https://get.docker.io/ | sh
+    wget -qO- https://get.docker.io/ | bash
 
 Verify your Docker installation:
 
