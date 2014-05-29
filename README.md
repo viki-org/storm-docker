@@ -154,31 +154,3 @@ script:
 Do not be alarmed by the `docker rm` commands in the script. Rebuilding the
 Docker images after a `docker rm` is faster than running the `rebuild.sh` script
 for the first time as results are being cached.
-
-## FAQ - Debugging stuff to do with Docker containers
-
-**NOTE:** This section is written from my memory (which tends to be vague) so it
-may not be as accurate as the sections above. In fact, you should correct the
-information here should you discover any mistakes.
-
-#### Qn: storm-alerts has been running for some time but for some reason it went down. I do not see the storm-docker containers when I run `docker ps` . What's wrong?
-
-**Answer:** Most likely your Docker containers were killed using `docker stop`
-or `docker kill` (and perhaps followed by `docker rm`).
-Do a `docker ps -a` and check if the containers are around. If the containers
-are around, then they were most likely killed by `docker stop` or `docker kill`.
-If you do not see the containers from the output of `docker ps -a`, most
-probably they were removed using `docker rm`.
-
-In any case, the simplest solution is to execute the `destroy-storm.sh` script
-in this repository, followed by the `make` command to rebuild the Docker images,
-then the `start-storm.sh` script (this might not work).
-
-If that fails, seek help from someone, preferrably in the following order:
-
-- someone who has directly worked on this repository
-- someone who is experienced in Docker
-
-Alternatively, you could go learn Docker yourself and figure things out.
-The [official Docker documentation](http://docs.docker.io/) is **awesome** and
-it'll take only one or two afternoons' worth of time to read them.
