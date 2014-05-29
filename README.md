@@ -130,7 +130,7 @@ the `config/storm-setup.yaml.sample` file on how to fill up the file.
 
 ### Run the Docker containers
 
-using the `start-storm.sh` script:
+Using the `start-storm.sh` script:
 
     ./start-storm.sh
 
