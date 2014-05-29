@@ -66,15 +66,6 @@ Additional documentation on logback can be found here:
 - [http://logback.qos.ch/manual/index.html](http://logback.qos.ch/manual/index.html)
 - [http://logback.qos.ch/documentation.html](http://logback.qos.ch/documentation.html)
 
-### Install lxc
-
-This is required if you wish to gain shell access to running Docker containers
-(without resorting to running an SSH server or something similar within the
-container), as outlined in
-[this Stackoverflow answer](http://stackoverflow.com/questions/20932357/docker-enter-running-container-with-new-tty).
-
-    sudo apt-get install lxc
-
 ### Python setup
 
 We will be making use of [virtualenv](http://virtualenv.readthedocs.org/en/latest/)
@@ -98,50 +89,9 @@ to install Docker
 
     wget -qO- https://get.docker.io/ | sh
 
-Check the information for your Docker installation:
+Verify your Docker installation:
 
     docker info
-
-You should see something like this:
-
-    Containers: 1
-
-    Images: 4
-    Storage Driver: aufs
-     Root Dir: /var/lib/docker/aufs
-     Dirs: 6
-     Execution Driver: native-0.1
-     Kernel Version: 3.11.0-19-generic
-    WARNING: No swap limit support
-
-**NOTE:** This step changing the Storage Driver to `btrfs` from `aufs` is not
-strictly necessary. In fact, for our athena storm-alerts setup (which runs
-fine), `aufs` is the Storage Driver.
-
-If the value for `Storage Driver` is `aufs` we might want to change it to btrfs.
-Edit the `/etc/default/docker` file and edit the `DOCKER_OPTS` line like so:
-
-    DOCKER_OPTS="-s btrfs -e lxc"
-
-The `-s btrfs` flag tells Docker to use btrfs as the storage driver.
-The `-e lxc` flag tells Docker to use lxc as the execution driver (this allows
-us to gain shell access to running Docker containers, as outlined in
-[this Stackoverflow answer](http://stackoverflow.com/questions/20932357/docker-enter-running-container-with-new-tty)).
-
-For these changes to take effect, restart the Docker server:
-
-    service docker restart
-
-Do a `docker info`, you should see something along the following:
-
-    Containers: 0
-    Images: 0
-    Storage Driver: btrfs
-    Execution Driver: native-0.1
-    Kernel Version: 3.11.0-19-generic
-    WARNING: No swap limit support
-
-Notice that the storage driver is now `btrfs`. This is what we want.
 
 ### Cloning this repository
 
