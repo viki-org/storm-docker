@@ -44,6 +44,6 @@ nimbus.host: "1.2.3.4"
 nimbus.thrift.port: 6627
 
 drpc.servers:
-  _ "1.2.3.4"
+  - "1.2.3.4"
 drpc.port: 6772
 drpc.invocations.port: 6773
