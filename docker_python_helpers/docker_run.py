@@ -26,6 +26,18 @@ def get_ipv4_addresses():
     matchObj = inetAddrRegex.match(line)
     if matchObj is not None:
       ipAddresses.append(matchObj.group(1))
+  # Get public IP address for Amazon EC2 instance.
+  # From:
+  #   http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-instance-addressing.html
+  ec2GetIpProc = subprocess.Popen([
+    "curl", "http://169.254.169.254/latest/meta-data/public-ipv4"
+  ], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+  ec2GetIpProcOut, _ = ec2GetIpProc.communicate()
+  if ec2GetIpProc.returncode == 0:
+    ec2PublicIp = ec2GetIpProcOut.strip()
+    if re.match(r"""\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}""",
+        ec2PublicIp) is not None:
+      ipAddresses.append(ec2PublicIp)
   ipAddresses.remove('127.0.0.1')
   return ipAddresses
 
