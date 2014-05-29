@@ -116,23 +116,17 @@ available since that version). The default goal builds the Docker images:
 If this is the first time the Docker images are being built, this script will
 take some time to complete.
 
-### Configuring storm-supervisor
+### Configuring the Storm setup
 
-**NOTE:** The section is critical, especially for a multiple node
-storm-supervisor setup.
-
-Storm Supervisor can be run on a "host" Storm machine (one with Zookeeper,
-Storm Nimbus, Storm UI) or a "slave" machine (which only runs Storm Supervisor).
-There are some differences in our setup for a Storm Supervisor running on a host
-Storm machine versus one running on a slave machine.
+**NOTE:** This step is **critical** to the correct functioning of the Storm
+topology.
 
 Copy the `storm-supervisor.yaml.sample` file in the `config` directory:
 
     cp config/storm-supervisor.yaml.sample config/storm-supervisor.yaml
 
-And edit the `config/storm-supervisor.yaml` file to fill in the actual values.
-Documentation is available in the `config/storm-supervisor.yaml.sample` file
-on how and what to fill up.
+And edit the `config/storm-supervisor.yaml` file. Documentation is available in
+the `config/storm-supervisor.yaml.sample` file on how to fill up the file.
 
 ### Run the Docker containers
 
