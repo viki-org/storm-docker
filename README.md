@@ -95,7 +95,7 @@ Verify your Docker installation:
 
 ### Cloning this repository
 
-Clone this repository, preferrable to `$HOME/workspace/storm-docker`.
+Clone this repository, preferrably to `$HOME/workspace/storm-docker`.
 At `$HOME/workspace`:
 
     git clone git@github.com:viki-org/storm-docker.git
