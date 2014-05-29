@@ -3,5 +3,5 @@
 *.pyc
 *.swo
 *.swp
-/config/storm-supervisor.yaml
+/config/storm-setup.yaml
 /venv

@@ -121,12 +121,12 @@ take some time to complete.
 **NOTE:** This step is **critical** to the correct functioning of the Storm
 topology.
 
-Copy the `storm-supervisor.yaml.sample` file in the `config` directory:
+Copy the `storm-setup.yaml.sample` file in the `config` directory:
 
-    cp config/storm-supervisor.yaml.sample config/storm-supervisor.yaml
+    cp config/storm-setup.yaml.sample config/storm-setup.yaml
 
-And edit the `config/storm-supervisor.yaml` file. Documentation is available in
-the `config/storm-supervisor.yaml.sample` file on how to fill up the file.
+And edit the `config/storm-setup.yaml` file. Documentation is available in
+the `config/storm-setup.yaml.sample` file on how to fill up the file.
 
 ### Run the Docker containers
 

@@ -42,8 +42,8 @@ def get_ipv4_addresses():
   return ipAddresses
 
 def get_storm_config():
-  """Returns the hash defined by the `config/storm-supervisor.yaml` file."""
-  with open(os.path.join("config", "storm-supervisor.yaml")) as f:
+  """Returns the hash defined by the `config/storm-setup.yaml` file."""
+  with open(os.path.join("config", "storm-setup.yaml")) as f:
     return yaml.load(f.read())
 
 def construct_docker_run_args(dockerRunArgv=sys.argv,
