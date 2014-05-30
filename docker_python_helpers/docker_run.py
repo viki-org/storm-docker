@@ -81,7 +81,7 @@ def construct_docker_run_args(dockerRunArgv=sys.argv,
 
   stormSupervisorHosts = " ".join(["--storm-supervisor-host {}@{}".format(
     hostInfo["ip"], ",".join(hostInfo["aliases"])
-  ) for hostInfo in stormConfig["storm_supervisor_hosts"]])
+  ) for hostInfo in stormConfig["storm.supervisor.hosts"]])
   stormZookeeperServers = " ".join([
     "--storm-zookeeper-server {}".format(zkServer) for zkServer in
       stormConfig["storm.zookeeper.servers"]

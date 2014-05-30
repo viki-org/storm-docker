@@ -13,7 +13,7 @@ if __name__ == "__main__":
   ipv4Addresses = docker_run.get_ipv4_addresses()
   stormConfig = docker_run.get_storm_config()
   dockerHostname = None
-  for supervisorConfig in stormConfig["storm_supervisor_hosts"]:
+  for supervisorConfig in stormConfig["storm.supervisor.hosts"]:
     if supervisorConfig["ip"] in ipv4Addresses:
       dockerHostname = supervisorConfig["aliases"][0]
   if dockerHostname is None:

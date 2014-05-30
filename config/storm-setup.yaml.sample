@@ -12,7 +12,7 @@
 #              storm-supervisor node.
 #              The 0th alias will be used as the hostname for the Docker
 #              container running the storm-supervisor.
-storm_supervisor_hosts:
+storm.supervisor.hosts:
   -
     ip: "10.0.52.1"
     aliases:
