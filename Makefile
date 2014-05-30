@@ -17,7 +17,7 @@ DOCKER_STORM_SETUP_YAML := $(addprefix base-storm/,$(STORM_SETUP_YAML))
 check-storm-setup-yaml-exists:
 > test -f $(CONFIG_STORM_SETUP_YAML) || \
   { echo \"$(CONFIG_STORM_SETUP_YAML)\" does not exist. Please create it from \
-	  \"$(CONFIG_STORM_SETUP_YAML_SAMPLE)\" and try again. Exiting.; exit 1; }
+    \"$(CONFIG_STORM_SETUP_YAML_SAMPLE)\" and try again. Exiting.; exit 1; }
 
 build-storm-docker-containers: check-storm-setup-yaml-exists \
     build-base-storm-docker-container build-zookeeper-docker-container
