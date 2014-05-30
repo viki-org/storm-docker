@@ -41,12 +41,28 @@ storm.supervisor.hosts:
 ################################################################################
 
 storm.yaml:
+  storm.local.dir: "/mnt/storm"
+
   storm.zookeeper.servers:
     - "1.2.3.4"
   storm.zookeeper.port: 2181
 
   nimbus.host: "1.2.3.4"
   nimbus.thrift.port: 6627
+
+  # Use IPv4
+  nimbus.childopts: "-Djava.net.preferIPv4Stack=true"
+  supervisor.childopts: "-Djava.net.preferIPv4Stack=true"
+  worker.childopts: "-Djava.net.preferIPv4Stack=true"
+
+  # netty transport
+  storm.messaging.transport: "backtype.storm.messaging.netty.Context"
+  storm.messaging.netty.server_worker_threads: 1
+  storm.messaging.netty.client_worker_threads: 1
+  storm.messaging.netty.buffer_size: 16384
+  storm.messaging.netty.max_retries: 10
+  storm.messaging.netty.min_wait_ms: 1000
+  storm.messaging.netty.max_wait_ms: 5000
 
   drpc.servers:
     - "1.2.3.4"
