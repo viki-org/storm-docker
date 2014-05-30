@@ -4,14 +4,24 @@
 #     python -m docker_python_helpers/run_storm_supervisor.py <ARGS>
 
 import os
+import os.path
 import re
 import sys
+import yaml
 
 from . import docker_run
 
+def get_storm_config():
+  """Returns the Dict defined by the `config/storm-setup.yaml` file.
+
+  Returns:
+    Dict: the Dict defined by the `config/storm-setup.yaml` file."""
+  with open(os.path.join("config", "storm-setup.yaml")) as f:
+    return yaml.load(f.read())
+
 if __name__ == "__main__":
   ipv4Addresses = docker_run.get_ipv4_addresses()
-  stormConfig = docker_run.get_storm_config()
+  stormConfig = get_storm_config()
   dockerHostname = None
   for supervisorConfig in stormConfig["storm.supervisor.hosts"]:
     if supervisorConfig["ip"] in ipv4Addresses:
@@ -24,7 +34,6 @@ if __name__ == "__main__":
     )
 
   dockerRunArgs = docker_run.construct_docker_run_args(
-    stormConfig=stormConfig,
     myIPv4Addresses=ipv4Addresses,
     # See the usage of this script at the top of the file... and you'll
     # understand why we need to subscript `sys.argv` from 2
@@ -33,12 +42,13 @@ if __name__ == "__main__":
   # Check if any Zookeeper or Nimbus Docker container is running on this host.
   # If so, add links to those Docker containers.
   zookeeperLink = ""
-  if any([(myIpAddress in stormConfig["storm.zookeeper.servers"])
+  stormYamlConfig = stormConfig["storm.yaml"]
+  if any([(myIpAddress in stormYamlConfig["storm.zookeeper.servers"])
       for myIpAddress in ipv4Addresses]):
     zookeeperLink = "--link zookeeper:zk"
 
   nimbusLink = ""
-  if any([(myIpAddress == stormConfig["nimbus.host"])
+  if any([(myIpAddress == stormYamlConfig["nimbus.host"])
       for myIpAddress in ipv4Addresses]):
     nimbusLink = "--link nimbus:nimbus"
   dockerRunCmd = re.sub(r"""\s+""", " ",

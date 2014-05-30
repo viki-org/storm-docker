@@ -25,25 +25,30 @@ storm.supervisor.hosts:
       - "machine-C-storm-supervisor"
       - "balut-fever"
 
+
 ################################################################################
-# Stuff from here onwards are exactly the same as those in `storm.yaml`.
-# These settings will be used for a slave node running storm-supervisor.
+# Stuff nested under the `storm.yaml` key mirror those in the actual
+# `storm.yaml` configuration file for Storm.
+#
+# Please place ALL settings you want to be in the `$STORM_HOME/conf/storm.yaml`
+# file for the various Storm components here.
 #
 # Refer to:
 #
 #     https://github.com/apache/incubator-storm/blob/master/conf/defaults.yaml
 #
-# for more details on how to configure this section.
+# for a more complete list of configuration parameters.
 ################################################################################
 
-storm.zookeeper.servers:
-  - "1.2.3.4"
-storm.zookeeper.port: 2181
+storm.yaml:
+  storm.zookeeper.servers:
+    - "1.2.3.4"
+  storm.zookeeper.port: 2181
 
-nimbus.host: "1.2.3.4"
-nimbus.thrift.port: 6627
+  nimbus.host: "1.2.3.4"
+  nimbus.thrift.port: 6627
 
-drpc.servers:
-  - "1.2.3.4"
-drpc.port: 6772
-drpc.invocations.port: 6773
+  drpc.servers:
+    - "1.2.3.4"
+  drpc.port: 6772
+  drpc.invocations.port: 6773

@@ -1,11 +1,9 @@
 # Executes the appropriate `docker run` command for different Storm components
 
 import os
-import os.path
 import re
 import subprocess
 import sys
-import yaml
 
 def get_ipv4_addresses():
   """Returns all possible IPv4 addresses for the machine based on the output of
@@ -41,13 +39,8 @@ def get_ipv4_addresses():
   ipAddresses.remove('127.0.0.1')
   return ipAddresses
 
-def get_storm_config():
-  """Returns the hash defined by the `config/storm-setup.yaml` file."""
-  with open(os.path.join("config", "storm-setup.yaml")) as f:
-    return yaml.load(f.read())
-
 def construct_docker_run_args(dockerRunArgv=sys.argv,
-    stormConfig=get_storm_config(), myIPv4Addresses=get_ipv4_addresses()):
+    myIPv4Addresses=get_ipv4_addresses()):
   """Returns a string containing arguments for `docker run`, assuming that the
   entrypoint of the Dockerfile is the `base-storm/run-supervisord.py` script.
 
@@ -55,9 +48,6 @@ def construct_docker_run_args(dockerRunArgv=sys.argv,
     dockerRunArgv(list of str, optional): Actual arguments to `docker run`
       (not to the entrypoint of the Dockerfile). Please DO NOT include
       `docker run` in this list.
-    stormConfig(dict, optional): Dictionary containing details for
-      `storm.yaml`. This should be the return value of the `get_storm_config`
-      function.
     myIPv4Addresses(list of str, optional): List of IPv4 addresses of the
       current machine.
 
@@ -68,57 +58,16 @@ def construct_docker_run_args(dockerRunArgv=sys.argv,
   """
   dockerRunArgsTemplate = """
       {docker_run_argv}
-      {storm_supervisor_hosts}
-      {storm_zookeeper_servers}
-      {storm_zookeeper_port}
-      {nimbus_host}
-      {nimbus_thrift_port}
-      {drpc_servers}
-      {drpc_port}
-      {drpc_invocations_port}
       {my_ip_addresses}
   """
-
-  stormSupervisorHosts = " ".join(["--storm-supervisor-host {}@{}".format(
-    hostInfo["ip"], ",".join(hostInfo["aliases"])
-  ) for hostInfo in stormConfig["storm.supervisor.hosts"]])
-  stormZookeeperServers = " ".join([
-    "--storm-zookeeper-server {}".format(zkServer) for zkServer in
-      stormConfig["storm.zookeeper.servers"]
-  ])
-  stormZookeeperPort = "--storm-zookeeper-port {}".format(
-    stormConfig["storm.zookeeper.port"]
-  )
-  nimbusHost = "--nimbus-host {}".format(stormConfig["nimbus.host"])
-  nimbusThriftPort = "--nimbus-thrift-port {}".format(
-    stormConfig["nimbus.thrift.port"]
-  )
-  drpcServers = " ".join([
-    "--drpc-server {}".format(drpcServer) for drpcServer in
-      stormConfig["drpc.servers"]
-  ])
-  drpcPort = "--drpc-port {}".format(stormConfig["drpc.port"])
-  drpcInvocationsPort = "--drpc-invocations-port {}".format(
-    stormConfig["drpc.invocations.port"]
-  )
   myIpAddresses = " ".join(["--my-ip-address {}".format(myIpAddress)
     for myIpAddress in myIPv4Addresses
   ])
-
   # Fill in the placeholders for the `docker run` args template
   dockerRunArgsString = dockerRunArgsTemplate.format(
     docker_run_argv=" ".join(dockerRunArgv),
-    storm_supervisor_hosts=stormSupervisorHosts,
-    storm_zookeeper_servers=stormZookeeperServers,
-    storm_zookeeper_port=stormZookeeperPort,
-    nimbus_host=nimbusHost,
-    nimbus_thrift_port=nimbusThriftPort,
-    drpc_servers=drpcServers,
-    drpc_port=drpcPort,
-    drpc_invocations_port=drpcInvocationsPort,
     my_ip_addresses=myIpAddresses,
   )
-
   # strip unnecessary whitespace
   return re.sub(r"""\s+""", " ", dockerRunArgsString).strip()
 

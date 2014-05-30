@@ -3,5 +3,6 @@
 *.pyc
 *.swo
 *.swp
+/base-storm/storm-setup.yaml
 /config/storm-setup.yaml
 /venv

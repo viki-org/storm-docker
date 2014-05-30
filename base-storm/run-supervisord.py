@@ -5,83 +5,25 @@ import os
 import os.path
 import re
 import subprocess
+import yaml
 
 STORM_HOME = os.environ["STORM_HOME"]
 
-STORM_ZOOKEEPER_SERVERS_TEMPLATE = """
-storm.zookeeper.servers:
-{storm_zookeeper_servers}
-
-storm.zookeeper.port: {storm_zookeeper_port}
-"""
-
-STORM_NIMBUS_TEMPLATE = """
-nimbus.host: "{nimbus_host}"
-nimbus.thrift.port: {nimbus_thrift_port}
-"""
-
-STORM_DRPC_TEMPLATE = """
-drpc.servers:
-{drpc_servers}
-
-drpc_port: {drpc_port}
-drpc_invocations_port: {drpc_invocations_port}
-"""
+# Opens the `storm-setup.yaml` file added to this Docker container. The file was
+# copied from the `config/storm-setup.yaml` file in the storm-docker repository
+# during a `make` execution.
+stormSetupConfig = None
+with open(os.environ["STORM_SETUP_YAML"]) as f:
+  stormSetupConfig = yaml.load(f.read())
 
 parser = argparse.ArgumentParser(
   description="Configures and runs storm-supervisor"
 )
-
 parser.add_argument("--is-storm-supervisor", action="store_true", default=False,
   dest="is_storm_supervisor",
   help=re.sub(r"""\s+""", " ",
     """Supply this flag if this Docker container is running a
     storm-supervisor"""
-  ).strip()
-)
-parser.add_argument("--storm-supervisor-host", action="append",
-  dest="storm_supervisor_hosts"
-)
-parser.add_argument("--storm-zookeeper-server", action="append",
-  dest="storm_zookeeper_servers", type=str,
-  help=re.sub(r"""\s+""", " ",
-    """IP address for a single server in `storm.zookeeper.servers` in
-       the `storm.yaml` file"""
-  ).strip()
-)
-parser.add_argument("--storm-zookeeper-port",
-  dest="storm_zookeeper_port", type=int,
-  help="`storm.zookeeper.port` for storm.yaml"
-)
-parser.add_argument("--nimbus-host",
-  dest="nimbus_host", type=str,
-  help=re.sub(r"""\s+""", " ",
-    """IP address for `nimbus.host` in the `storm.yaml` file"""
-  ).strip()
-)
-parser.add_argument("--nimbus-thrift-port",
-  dest="nimbus_thrift_port", type=int,
-  help=re.sub(r"""\s+""", " ",
-    """Port for `nimbus.thrift.port` in the `storm.yaml` file"""
-  ).strip()
-)
-parser.add_argument("--drpc-server", action="append",
-  dest="drpc_servers", type=str,
-  help=re.sub(r"""\s+""", " ",
-    """IP address for a single server in  `drpc.servers` in the
-       `storm.yaml` file"""
-  ).strip()
-)
-parser.add_argument("--drpc-port",
-  dest="drpc_port", type=int,
-  help=re.sub(r"""\s+""", " ",
-    """Port for `drpc.port` in the `storm.yaml` file"""
-  ).strip()
-)
-parser.add_argument("--drpc-invocations-port",
-  dest="drpc_invocations_port", type=int,
-  help=re.sub(r"""\s+""", " ",
-    """Port for `drpc.invocations.port` in the `storm.yaml` file"""
   ).strip()
 )
 parser.add_argument("--my-ip-address", action="append",
@@ -99,95 +41,74 @@ myIpAddresses = parsedArgs.my_ip_addresses
 # IP addresses are not equal to that of this host machine
 if parsedArgs.is_storm_supervisor:
   with open("/etc/dnsmasq-extra-hosts", "w") as f:
-    for stormSupervisorStr in parsedArgs.storm_supervisor_hosts:
-      # Each arg is of this format:
-      #
-      #     ipaddress@alias1,alias2,alias3,...
-      #
-      # Eg.
-      #
-      #     10.0.0.2@host-name-one,host-name-two
-      try:
-        [ipAddress, commaSeparatedAliases] = stormSupervisorStr.split("@")
-        aliasList = commaSeparatedAliases.split(",")
-        if ipAddress not in myIpAddresses:
-          f.write("{} {}\n".format(ipAddress, " ".join(aliasList)))
-      except ValueError as e:
-        pass
+    stormSupervisorHosts = stormSetupConfig["storm.supervisor.hosts"]
+    for stormSupervisorConfig in stormSupervisorHosts:
+      ipAddress = stormSupervisorConfig["ip"]
+      aliasList = stormSupervisorConfig["aliases"]
+      if ipAddress not in myIpAddresses:
+        f.write("{} {}\n".format(ipAddress, " ".join(aliasList)))
 
-stormYamlTemplate = None
-with open(os.path.join(STORM_HOME, "conf", "storm.yaml.sample"), "r") as f:
-  stormYamlTemplate = f.read()
+# This dict contains everything that should be written to the
+# `$STORM_HOME/conf/storm.yaml` file
+stormYamlConfig = stormSetupConfig["storm.yaml"]
 
-stormZookeeperServers = []
-for zkServer in parsedArgs.storm_zookeeper_servers:
+# We're gonna check if a Zookeeper runs on the server hosting our current
+# Docker container.
+#
+# If that's the case, we assume that the Zookeeper is running in a Docker
+# container, and that this Docker container we're in was run with a link to the
+# Zookeeper Docker container.
+# We use the IP address of the Zookeeper Docker container in place of its
+# global IP address.
+zkServerIpToReplace = None
+# Loop through the Zookeeper server IP addresses
+for zkServer in stormYamlConfig["storm.zookeeper.servers"]:
   if zkServer in myIpAddresses:
-    # This server has a Zookeeper running.
-    # We assume that the Zookeeper is running in a Docker container, and that
-    # this Docker container we're in was run with a link to the Zookeeper
-    # Docker container.
-    # We use the IP address of the Zookeeper Docker container in place of its
-    # global IP address.
-    stormZookeeperServers.append(os.environ["ZK_PORT_2181_TCP_ADDR"])
-  else:
-    stormZookeeperServers.append(zkServer)
+    # The server hosting our current Docker container has a Zookeeper running.
+    zkServerIpToReplace = zkServer
+    break
 
-nimbusHost = ""
-if parsedArgs.nimbus_host in myIpAddresses:
-  # This server has a storm-nimbus running.
+# Zookeeper is running on the same server
+if zkServerIpToReplace is not None:
+  # Replace the IP address
+  stormYamlConfig["storm.zookeeper.servers"].remove(zkServerIpToReplace)
+  stormYamlConfig["storm.zookeeper.servers"].append(
+    os.environ["ZK_PORT_2181_TCP_ADDR"]
+  )
+
+# We're gonna check if Storm Nimbus runs on the server hosting our current
+# Docker container.
+# If so, we can replace the globally accessible "nimbus.host" IP address with
+# a "more efficient" IP address (the IP address of the Docker container running
+# the Storm Nimbus).
+if stormYamlConfig["nimbus.host"] in myIpAddresses:
+  # This server has a Storm Nimbus running.
   # There are 2 possibilities:
-  # 1. This Docker container is running storm-nimbus
-  # 2. storm-nimbus is running on a separate Docker container on the same
+  # 1. This Docker container is the one running the Storm Nimbus.
+  # 2. Storm Nimbus is running on a separate Docker container on the same
   #    machine, and this Docker container was run with a link to the
-  #    storm-nimbus Docker container.
+  #    Storm Nimbus Docker container.
   try:
-    # To find out which case it is, we look for the `NIMBUS_PORT_6627_TCP_ADDR`
-    # environment variable, which will be created if this Docker container was
-    # run with a link to the storm-nimbus Docker container.
-    nimbusHost = os.environ["NIMBUS_PORT_6627_TCP_ADDR"]
+    # To determine if it's case number 2, we look for the
+    # `NIMBUS_PORT_6627_TCP_ADDR` environment variable, which will be created
+    # if this Docker container was run with a link to the Storm Nimbus Docker
+    # container.
+    stormYamlConfig["nimbus.host"] = os.environ["NIMBUS_PORT_6627_TCP_ADDR"]
   except KeyError:
-    # The `NIMBUS_PORT_6627_TCP_ADDR` environment variable does not exist, so
-    # we assume that this is the storm-nimbus Docker container (hence it does
-    # not have a link to itself), and use the output of `hostname -i` as the
-    # nimbus host.
+    # The `NIMBUS_PORT_6627_TCP_ADDR` environment variable does not exist
+    # (there is no Docker link to the Storm Nimbus container), yet the
+    # `nimbus.host` global IP address is one of the IP addresses of this
+    # server.
+    # We assume that this is case 1, and replace the IP address of
+    # `nimbus.host` with the output of `hostname -i`.
     p = subprocess.Popen(["hostname", "-i"], stdout=subprocess.PIPE,
       stderr=subprocess.PIPE
     )
     out, _ = p.communicate()
-    nimbusHost = out.strip()
-else:
-  # This server has no storm-nimbus running. We use the IP address supplied by
-  # the `--nimbus-host` flag.
-  nimbusHost = parsedArgs.nimbus_host
+    stormYamlConfig["nimbus.host"] = out.strip()
 
-# Replace the appropriate sections of `storm.yaml` using parameters supplied
-# on the command line
-stormYamlTemplate = stormYamlTemplate \
-  .replace("### zookeeper section ###",
-    STORM_ZOOKEEPER_SERVERS_TEMPLATE.format(
-      storm_zookeeper_servers="".join([
-        '  - "{}"\n'.format(zkServer) for zkServer in stormZookeeperServers
-      ]),
-      storm_zookeeper_port=parsedArgs.storm_zookeeper_port,
-    )
-  ) \
-  .replace("### nimbus section ###",
-    STORM_NIMBUS_TEMPLATE.format(
-      nimbus_host=nimbusHost,
-      nimbus_thrift_port=parsedArgs.nimbus_thrift_port,
-    )
-  ) \
-  .replace("### drpc section ###",
-    STORM_DRPC_TEMPLATE.format(
-      drpc_servers="".join([
-        '  - "{}"\n'.format(drpcServer) for drpcServer in
-          parsedArgs.drpc_servers
-      ]),
-      drpc_port=parsedArgs.drpc_port,
-      drpc_invocations_port=parsedArgs.drpc_invocations_port,
-    )
-  )
+# Write out to `$STORM_HOME/conf/storm.yaml`
 with open(os.path.join(STORM_HOME, "conf", "storm.yaml"), "w") as f:
-  f.write(stormYamlTemplate)
+  f.write(yaml.dump(stormYamlConfig, default_flow_style=False))
 
 os.system("supervisord")

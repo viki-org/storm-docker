@@ -15,6 +15,7 @@ build-storm-docker-containers: build-base-storm-docker-container \
 > docker build -t="viki_data/storm-ui" storm-ui
 
 build-base-storm-docker-container:
+> cp config/storm-setup.yaml base-storm/
 > docker build -t="viki_data/base-storm" base-storm
 
 build-zookeeper-docker-container:
