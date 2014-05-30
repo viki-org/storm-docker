@@ -92,7 +92,6 @@ parser.add_argument("--my-ip-address", action="append",
 )
 
 parsedArgs = parser.parse_args()
-print(parsedArgs)
 myIpAddresses = parsedArgs.my_ip_addresses
 
 # For a Docker container running a storm-supervisor.
