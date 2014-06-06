@@ -13,6 +13,7 @@ CONFIG_STORM_SETUP_YAML := $(addprefix config/,$(STORM_SETUP_YAML))
 CONFIG_STORM_SETUP_YAML_SAMPLE := \
   $(addsuffix .sample,$(CONFIG_STORM_SETUP_YAML))
 DOCKER_STORM_SETUP_YAML := $(addprefix base-storm/,$(STORM_SETUP_YAML))
+ZK_STORM_SETUP_YAML := $(addprefix zookeeper/,$(STORM_SETUP_YAML))
 
 check-storm-setup-yaml-exists:
 > test -f $(CONFIG_STORM_SETUP_YAML) || \
@@ -44,5 +45,13 @@ ifneq ($(STORM_SETUP_YAML_SOURCE_CHECKSUM),$(STORM_SETUP_YAML_DEST_CHECKSUM))
 endif
 > docker build -t="viki_data/base-storm" base-storm
 
-build-zookeeper-docker-container:
+STORM_SETUP_YAML_ZK_CHECKSUM = $(shell \
+  md5sum < $(ZK_STORM_SETUP_YAML) | awk '{print $$1}' || echo "dest" \
+)
+
+build-zookeeper-docker-container: check-storm-setup-yaml-exists
+ifneq ($(STORM_SETUP_YAML_SOURCE_CHECKSUM),$(STORM_SETUP_YAML_ZK_CHECKSUM))
+# Same usage as `build-base-storm-docker-container` rule
+> cp $(CONFIG_STORM_SETUP_YAML) $(ZK_STORM_SETUP_YAML)
+endif
 > docker build -t="viki_data/zookeeper" zookeeper

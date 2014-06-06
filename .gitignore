@@ -5,4 +5,5 @@
 *.swp
 /base-storm/storm-setup.yaml
 /config/storm-setup.yaml
+/zookeeper/storm-setup.yaml
 /venv
