@@ -34,7 +34,7 @@ def ec2_get_ip(public=True):
     urlToQuery = "http://169.254.169.254/latest/meta-data/public-ipv4"
   else:
     urlToQuery = "http://169.254.169.254/latest/meta-data/local-ipv4"
-  getIpProc = subprocess.Popen(["curl", urlToQuery],
+  getIpProc = subprocess.Popen(["curl", urlToQuery, "--connect-timeout", "10"],
     stdout=subprocess.PIPE, stderr=subprocess.PIPE
   )
   procOut, _ = getIpProc.communicate()
