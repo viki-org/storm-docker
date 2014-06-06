@@ -74,6 +74,7 @@ def get_ipv4_addresses():
     if matchObj is not None:
       ipAddresses.append(matchObj.group(1))
   ipAddresses.append(ec2_get_ip(public=True))
+  ipAddresses.append(ec2_get_ip(public=False))
   ipAddresses.remove('127.0.0.1')
   return ipAddresses
 
