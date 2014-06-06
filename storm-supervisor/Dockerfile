@@ -17,7 +17,7 @@ RUN echo 'root:root' | chpasswd
 RUN sed -i 's/^\(PermitRootLogin\).*$/\1 yes/' /etc/ssh/sshd_config
 RUN sed -i 's/^\(.*pam_loginuid\.so.*\)$/#\1/' /etc/pam.d/sshd
 
-ADD ssh-supervisor /etc/supervisor/conf.d/ssh.conf
+ADD ssh.supervisord.conf /etc/supervisor/conf.d/ssh.conf
 
 EXPOSE 6700
 EXPOSE 6701
