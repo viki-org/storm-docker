@@ -14,6 +14,46 @@ def get_storm_config():
   with open(os.path.join("config", "storm-setup.yaml")) as f:
     return yaml.load(f.read())
 
+def ec2_get_ip(public=True):
+  """Returns the public or private IP address for the current EC2 machine.
+
+  For the urls being queried, see:
+
+      http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-instance-addressing.html
+
+  Args:
+    public(bool, optional): defaults to True. If True, the public IP of the
+      EC2 machine is returned. If False, the private IP of the EC2 machine is
+      returned.
+
+  Returns:
+    str: Public or private IP address for the current EC2 machine
+  """
+  urlToQuery = None
+  if public:
+    urlToQuery = "http://169.254.169.254/latest/meta-data/public-ipv4"
+  else:
+    urlToQuery = "http://169.254.169.254/latest/meta-data/local-ipv4"
+  getIpProc = subprocess.Popen(["curl", urlToQuery],
+    stdout=subprocess.PIPE, stderr=subprocess.PIPE
+  )
+  procOut, _ = getIpProc.communicate()
+  if getIpProc.returncode == 0:
+    mbIpAddr = procOut.strip()
+    if re.match(r"""^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$""", mbIpAddr) \
+        is not None:
+      return mbIpAddr
+    else:
+      raise ValueError(
+        "Return value of `{}` \"{}\" does not look like an IP address".format(
+          "curl {}".format(urlToQuery), mbIpAddr
+        )
+      )
+  else:
+    raise ValueError("Command `{}` had non-zero exit code {}".format(
+      "curl {}".format(urlToQuery), getIpProc.returncode
+    ))
+
 def get_ipv4_addresses():
   """Returns all possible IPv4 addresses for the machine based on the output of
   the `ifconfig` command, excluding '127.0.0.1'.
@@ -33,18 +73,7 @@ def get_ipv4_addresses():
     matchObj = inetAddrRegex.match(line)
     if matchObj is not None:
       ipAddresses.append(matchObj.group(1))
-  # Get public IP address for Amazon EC2 instance.
-  # From:
-  #   http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-instance-addressing.html
-  ec2GetIpProc = subprocess.Popen([
-    "curl", "http://169.254.169.254/latest/meta-data/public-ipv4"
-  ], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-  ec2GetIpProcOut, _ = ec2GetIpProc.communicate()
-  if ec2GetIpProc.returncode == 0:
-    ec2PublicIp = ec2GetIpProcOut.strip()
-    if re.match(r"""\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}""",
-        ec2PublicIp) is not None:
-      ipAddresses.append(ec2PublicIp)
+  ipAddresses.append(ec2_get_ip(public=True))
   ipAddresses.remove('127.0.0.1')
   return ipAddresses
 
