@@ -78,7 +78,10 @@ def get_ipv4_addresses():
   ec2PrivateIp = ec2_get_ip(public=False)
   if ec2PrivateIp is not None:
     ipAddresses.append(ec2PrivateIp)
-  ipAddresses.remove('127.0.0.1')
+  try:
+    ipAddresses.remove('127.0.0.1')
+  except ValueError:
+    pass
   return ipAddresses
 
 def construct_docker_run_args(dockerRunArgv=sys.argv,
