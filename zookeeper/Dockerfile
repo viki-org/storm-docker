@@ -35,7 +35,7 @@ RUN echo [supervisord] | tee -a /etc/supervisor/supervisord.conf
 RUN echo nodaemon=true | tee -a /etc/supervisor/supervisord.conf
 
 # Add supervisor configuration file for zookeeper
-ADD supervisord.conf /etc/supervisor/conf.d/zookeeper.conf
+ADD zookeeper.supervisord.conf /etc/supervisor/conf.d/zookeeper.conf
 
 ENV JAVA_HOME /usr/lib/jvm/java-6-openjdk-amd64
 
@@ -45,7 +45,7 @@ RUN apt-get install -y openssh-server
 RUN echo 'root:root' | chpasswd
 RUN sed -i 's/^\(PermitRootLogin\).*$/\1 yes/' /etc/ssh/sshd_config
 RUN sed -i 's/^\(.*pam_loginuid\.so.*\)$/#\1/' /etc/pam.d/sshd
-ADD ssh-supervisor /etc/supervisor/conf.d/ssh.conf
+ADD ssh.supervisord.conf /etc/supervisor/conf.d/ssh.conf
 EXPOSE 22
 
 # Entrypoint
