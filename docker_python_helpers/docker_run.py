@@ -4,6 +4,15 @@ import os
 import re
 import subprocess
 import sys
+import yaml
+
+def get_storm_config():
+  """Returns the Dict defined by the `config/storm-setup.yaml` file.
+
+  Returns:
+    Dict: the Dict defined by the `config/storm-setup.yaml` file."""
+  with open(os.path.join("config", "storm-setup.yaml")) as f:
+    return yaml.load(f.read())
 
 def get_ipv4_addresses():
   """Returns all possible IPv4 addresses for the machine based on the output of

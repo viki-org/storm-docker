@@ -11,17 +11,9 @@ import yaml
 
 from . import docker_run
 
-def get_storm_config():
-  """Returns the Dict defined by the `config/storm-setup.yaml` file.
-
-  Returns:
-    Dict: the Dict defined by the `config/storm-setup.yaml` file."""
-  with open(os.path.join("config", "storm-setup.yaml")) as f:
-    return yaml.load(f.read())
-
 if __name__ == "__main__":
   ipv4Addresses = docker_run.get_ipv4_addresses()
-  stormConfig = get_storm_config()
+  stormConfig = docker_run.get_storm_config()
   dockerHostname = None
   for supervisorConfig in stormConfig["storm.supervisor.hosts"]:
     if supervisorConfig["ip"] in ipv4Addresses:
