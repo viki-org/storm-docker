@@ -50,9 +50,8 @@ def ec2_get_ip(public=True):
         )
       )
   else:
-    raise ValueError("Command `{}` had non-zero exit code {}".format(
-      "curl {}".format(urlToQuery), getIpProc.returncode
-    ))
+    # Most probably this server is not an EC2 instance
+    return None
 
 def get_ipv4_addresses():
   """Returns all possible IPv4 addresses for the machine based on the output of
@@ -73,8 +72,12 @@ def get_ipv4_addresses():
     matchObj = inetAddrRegex.match(line)
     if matchObj is not None:
       ipAddresses.append(matchObj.group(1))
-  ipAddresses.append(ec2_get_ip(public=True))
-  ipAddresses.append(ec2_get_ip(public=False))
+  ec2PublicIp = ec2_get_ip(public=True)
+  if ec2PublicIp is not None:
+    ipAddresses.append(ec2PublicIp)
+  ec2PrivateIp = ec2_get_ip(public=False)
+  if ec2PrivateIp is not None:
+    ipAddresses.append(ec2PrivateIp)
   ipAddresses.remove('127.0.0.1')
   return ipAddresses
 
