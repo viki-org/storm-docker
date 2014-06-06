@@ -7,7 +7,11 @@ then
   echo "Zookeeper is already running"
 else
   echo "Starting Zookeeper"
-  docker run -p 2181:2181 -h zookeeper --name zookeeper -d viki_data/zookeeper
+  scripts/run-zookeeper.sh \
+    -p 2181:2181 -p 2888:2888 -p 2888:2888/udp -p 3888:3888 \
+    -p 127.0.0.1:49122:22 \
+    -h zookeeper --name zookeeper \
+    -d viki_data/zookeeper
 fi
 
 scripts/run-storm-docker-component.sh \
