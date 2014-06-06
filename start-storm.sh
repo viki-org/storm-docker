@@ -15,17 +15,17 @@ else
 fi
 
 SKIP_PIP_INSTALL=$SKIP_PIP_INSTALL scripts/run-storm-docker-component.sh \
-  -p 3773:3773 -p 3772:3772 -p 6627:6627 \
   --name nimbus \
   --link zookeeper:zk \
   -h nimbus \
-  -d viki_data/storm-nimbus
+  -d viki_data/storm-nimbus \
+  --storm-docker-component nimbus
 
 SKIP_PIP_INSTALL=$SKIP_PIP_INSTALL scripts/run-storm-docker-component.sh \
-  -p 49080:8080 \
   --name ui \
   --link nimbus:nimbus --link zookeeper:zk \
-  -d viki_data/storm-ui
+  -d viki_data/storm-ui \
+  --storm-docker-component ui
 
 SKIP_PIP_INSTALL=$SKIP_PIP_INSTALL scripts/run-storm-supervisor.sh \
   --dns 127.0.0.1 --dns 8.8.8.8 --dns 8.8.8.4 \

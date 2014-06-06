@@ -1,10 +1,41 @@
 # Executes the appropriate `docker run` command for different Storm components
 
+import argparse
 import os
 import re
 import subprocess
 import sys
 import yaml
+
+NIMBUS_THRIFT_PORT_STR = "nimbus.thrift.port"
+DRPC_PORT_STR = "drpc.port"
+DRPC_INVOCATIONS_PORT_STR = "drpc.invocations.port"
+UI_PORT_STR = "ui.port"
+
+STORM_DEFAULT_PORTS = {
+  NIMBUS_THRIFT_PORT_STR: 6627,
+  DRPC_PORT_STR: 3772,
+  DRPC_INVOCATIONS_PORT_STR: 3773,
+  UI_PORT_STR: 8080,
+}
+
+STORM_COMPONENT_PORTS = {
+  "nimbus": [NIMBUS_THRIFT_PORT_STR, DRPC_PORT_STR, DRPC_INVOCATIONS_PORT_STR],
+  "ui": [UI_PORT_STR],
+}
+
+parser = argparse.ArgumentParser(
+  description="Generates the docker run command for the given Storm component",
+  # The `-h` flag is in some args passed to this program to specify the Docker
+  # hostname and will trigger this parser's help.
+  # We disable the help flags here to ensure that it does not happen.
+  add_help=False,
+)
+parser.add_argument("--storm-docker-component",
+  choices=["nimbus", "ui"],
+  dest="storm_component",
+  help="The Storm component to run",
+)
 
 def get_storm_config():
   """Returns the Dict defined by the `config/storm-setup.yaml` file.
@@ -84,7 +115,7 @@ def get_ipv4_addresses():
     pass
   return ipAddresses
 
-def construct_docker_run_args(dockerRunArgv=sys.argv,
+def construct_docker_run_args(dockerRunArgv,
     myIPv4Addresses=get_ipv4_addresses()):
   """Returns a string containing arguments for `docker run`, assuming that the
   entrypoint of the Dockerfile is the `base-storm/run-supervisord.py` script.
@@ -116,12 +147,46 @@ def construct_docker_run_args(dockerRunArgv=sys.argv,
   # strip unnecessary whitespace
   return re.sub(r"""\s+""", " ", dockerRunArgsString).strip()
 
+def construct_docker_run_port_args(portKeyStringList):
+  """Constructs the arguments used by `docker run` for port forwarding and
+  exposing ports.
+
+  Args:
+    portKeyStringList(list of str): List of strings (keys of the
+      `STORM_DEFAULT_PORTS` dict)
+
+  Returns:
+    list of str: List of arguments to `docker run` for port forwarding and
+      exposing ports
+  """
+  stormConfig = get_storm_config()
+  stormYamlConfig = stormConfig["storm.yaml"]
+  portForwardArgs = []
+  portExposeArgs = []
+  for portKeyString in portKeyStringList:
+    portNum = stormYamlConfig.get(portKeyString,
+      STORM_DEFAULT_PORTS[portKeyString]
+    )
+    portForwardArgs.append("-p {}:{}".format(portNum, portNum))
+    portExposeArgs.append("--expose {}".format(portNum))
+  return portForwardArgs + portExposeArgs
 
 # When run as a main program
 if __name__ == "__main__":
   # This script is used like `python -m docker_python_helpers <ARGS>`, hence
   # the need for subscripting sys.argv from 2
-  dockerRunArgsString = construct_docker_run_args(sys.argv[2:])
+  parsedArgs, remArgList = parser.parse_known_args(args=sys.argv[2:])
+
+  # Construct port forwarding command line args. These port forwarding args are
+  # added here to allow users to choose the Docker and host ports to use in the
+  # `config/storm-setup.yaml` file
+  portArgs = construct_docker_run_port_args(
+    STORM_COMPONENT_PORTS[parsedArgs.storm_component]
+  )
+  # Prepend port forwarding args to args list
+  remArgList[:0] = portArgs
+
+  dockerRunArgsString = construct_docker_run_args(remArgList)
   dockerRunCmd = "docker run {}".format(dockerRunArgsString)
   print(dockerRunCmd)
   # execute `docker run` with the generated args

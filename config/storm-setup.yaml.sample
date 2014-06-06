@@ -50,6 +50,8 @@ storm.yaml:
   nimbus.host: "1.2.3.4"
   nimbus.thrift.port: 6627
 
+  ui.port: 8080
+
   # Use IPv4
   nimbus.childopts: "-Djava.net.preferIPv4Stack=true"
   supervisor.childopts: "-Djava.net.preferIPv4Stack=true"

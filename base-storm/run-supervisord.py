@@ -89,13 +89,19 @@ if stormYamlConfig["nimbus.host"] in myIpAddresses:
   #    machine, and this Docker container was run with a link to the
   #    Storm Nimbus Docker container.
   try:
-    # To determine if it's case number 2, we look for the
-    # `NIMBUS_PORT_6627_TCP_ADDR` environment variable, which will be created
-    # if this Docker container was run with a link to the Storm Nimbus Docker
-    # container.
-    stormYamlConfig["nimbus.host"] = os.environ["NIMBUS_PORT_6627_TCP_ADDR"]
+    # To determine if it's case number 2, we look for an environment variable
+    # named `NIMBUS_PORT_{XYZ}_TCP_ADDR` where XYZ is the `nimbus.thrift.port`.
+    # We first construct the name of this environment variable.
+    nimbusEnvVar = "NIMBUS_PORT_{}_TCP_ADDR".format(
+      stormYamlConfig["nimbus.thrift.port"]
+    )
+    # If this Docker container was run with a link to the Storm Nimbus Docker
+    # container, then the environment variable will be present, and its value
+    # is the IP address of the Storm Nimbus Docker container.
+    # We set `nimbus.host` to that value.
+    stormYamlConfig["nimbus.host"] = os.environ[nimbusEnvVar]
   except KeyError:
-    # The `NIMBUS_PORT_6627_TCP_ADDR` environment variable does not exist
+    # The `NIMBUS_PORT_{XYZ}_TCP_ADDR` environment variable does not exist
     # (there is no Docker link to the Storm Nimbus container), yet the
     # `nimbus.host` global IP address is one of the IP addresses of this
     # server.
