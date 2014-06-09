@@ -70,3 +70,11 @@ storm.yaml:
     - "1.2.3.4"
   drpc.port: 6772
   drpc.invocations.port: 6773
+
+  logviewer.port: 8000
+
+  supervisor.slots.ports:
+    - 6700
+    - 6701
+    - 6702
+    - 6703

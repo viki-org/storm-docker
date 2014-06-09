@@ -31,6 +31,13 @@ if __name__ == "__main__":
     # understand why we need to subscript `sys.argv` from 2
     dockerRunArgv=sys.argv[2:],
   )
+  # construct appropriate port arguments for Storm supervisor and logviewer
+  # since we run those 2 services in the `storm-supervisor` container
+  dockerPortArgs = docker_run.construct_docker_run_port_args(
+    docker_run.STORM_COMPONENT_PORTS["supervisor"] +
+    docker_run.STORM_COMPONENT_PORTS["logviewer"]
+  )
+
   # Check if any Zookeeper or Nimbus Docker container is running on this host.
   # If so, add links to those Docker containers.
   zookeeperLink = ""
@@ -45,10 +52,11 @@ if __name__ == "__main__":
     nimbusLink = "--link nimbus:nimbus"
   dockerRunCmd = re.sub(r"""\s+""", " ",
     """docker run -h {docker_hostname} {zookeeper_link} {nimbus_link}
-       {docker_run_args} --is-storm-supervisor""".format(
+       {docker_port_args} {docker_run_args} --is-storm-supervisor""".format(
       docker_hostname=dockerHostname,
       zookeeper_link=zookeeperLink,
       nimbus_link=nimbusLink,
+      docker_port_args=" ".join(dockerPortArgs),
       docker_run_args=dockerRunArgs,
     )
   ).strip()

@@ -10,18 +10,25 @@ import yaml
 NIMBUS_THRIFT_PORT_STR = "nimbus.thrift.port"
 DRPC_PORT_STR = "drpc.port"
 DRPC_INVOCATIONS_PORT_STR = "drpc.invocations.port"
+LOGVIEWER_PORT_STR = "logviewer.port"
 UI_PORT_STR = "ui.port"
+SUPERVISOR_SLOTS_PORTS_STR = "supervisor.slots.ports"
 
 STORM_DEFAULT_PORTS = {
   NIMBUS_THRIFT_PORT_STR: 6627,
   DRPC_PORT_STR: 3772,
   DRPC_INVOCATIONS_PORT_STR: 3773,
+  LOGVIEWER_PORT_STR: 8000,
   UI_PORT_STR: 8080,
+  SUPERVISOR_SLOTS_PORTS_STR: [6700, 6701, 6702, 6703],
 }
 
 STORM_COMPONENT_PORTS = {
-  "nimbus": [NIMBUS_THRIFT_PORT_STR, DRPC_PORT_STR, DRPC_INVOCATIONS_PORT_STR],
-  "ui": [UI_PORT_STR],
+  "logviewer":  [LOGVIEWER_PORT_STR],
+  "nimbus":     [NIMBUS_THRIFT_PORT_STR, DRPC_PORT_STR,
+                 DRPC_INVOCATIONS_PORT_STR],
+  "supervisor": [SUPERVISOR_SLOTS_PORTS_STR],
+  "ui":         [UI_PORT_STR],
 }
 
 parser = argparse.ArgumentParser(
@@ -32,7 +39,7 @@ parser = argparse.ArgumentParser(
   add_help=False,
 )
 parser.add_argument("--storm-docker-component",
-  choices=["nimbus", "ui"],
+  choices=["nimbus", "supervisor", "ui"],
   dest="storm_component",
   help="The Storm component to run",
 )
@@ -163,12 +170,24 @@ def construct_docker_run_port_args(portKeyStringList):
   stormYamlConfig = stormConfig["storm.yaml"]
   portForwardArgs = []
   portExposeArgs = []
+
   for portKeyString in portKeyStringList:
-    portNum = stormYamlConfig.get(portKeyString,
+    # Obtain the port from the `storm.yaml` section of the configuration,
+    # but fallback to the default(s) in `STORM_DEFAULT_PORTS` in case there
+    # is nothing supplied in `storm.yaml`.
+    # The default port(s) may either be a single port, or a list of ports.
+    portNumOrList = stormYamlConfig.get(portKeyString,
       STORM_DEFAULT_PORTS[portKeyString]
     )
-    portForwardArgs.append("-p {}:{}".format(portNum, portNum))
-    portExposeArgs.append("--expose {}".format(portNum))
+    # To simplify things for the case where the default is a single port, we
+    # convert the single port into a singleton list containing that port
+    if not isinstance(portNumOrList, list):
+      portNumOrList = [portNumOrList]
+    # Now `portNumOrList` is a list of ports.
+    # We go through each port and construct the port forwarding and expose args
+    for portNum in portNumOrList:
+      portForwardArgs.append("-p {}:{}".format(portNum, portNum))
+      portExposeArgs.append("--expose {}".format(portNum))
   return portForwardArgs + portExposeArgs
 
 # When run as a main program
