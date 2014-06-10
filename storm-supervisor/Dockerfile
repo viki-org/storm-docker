@@ -19,11 +19,6 @@ RUN sed -i 's/^\(.*pam_loginuid\.so.*\)$/#\1/' /etc/pam.d/sshd
 
 ADD ssh.supervisord.conf /etc/supervisor/conf.d/ssh.conf
 
-EXPOSE 6700
-EXPOSE 6701
-EXPOSE 6702
-EXPOSE 6703
-EXPOSE 8000
 EXPOSE 22
 
 RUN /usr/bin/config-supervisord.sh supervisor
