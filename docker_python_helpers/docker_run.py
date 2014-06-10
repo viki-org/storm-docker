@@ -54,13 +54,13 @@ class StormPort:
 
 # Default port(s) for a section in `storm.yaml`
 STORM_DEFAULT_PORTS = {
-  NIMBUS_THRIFT_PORT_STR: StormPort(6627),
-  DRPC_PORT_STR: StormPort(3772),
-  DRPC_INVOCATIONS_PORT_STR: StormPort(3773),
-  LOGVIEWER_PORT_STR: StormPort(8000),
-  UI_PORT_STR: StormPort(8080),
-  SUPERVISOR_SLOTS_PORTS_STR: StormPort([6700, 6701, 6702, 6703]),
-  ZOOKEEPER_PORT_STR: StormPort(2181),
+  NIMBUS_THRIFT_PORT_STR:      StormPort(6627),
+  DRPC_PORT_STR:               StormPort(3772),
+  DRPC_INVOCATIONS_PORT_STR:   StormPort(3773),
+  LOGVIEWER_PORT_STR:          StormPort(8000),
+  UI_PORT_STR:                 StormPort(8080),
+  SUPERVISOR_SLOTS_PORTS_STR:  StormPort([6700, 6701, 6702, 6703]),
+  ZOOKEEPER_PORT_STR:          StormPort(2181),
   ZOOKEEPER_FOLLOWER_PORT_STR: StormPort(2888, needsUDP=True,
                                          section="zookeeper.multiple.setup"),
   ZOOKEEPER_ELECTION_PORT_STR: StormPort(3888,
