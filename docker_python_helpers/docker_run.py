@@ -7,6 +7,8 @@ import subprocess
 import sys
 import yaml
 
+# Strings of sections specifying ports in `storm.yaml` for major Storm
+# components
 NIMBUS_THRIFT_PORT_STR = "nimbus.thrift.port"
 DRPC_PORT_STR = "drpc.port"
 DRPC_INVOCATIONS_PORT_STR = "drpc.invocations.port"
@@ -14,6 +16,7 @@ LOGVIEWER_PORT_STR = "logviewer.port"
 UI_PORT_STR = "ui.port"
 SUPERVISOR_SLOTS_PORTS_STR = "supervisor.slots.ports"
 
+# Default port(s) for a section in `storm.yaml`
 STORM_DEFAULT_PORTS = {
   NIMBUS_THRIFT_PORT_STR: 6627,
   DRPC_PORT_STR: 3772,
@@ -23,6 +26,7 @@ STORM_DEFAULT_PORTS = {
   SUPERVISOR_SLOTS_PORTS_STR: [6700, 6701, 6702, 6703],
 }
 
+# Dict of Storm component -> list of sections in `storm.yaml` specifying ports
 STORM_COMPONENT_PORTS = {
   "drpc":       [DRPC_PORT_STR, DRPC_INVOCATIONS_PORT_STR],
   "logviewer":  [LOGVIEWER_PORT_STR],
