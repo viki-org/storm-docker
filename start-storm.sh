@@ -19,7 +19,8 @@ SKIP_PIP_INSTALL=$SKIP_PIP_INSTALL scripts/run-storm-docker-component.sh \
   --link zookeeper:zk \
   -h nimbus \
   -d viki_data/storm-nimbus \
-  --storm-docker-component nimbus
+  --storm-docker-component nimbus \
+  --storm-docker-component drpc
 
 SKIP_PIP_INSTALL=$SKIP_PIP_INSTALL scripts/run-storm-docker-component.sh \
   --name ui \

@@ -33,10 +33,9 @@ if __name__ == "__main__":
   )
   # construct appropriate port arguments for Storm supervisor and logviewer
   # since we run those 2 services in the `storm-supervisor` container
-  dockerPortArgs = docker_run.construct_docker_run_port_args(
-    docker_run.STORM_COMPONENT_PORTS["supervisor"] +
-    docker_run.STORM_COMPONENT_PORTS["logviewer"]
-  )
+  dockerPortArgs = docker_run.construct_docker_run_port_args(["supervisor",
+    "logviewer"
+  ])
 
   # Check if any Zookeeper or Nimbus Docker container is running on this host.
   # If so, add links to those Docker containers.

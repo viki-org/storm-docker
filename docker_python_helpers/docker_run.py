@@ -24,9 +24,9 @@ STORM_DEFAULT_PORTS = {
 }
 
 STORM_COMPONENT_PORTS = {
+  "drpc":       [DRPC_PORT_STR, DRPC_INVOCATIONS_PORT_STR],
   "logviewer":  [LOGVIEWER_PORT_STR],
-  "nimbus":     [NIMBUS_THRIFT_PORT_STR, DRPC_PORT_STR,
-                 DRPC_INVOCATIONS_PORT_STR],
+  "nimbus":     [NIMBUS_THRIFT_PORT_STR],
   "supervisor": [SUPERVISOR_SLOTS_PORTS_STR],
   "ui":         [UI_PORT_STR],
 }
@@ -39,8 +39,9 @@ parser = argparse.ArgumentParser(
   add_help=False,
 )
 parser.add_argument("--storm-docker-component",
-  choices=["nimbus", "supervisor", "ui"],
-  dest="storm_component",
+  action="append",
+  choices=["drpc", "nimbus", "supervisor", "ui"],
+  dest="storm_components",
   help="The Storm component to run",
 )
 
@@ -154,13 +155,13 @@ def construct_docker_run_args(dockerRunArgv,
   # strip unnecessary whitespace
   return re.sub(r"""\s+""", " ", dockerRunArgsString).strip()
 
-def construct_docker_run_port_args(portKeyStringList):
+def construct_docker_run_port_args(stormComponentList):
   """Constructs the arguments used by `docker run` for port forwarding and
   exposing ports.
 
   Args:
-    portKeyStringList(list of str): List of strings (keys of the
-      `STORM_DEFAULT_PORTS` dict)
+    stormComponentList(list of str): List of strings, each of which is a Storm
+      component
 
   Returns:
     list of str: List of arguments to `docker run` for port forwarding and
@@ -171,23 +172,30 @@ def construct_docker_run_port_args(portKeyStringList):
   portForwardArgs = []
   portExposeArgs = []
 
-  for portKeyString in portKeyStringList:
-    # Obtain the port from the `storm.yaml` section of the configuration,
-    # but fallback to the default(s) in `STORM_DEFAULT_PORTS` in case there
-    # is nothing supplied in `storm.yaml`.
-    # The default port(s) may either be a single port, or a list of ports.
-    portNumOrList = stormYamlConfig.get(portKeyString,
-      STORM_DEFAULT_PORTS[portKeyString]
-    )
-    # To simplify things for the case where the default is a single port, we
-    # convert the single port into a singleton list containing that port
-    if not isinstance(portNumOrList, list):
-      portNumOrList = [portNumOrList]
-    # Now `portNumOrList` is a list of ports.
-    # We go through each port and construct the port forwarding and expose args
-    for portNum in portNumOrList:
-      portForwardArgs.append("-p {}:{}".format(portNum, portNum))
-      portExposeArgs.append("--expose {}".format(portNum))
+  # For each Storm component
+  for stormComponent in stormComponentList:
+    # We retrieve the list of string keys for sections in `storm.yaml` that
+    # specify a configurable port / list of ports
+    portKeyStringsList = STORM_COMPONENT_PORTS[stormComponent]
+    # For each section
+    for portKeyString in portKeyStringsList:
+      # Retrieve the port / list of ports specified in `storm.yaml` for that
+      # section, or fallback to the value(s) in `STORM_DEFAULT_PORTS` if the
+      # user did not specify it.
+      portNumOrList = stormYamlConfig.get(portKeyString,
+        STORM_DEFAULT_PORTS[portKeyString]
+      )
+      # To simplify things, for the case where `portNumOrList` is a single
+      # port, we convert the single port into a singleton list containing that
+      # port.
+      if isinstance(portNumOrList, int):
+        portNumOrList = [portNumOrList]
+      # Go through the list of ports
+      for portNum in portNumOrList:
+        # And for each port, construct the port forwarding and expose args for
+        # `docker run`
+        portForwardArgs.append("-p {}:{}".format(portNum, portNum))
+        portExposeArgs.append("--expose {}".format(portNum))
   return portForwardArgs + portExposeArgs
 
 # When run as a main program
@@ -199,9 +207,8 @@ if __name__ == "__main__":
   # Construct port forwarding command line args. These port forwarding args are
   # added here to allow users to choose the Docker and host ports to use in the
   # `config/storm-setup.yaml` file
-  portArgs = construct_docker_run_port_args(
-    STORM_COMPONENT_PORTS[parsedArgs.storm_component]
-  )
+  portArgs = construct_docker_run_port_args(parsedArgs.storm_components)
+
   # Prepend port forwarding args to args list
   remArgList[:0] = portArgs
 
