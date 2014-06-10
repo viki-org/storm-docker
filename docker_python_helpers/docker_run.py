@@ -15,15 +15,56 @@ DRPC_INVOCATIONS_PORT_STR = "drpc.invocations.port"
 LOGVIEWER_PORT_STR = "logviewer.port"
 UI_PORT_STR = "ui.port"
 SUPERVISOR_SLOTS_PORTS_STR = "supervisor.slots.ports"
+ZOOKEEPER_PORT_STR = "storm.zookeeper.port"
+ZOOKEEPER_FOLLOWER_PORT_STR = "follower.port"
+ZOOKEEPER_ELECTION_PORT_STR = "election.port"
+
+class StormPort:
+  """Information on a port type for a Storm component."""
+  def __init__(self, ports, needsUDP=False, section="storm.yaml"):
+    """Constructor for StormPort
+
+    Args:
+      ports(str or list of str): A single integer port or a list of integer
+        ports for the port type
+      needsUDP(bool, optional): Whether the port(s) should accept UDP traffic
+      section(str, optional): The appropriate section in the
+        `config/storm-setup.yaml` file for retrieving this port
+    """
+    # To simplify things, for the case where `tmpPorts` is a single integer
+    # port, we convert it to a singleton list containing that port
+    tmpPorts = ports
+    if not isinstance(tmpPorts, list):
+      tmpPorts = [tmpPorts]
+    self._portList = tmpPorts
+    self._needsUDP = needsUDP
+    self._section = section
+
+  @property
+  def portList(self):
+    return self._portList
+
+  @property
+  def needsUDP(self):
+    return self._needsUDP
+
+  @property
+  def section(self):
+    return self._section
 
 # Default port(s) for a section in `storm.yaml`
 STORM_DEFAULT_PORTS = {
-  NIMBUS_THRIFT_PORT_STR: 6627,
-  DRPC_PORT_STR: 3772,
-  DRPC_INVOCATIONS_PORT_STR: 3773,
-  LOGVIEWER_PORT_STR: 8000,
-  UI_PORT_STR: 8080,
-  SUPERVISOR_SLOTS_PORTS_STR: [6700, 6701, 6702, 6703],
+  NIMBUS_THRIFT_PORT_STR: StormPort(6627),
+  DRPC_PORT_STR: StormPort(3772),
+  DRPC_INVOCATIONS_PORT_STR: StormPort(3773),
+  LOGVIEWER_PORT_STR: StormPort(8000),
+  UI_PORT_STR: StormPort(8080),
+  SUPERVISOR_SLOTS_PORTS_STR: StormPort([6700, 6701, 6702, 6703]),
+  ZOOKEEPER_PORT_STR: StormPort(2181),
+  ZOOKEEPER_FOLLOWER_PORT_STR: StormPort(2888, needsUDP=True,
+                                         section="zookeeper.multiple.setup"),
+  ZOOKEEPER_ELECTION_PORT_STR: StormPort(3888,
+                                         section="zookeeper.multiple.setup"),
 }
 
 # Dict of Storm component -> list of sections in `storm.yaml` specifying ports
@@ -33,6 +74,8 @@ STORM_COMPONENT_PORTS = {
   "nimbus":     [NIMBUS_THRIFT_PORT_STR],
   "supervisor": [SUPERVISOR_SLOTS_PORTS_STR],
   "ui":         [UI_PORT_STR],
+  "zookeeper":  [ZOOKEEPER_PORT_STR, ZOOKEEPER_FOLLOWER_PORT_STR,
+                 ZOOKEEPER_ELECTION_PORT_STR],
 }
 
 parser = argparse.ArgumentParser(
@@ -172,33 +215,38 @@ def construct_docker_run_port_args(stormComponentList):
       exposing ports
   """
   stormConfig = get_storm_config()
-  stormYamlConfig = stormConfig["storm.yaml"]
   portForwardArgs = []
   portExposeArgs = []
 
   # For each Storm component
   for stormComponent in stormComponentList:
-    # We retrieve the list of string keys for sections in `storm.yaml` that
-    # specify a configurable port / list of ports
+    # We retrieve the list of string keys for sections in
+    # `config/storm-setup.yaml` that specifies a configurable port / list of
+    # ports
     portKeyStringsList = STORM_COMPONENT_PORTS[stormComponent]
     # For each section
     for portKeyString in portKeyStringsList:
-      # Retrieve the port / list of ports specified in `storm.yaml` for that
-      # section, or fallback to the value(s) in `STORM_DEFAULT_PORTS` if the
-      # user did not specify it.
-      portNumOrList = stormYamlConfig.get(portKeyString,
-        STORM_DEFAULT_PORTS[portKeyString]
-      )
+      # Retrieve the `StormPort` object in `STORM_DEFAULT_PORTS`
+      stormPortObj = STORM_DEFAULT_PORTS[portKeyString]
+      # Retrieve the appropriate section in `config/storm-setup.yaml`
+      # containing the port configuration
+      stormYamlSection = stormConfig[stormPortObj.section]
+      # Retrieve the port / list of ports for this section. Fallback to using
+      # the default port / ports if the user did not specify any.
+      portNumOrList = stormYamlSection.get(portKeyString, stormPortObj.portList)
       # To simplify things, for the case where `portNumOrList` is a single
       # port, we convert the single port into a singleton list containing that
       # port.
       if isinstance(portNumOrList, int):
         portNumOrList = [portNumOrList]
-      # Go through the list of ports
       for portNum in portNumOrList:
-        # And for each port, construct the port forwarding and expose args for
+        # For each port, construct the port forwarding and expose args for
         # `docker run`
         portForwardArgs.append("-p {}:{}".format(portNum, portNum))
+        # For port(s) that need to accept UDP traffic, we add another flag to
+        # indicate it
+        if stormPortObj.needsUDP:
+          portForwardArgs.append("-p {}:{}/udp".format(portNum, portNum))
         portExposeArgs.append("--expose {}".format(portNum))
   return portForwardArgs + portExposeArgs
 

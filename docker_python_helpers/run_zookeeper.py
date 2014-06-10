@@ -32,6 +32,9 @@ if __name__ == "__main__":
     # understand why we need to subscript `sys.argv` from 2
     dockerRunArgv=sys.argv[2:],
   )
-  dockerRunCmd = "docker run {}".format(dockerRunArgs)
+  dockerPortArgs = docker_run.construct_docker_run_port_args(["zookeeper"])
+  dockerRunCmd = "docker run {} {}".format(" ".join(dockerPortArgs),
+    dockerRunArgs
+  )
   print(dockerRunCmd)
   os.system(dockerRunCmd)

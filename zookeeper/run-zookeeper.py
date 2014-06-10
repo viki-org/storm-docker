@@ -61,6 +61,13 @@ if myId is None:
     """.format(STORM_SETUP_YAML)
   ))
 
+# Add `clientPort` to the Zookeeper configuration file at this point, because
+# we allow the user to change the `storm.zookeeper.port`
+with open(ZK_CFG, "a") as f:
+  f.write("clientPort={}\n".format(
+    stormSetupConfig["storm.yaml"]["storm.zookeeper.port"]
+  ))
+
 # Differentiate between a multiple and single Zookeeper setup
 if len(zkIpAddresses) > 1:
   # A multiple Zookeeper setup requires a `myid` file in the dataDir (whose
@@ -82,16 +89,24 @@ if len(zkIpAddresses) > 1:
   dockerIp, _ = proc.communicate()
   dockerIp = dockerIp.strip()
 
+  # Obtain the Zookeeper follower and election ports
+  zkFollowerPort = stormSetupConfig["zookeeper.multiple.setup"]["follower.port"]
+  zkElectionPort = stormSetupConfig["zookeeper.multiple.setup"]["election.port"]
+
   # Append the list of Zookeeper IP addresses to $ZK_CFG file
   with open(ZK_CFG, "a") as f:
     for (idx, zkIpAddr) in enumerate(zkIpAddresses):
       if idx == myId:
         # This is the entry for the current server. We use the Docker IP address
         # in place of the host IP address.
-        f.write("server.{}={}:2888:3888\n".format(idx + 1, dockerIp))
+        f.write("server.{}={}:{}:{}\n".format(idx + 1, dockerIp, zkFollowerPort,
+          zkElectionPort
+        ))
       else:
         # Zookeeper entry for another server. Use its original IP address.
-        f.write("server.{}={}:2888:3888\n".format(idx + 1, zkIpAddr))
+        f.write("server.{}={}:{}:{}\n".format(idx + 1, zkIpAddr, zkFollowerPort,
+          zkElectionPort
+        ))
 
 # Start supervisord
 os.system("supervisord")

@@ -8,7 +8,6 @@ then
 else
   echo "Starting Zookeeper"
   SKIP_PIP_INSTALL=$SKIP_PIP_INSTALL scripts/run-zookeeper.sh \
-    -p 2181:2181 -p 2888:2888 -p 2888:2888/udp -p 3888:3888 \
     -p 127.0.0.1:49122:22 \
     -h zookeeper --name zookeeper \
     -d viki_data/zookeeper

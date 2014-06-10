@@ -72,9 +72,12 @@ for zkServer in stormYamlConfig["storm.zookeeper.servers"]:
 if zkServerIpToReplace is not None:
   # Replace the IP address
   stormYamlConfig["storm.zookeeper.servers"].remove(zkServerIpToReplace)
-  stormYamlConfig["storm.zookeeper.servers"].append(
-    os.environ["ZK_PORT_2181_TCP_ADDR"]
+  # Obtain the environment variable name for `storm.zookeeper.port` because
+  # we allow the user to choose the port (so it is no longer the default 2181)
+  zkPortEnvVar = "ZK_PORT_{}_TCP_ADDR".format(
+    stormYamlConfig["storm.zookeeper.port"]
   )
+  stormYamlConfig["storm.zookeeper.servers"].append(os.environ[zkPortEnvVar])
 
 # We're gonna check if Storm Nimbus runs on the server hosting our current
 # Docker container.

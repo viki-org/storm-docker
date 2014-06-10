@@ -25,6 +25,14 @@ storm.supervisor.hosts:
       - "machine-C-storm-supervisor"
       - "balut-fever"
 
+# Port configuration for a multiple server Zookeeper setup.
+# I know this is separate from the `storm.zookeeper.port` under `storm.yaml` but
+# yea...
+# This is NOT required if you are running a single Zookeeper.
+zookeeper.multiple.setup:
+  follower.port: 2888
+  election.port: 3888
+
 
 ################################################################################
 # Stuff nested under the `storm.yaml` key mirror those in the actual

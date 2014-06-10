@@ -51,6 +51,4 @@ EXPOSE 22
 # Entrypoint
 ADD run-zookeeper.py /usr/bin/run-zookeeper.py
 
-EXPOSE 2181 2888 3888
-
 ENTRYPOINT ["/usr/bin/run-zookeeper.py"]
