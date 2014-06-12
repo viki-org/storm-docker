@@ -33,7 +33,7 @@ Don't believe it? Read the Dockerfiles)
 
 ## System Requirements
 
-- **GNU** Make >= 3.8.2 (Required for .RECIPEPREFIX)
+- GNU Make
 - Docker
 - python 2.7.x
 - virtualenv
@@ -107,9 +107,7 @@ go there:
 
 ### Building the Docker images
 
-Run the **GNU** `make` command (**NOTE:** Ensure that your version of GNU Make
-is at least **3.8.2**, because we are using the `.RECIPEPREFIX` feature
-available since that version). The default goal builds the Docker images:
+Run the **GNU** `make` command. The default goal builds the Docker images:
 
     make
 
