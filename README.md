@@ -38,7 +38,7 @@ Don't believe it? Read the Dockerfiles)
 - python 2.7.x
 - virtualenv
 
-## Setup
+## Software Setup
 
 ### Python setup
 
