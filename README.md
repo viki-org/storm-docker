@@ -1,31 +1,10 @@
 storm-docker
 ============
 
-At Viki, we run the [Docker](https://www.docker.io/) images built from this
-repository to obtain configured environments for the following components of the
-[Storm 'alerts' topology](https://github.com/viki-org/storm-alerts):
-
-- Zookeeper
-- Nimbus
-- Storm UI
-- Storm Supervisor
-
-By leveraging the power of [Docker](https://www.docker.io/) to create containers
-on heterogeneous Linux servers and run on all of them as if they were
-homogenous, the rather tedious process of:
-
-- setting up Zookeeper
-- setting up Nimbus
-- setting up Storm UI
-- setting up Storm Supervisor
-- deploying storm-alerts and **hoping that everything will work**
-
-is replaced by:
-
-- setting up this repository (instructions are below; they are much less tedious
-and error prone than manually setting up the individual components stated above.
-Don't believe it? Read the Dockerfiles)
-- deploying storm-alerts and **seeing that things are working** =)
+This repository makes it easy to run **distributed, multiple server**
+(multiple Zookeeper, multiple Storm Supervisor)
+[Storm](http://storm.incubator.apache.org/) topologies within
+[Docker](https://www.docker.io/).
 
 ## System Requirements
 
