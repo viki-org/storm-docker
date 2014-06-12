@@ -10,6 +10,11 @@
 #
 # - `aliases`: A list of aliases that can be used to identify the
 #              storm-supervisor node.
+#
+#              This is needed for the Storm Supervisor nodes to identify one
+#              another; supplying one unique identifier for each
+#              Storm Supervisor host will do the trick.
+#
 #              The 0th alias will be used as the hostname for the Docker
 #              container running the storm-supervisor.
 storm.supervisor.hosts:
