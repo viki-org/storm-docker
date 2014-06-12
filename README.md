@@ -61,36 +61,28 @@ go there:
 **NOTE:** This step is **critical** to the correct functioning of the Storm
 topology.
 
-Copy the `config/storm-setup.yaml.sample` file to `config/storm-setup.yaml`:
+Copy the sample configuration files to concrete configuration files (this does
+not overwrite any existing concrete configuration files):
 
-    cp config/storm-setup.yaml.sample config/storm-setup.yaml
+    ./copy-sample-config.sh
 
-And edit the `config/storm-setup.yaml` file. Documentation is available in
-the `config/storm-setup.yaml.sample` file and should give you a good idea on
-how to make your edits.
+Carry on by editing the following concrete configuration files:
 
-Copy the `config/cluster.xml.sample` to `config/cluster.xml`:
+- `config/storm-setup.yaml`
+- `config/cluster.xml`
+- `config/zoo.cfg`
 
-    cp config/cluster.xml.sample config/cluster.xml
+Documentation is available in the copied concrete configuration files, except
+the `config/cluster.xml` file used for logback configuration. For that, we
+highly recommend reading
+[The logback manual](http://logback.qos.ch/manual/).
 
-`config/cluster.xml` will be used as the [logback](http://logback.qos.ch/)
-configuration file for Storm. The sample file comes with some ok defaults; to
-learn more about logback to edit the `config/cluster.xml` file, I highly
-recommend reading [The logback manual](http://logback.qos.ch/manual/index.html).
-
-Copy `config/zoo.cfg.sample` to `config/zoo.cfg`:
-
-    cp config/zoo.cfg.sample config/zoo.cfg
-
-`config/zoo.cfg` will be used as Zookeeper's configuration file. There are
-instructions in the sample file on configuring this.
-
-Once this step is done, we continue with building the Docker images.
+Once done with your edits, we can continue with building the Docker images.
 
 ### Building the Docker images
 
-**NOTE:** This step is necessary after making changes to
-`config/storm-setup.yaml`.
+**NOTE:** This step is necessary after making changes to **any** of the
+configuration files in the above subsection.
 
 Run the **GNU** `make` command. The default goal builds the Docker images:
 
