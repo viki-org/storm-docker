@@ -38,8 +38,7 @@ zookeeper.multiple.setup:
 # Stuff nested under the `storm.yaml` key mirror those in the actual
 # `storm.yaml` configuration file for Storm.
 #
-# Please place ALL settings you want to be in the `$STORM_HOME/conf/storm.yaml`
-# file for the various Storm components here.
+# Please place ALL settings you want to be in the actual `storm.yaml` file here.
 #
 # Refer to:
 #
