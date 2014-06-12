@@ -38,38 +38,12 @@ Don't believe it? Read the Dockerfiles)
 - python 2.7.x
 - virtualenv
 
-## Setup for running storm-alerts within storm-docker
-
-This section details the steps needed to setup the `storm-docker` repository
-so it is ready for running the Storm topology in the
-[storm-alerts](https://github.com/viki-org/storm-alerts) repository.
-
-You should perform the following on the production server that you are going
-to run [storm-alerts](https://github.com/viki-org/storm-alerts) on.
-
-### On Storm's Logging Configuration
-
-Storm 0.9.x makes use of [slf4j](http://www.slf4j.org/) as the abstract logger
-and [logback](http://logback.qos.ch/) as the concrete logger.
-
-**NOTE:** Whether storm-docker uses the `storm/cluster.xml` file as the actual
-logging configuration file is just a guess, but one I'm relatively confident of
-being correct.
-
-When you build the Docker containers (steps are detailed below), the
-`storm/cluster.xml` configuration file will be used as the `cluster.xml` file
-for Storm. This happens to be the configuration file for logback, so you may
-want to review it and change the logging configuration settings.
-
-Additional documentation on logback can be found here:
-
-- [http://logback.qos.ch/manual/index.html](http://logback.qos.ch/manual/index.html)
-- [http://logback.qos.ch/documentation.html](http://logback.qos.ch/documentation.html)
+## Setup
 
 ### Python setup
 
 We will be making use of [virtualenv](http://virtualenv.readthedocs.org/en/latest/)
-for running the Storm Supervisor Docker. We also make use of the
+for some of the Python scripts in this repository. We also make use of the
 [PyYAML](http://pyyaml.org/) library, and that requires some Python header
 files.
 
@@ -173,3 +147,24 @@ script:
 Do not be alarmed by the `docker rm` commands in the script. Rebuilding the
 Docker images after a `docker rm` is faster than running the `rebuild.sh` script
 for the first time as results are being cached.
+
+## Other configuration
+
+### On Storm's Logging Configuration
+
+Storm 0.9.x makes use of [slf4j](http://www.slf4j.org/) as the abstract logger
+and [logback](http://logback.qos.ch/) as the concrete logger.
+
+**NOTE:** Whether storm-docker uses the `storm/cluster.xml` file as the actual
+logging configuration file is just a guess, but one I'm relatively confident of
+being correct.
+
+When you build the Docker containers (steps are detailed below), the
+`storm/cluster.xml` configuration file will be used as the `cluster.xml` file
+for Storm. This happens to be the configuration file for logback, so you may
+want to review it and change the logging configuration settings.
+
+Additional documentation on logback can be found here:
+
+- [http://logback.qos.ch/manual/index.html](http://logback.qos.ch/manual/index.html)
+- [http://logback.qos.ch/documentation.html](http://logback.qos.ch/documentation.html)
