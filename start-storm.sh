@@ -75,6 +75,22 @@ then
   start_storm_docker "nimbus"
   start_storm_docker "ui"
   start_storm_docker "supervisor"
+elif [ "$1" = "--help" ]
+then
+  echo "Runs a Docker container built by this repository."
+  echo "You can supply one or more of the following args:"
+  echo ""
+  echo "    nimbus     - Runs the nimbus container (components:" \
+    "Storm Nimbus, Storm DRPC)"
+  echo "    supervisor - Runs the supervisor container (components:" \
+    "Storm Supervisor, Storm Logviewer)"
+  echo "    ui         - Runs the ui container (components: Storm UI)"
+  echo "    zookeeper  - Runs the zookeeper container (components: Zookeeper)"
+  echo ""
+  echo "For example, to run the zookeeper and ui containers, run:"
+  echo ""
+  echo "    ./start-storm.sh zookeeper ui"
+  echo ""
 else
   # At least one argument was supplied to this script.
   # We start each Docker container in the arguments.
