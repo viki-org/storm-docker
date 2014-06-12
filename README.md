@@ -1,10 +1,6 @@
 storm-docker
 ============
 
-This repository is forked from https://github.com/wurstmeister/storm-docker
-and contains some edits that are specific to running the
-[storm-alerts](https://github.com/viki-org/storm-alerts) repository.
-
 At Viki, we run the [Docker](https://www.docker.io/) images built from this
 repository to obtain configured environments for the following components of the
 [Storm 'alerts' topology](https://github.com/viki-org/storm-alerts):
@@ -154,3 +150,9 @@ Additional documentation on logback can be found here:
 
 - [http://logback.qos.ch/manual/index.html](http://logback.qos.ch/manual/index.html)
 - [http://logback.qos.ch/documentation.html](http://logback.qos.ch/documentation.html)
+
+## Credits
+
+This repository was originally based on
+[wurstmeister/storm-docker](https://github.com/wurstmeister/storm-docker);
+big thanks to wurstmeister for making his project open source.
