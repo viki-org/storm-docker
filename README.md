@@ -79,6 +79,8 @@ go there:
 
     cd storm-docker
 
+## Running the Storm components
+
 ### Building the Docker images
 
 Run the **GNU** `make` command. The default goal builds the Docker images:
