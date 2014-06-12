@@ -122,20 +122,17 @@ For more information on running individual containers, run:
 
     ./start-storm.sh --help
 
-## To stop the Docker containers
+## Stopping Docker containers
 
-Take a look inside the `destroy-storm.sh` script if you only need to stop
-specific Docker containers. This can probably be done using `docker stop` (or
-`docker kill`).
-
-If you wish to stop everything (or if you're lazy), run the `destroy-storm.sh`
-script:
+To stop all running Docker containers for this repository:
 
     ./destroy-storm.sh
 
-Do not be alarmed by the `docker rm` commands in the script. Rebuilding the
-Docker images after a `docker rm` is faster than running the `rebuild.sh` script
-for the first time as results are being cached.
+To stop individual containers, supply them as arguments to the
+`destroy-storm.sh` script, for instance to stop the `ui` and `zookeeper`
+containers:
+
+    ./destroy-storm.sh ui zookeeper
 
 ## Other configuration
 
