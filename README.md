@@ -69,6 +69,15 @@ And edit the `config/storm-setup.yaml` file. Documentation is available in
 the `config/storm-setup.yaml.sample` file and should give you a good idea on
 how to make your edits.
 
+Copy the `config/cluster.xml.sample` to `config/cluster.xml`:
+
+    cp config/cluster.xml.sample config/cluster.xml
+
+`config/cluster.xml` will be used as the [logback](http://logback.qos.ch/)
+configuration file for Storm. The sample file comes with some ok defaults; to
+learn more about logback to edit the `config/cluster.xml` file, I highly
+recommend reading [The logback manual](http://logback.qos.ch/manual/index.html).
+
 Once this step is done, we continue with building the Docker images.
 
 ### Building the Docker images

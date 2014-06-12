@@ -2,7 +2,8 @@
 all: build-storm-docker-containers
 
 .PHONY: check-storm-setup-yaml-exists build-storm-docker-containers \
-  build-base-storm-docker-container build-zookeeper-docker-container
+  build-base-storm-docker-container build-zookeeper-docker-container \
+  check-config-cluster-xml-exists
 
 STORM_SETUP_YAML := storm-setup.yaml
 CONFIG_STORM_SETUP_YAML := $(addprefix config/,$(STORM_SETUP_YAML))
@@ -16,8 +17,19 @@ check-storm-setup-yaml-exists:
       { echo \"$(CONFIG_STORM_SETUP_YAML)\" does not exist. Please create it from \
       \"$(CONFIG_STORM_SETUP_YAML_SAMPLE)\" and try again. Exiting.; exit 1; }
 
+CLUSTER_XML := cluster.xml
+CONFIG_CLUSTER_XML := $(addprefix config/,$(CLUSTER_XML))
+CONFIG_CLUSTER_XML_SAMPLE := $(addsuffix .sample,$(CONFIG_CLUSTER_XML))
+BASE_STORM_CLUSTER_XML := $(addprefix base-storm/,$(CLUSTER_XML))
+
+check-config-cluster-xml-exists:
+	test -f $(CONFIG_CLUSTER_XML) || \
+      { echo \"$(CONFIG_CLUSTER_XML)\" does not exist. Please create it from \
+      \"$(CONFIG_CLUSTER_XML_SAMPLE)\" and try again. Exiting.; exit 1; }
+
 build-storm-docker-containers: check-storm-setup-yaml-exists \
-  build-base-storm-docker-container build-zookeeper-docker-container
+  check-config-cluster-xml-exists build-base-storm-docker-container \
+  build-zookeeper-docker-container
 	docker build -t="viki_data/storm-nimbus" storm-nimbus
 	docker build -t="viki_data/storm-supervisor" storm-supervisor
 	docker build -t="viki_data/storm-ui" storm-ui
@@ -30,7 +42,15 @@ STORM_SETUP_YAML_DEST_CHECKSUM = $(shell \
   md5sum < $(DOCKER_STORM_SETUP_YAML) | awk '{print $$1}' || echo "dest" \
 )
 
-build-base-storm-docker-container:
+# Get MD5 checksums of source and destination `cluster.xml`
+BASE_STORM_CLUSTER_XML_SOURCE_CHECKSUM = $(shell \
+  md5sum < $(CONFIG_CLUSTER_XML) | awk '{print $$1}' || echo "source" \
+)
+BASE_STORM_CLUSTER_XML_DEST_CHECKSUM = $(shell \
+  md5sum < $(BASE_STORM_CLUSTER_XML) | awk '{print $$1}' || echo "dest" \
+)
+
+build-base-storm-docker-container: check-config-cluster-xml-exists
 ifneq ($(STORM_SETUP_YAML_SOURCE_CHECKSUM),$(STORM_SETUP_YAML_DEST_CHECKSUM))
 # Only copy `config/storm-setup.yaml` to `base-storm/storm-setup.yaml` if their
 # contents differ.
@@ -38,6 +58,11 @@ ifneq ($(STORM_SETUP_YAML_SOURCE_CHECKSUM),$(STORM_SETUP_YAML_DEST_CHECKSUM))
 # make use of the cache after the step where `base-storm/storm-setup.yaml` is
 # added into the Docker container.
 	cp $(CONFIG_STORM_SETUP_YAML) $(DOCKER_STORM_SETUP_YAML)
+endif
+ifneq ($(BASE_STORM_CLUSTER_XML_SOURCE_CHECKSUM),$(BASE_STORM_CLUSTER_XML_DEST_CHECKSUM))
+# Copy the `config/cluster.xml` file to `base-storm/cluster.xml` if their
+# contents differ (or if `base-storm/cluster.xml` does not exist)
+	cp $(CONFIG_CLUSTER_XML) $(BASE_STORM_CLUSTER_XML)
 endif
 	docker build -t="viki_data/base-storm" base-storm
 
