@@ -78,6 +78,13 @@ configuration file for Storm. The sample file comes with some ok defaults; to
 learn more about logback to edit the `config/cluster.xml` file, I highly
 recommend reading [The logback manual](http://logback.qos.ch/manual/index.html).
 
+Copy `config/zoo.cfg.sample` to `config/zoo.cfg`:
+
+    cp config/zoo.cfg.sample config/zoo.cfg
+
+`config/zoo.cfg` will be used as Zookeeper's configuration file. There are
+instructions in the sample file on configuring this.
+
 Once this step is done, we continue with building the Docker images.
 
 ### Building the Docker images

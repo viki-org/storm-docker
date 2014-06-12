@@ -7,5 +7,7 @@
 /base-storm/storm-setup.yaml
 /config/storm-setup.yaml
 /config/cluster.xml
+/config/zoo.cfg
 /zookeeper/storm-setup.yaml
+/zookeeper/zoo.cfg
 /venv

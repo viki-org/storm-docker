@@ -1,3 +1,18 @@
+# NOTE: DO NOT add the following configuration parameters:
+#
+#     clientPort
+#     server.* entries (eg. server.1=1.2.3.4:2888:3888)
+#
+# Because these will be added by the `zookeeper/run-zookeeper.py` Python
+# script, which is the entrypoint of the Zookeeper Docker container
+#
+#
+# For more information on the various configuration settings of Zookeeper,
+# check out:
+#
+#     http://zookeeper.apache.org/doc/r3.4.6/zookeeperAdmin.html#sc_configuration
+
+
 # The number of milliseconds of each tick
 tickTime=2000
 # The number of ticks that the initial
