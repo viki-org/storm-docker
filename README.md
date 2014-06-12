@@ -117,6 +117,19 @@ containers:
 
     ./destroy-storm.sh ui zookeeper
 
+## Motivation
+
+This project was started to address the need to increase the scalability and
+fault tolerance of Viki's Storm cluster. A lot of effort was spent figuring out
+how to run multiple Storm Supervisor and Zookeeper in Docker.
+
+This repository should be viewed more as a foundation on which you can build
+on for running your Storm cluster in Docker, rather than as a defacto standard
+for running Storm in Docker.
+
+To better aid someone new to the codebase to modify it, much of the core Python
+code contains rather extensive inline documentation to better aid understanding.
+
 ## Credits
 
 This repository was originally based on
