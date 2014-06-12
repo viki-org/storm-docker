@@ -112,36 +112,15 @@ take some time to complete.
 
 ### Run the Docker containers
 
-For a machine that is used to run **all** the following (in separate Docker
-containers):
-
-- Zookeeper
-- Storm Nimbus
-- Storm UI
-- Storm Supervisor
-
-Use the `start-storm.sh` script:
+To run all Docker containers for this repository on your current machine:
 
     ./start-storm.sh
 
-For a machine which should run **some** of the above components (most notably, a
-machine running only Storm Supervisor), refer to the same `start-storm.sh` file
-and look at the individual commands in that script.
+You should not see any errors if configuration is done correctly.
 
-To provide a concrete example, the following command will run a
-Storm Supervisor Docker container on **any** machine listed in the
-`storm_supervisor_hosts` section of the `config/storm-setup.yaml` file:
+For more information on running individual containers, run:
 
-    scripts/run-storm-supervisor.sh \
-      --dns 127.0.0.1 --dns 8.8.8.8 --dns 8.8.8.4 \
-      -p 49000:8000 -p 127.0.0.1:49022:22 \
-      -p 6700:6700 -p 6701:6701 -p 6702:6702 -p 6703:6703 \
-      --name supervisor \
-      -d viki_data/storm-supervisor
-
-Once you've run the desired Docker containers (minimally 1 Zookeeper,
-1 Storm Nimbus, 1 Storm UI, 1 Storm Supervisor), you're ready to deploy a Storm
-topology.
+    ./start-storm.sh --help
 
 ## To stop the Docker containers
 
