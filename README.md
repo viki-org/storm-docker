@@ -79,9 +79,27 @@ go there:
 
     cd storm-docker
 
-## Running the Storm components
+## Configuration
+
+### Configuring the Storm setup
+
+**NOTE:** This step is **critical** to the correct functioning of the Storm
+topology.
+
+Copy the `config/storm-setup.yaml.sample` file to `config/storm-setup.yaml`:
+
+    cp config/storm-setup.yaml.sample config/storm-setup.yaml
+
+And edit the `config/storm-setup.yaml` file. Documentation is available in
+the `config/storm-setup.yaml.sample` file and should give you a good idea on
+how to make your edits.
+
+Once this step is done, we continue with building the Docker images.
 
 ### Building the Docker images
+
+**NOTE:** This step is necessary after making changes to
+`config/storm-setup.yaml`.
 
 Run the **GNU** `make` command. The default goal builds the Docker images:
 
@@ -90,17 +108,7 @@ Run the **GNU** `make` command. The default goal builds the Docker images:
 If this is the first time the Docker images are being built, this script will
 take some time to complete.
 
-### Configuring the Storm setup
-
-**NOTE:** This step is **critical** to the correct functioning of the Storm
-topology.
-
-Copy the `storm-setup.yaml.sample` file in the `config` directory:
-
-    cp config/storm-setup.yaml.sample config/storm-setup.yaml
-
-And edit the `config/storm-setup.yaml` file. Documentation is available in
-the `config/storm-setup.yaml.sample` file on how to fill up the file.
+## Running the Storm components
 
 ### Run the Docker containers
 
