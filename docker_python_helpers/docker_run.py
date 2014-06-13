@@ -139,12 +139,17 @@ def ec2_get_ip(public=True):
     # Most probably this server is not an EC2 instance
     return None
 
-def get_ipv4_addresses():
+def get_ipv4_addresses(isLocalhostSetup=False):
   """Returns all possible IPv4 addresses for the machine based on the output of
-  the `ifconfig` command, excluding '127.0.0.1'.
+  the `ifconfig` command. `127.0.0.1` will be included if True is supplied for
+  the `isLocalhostSetup` parameter, it will be excluded otherwise.
+
+  Args:
+    isLocalhostSetup(bool, optional): Set this to True if you are running
+      everything on one machine using 127.0.0.1 as the IP address
 
   Returns:
-    list of str: List of IPv4 addresses for this machine, excluding '127.0.0.1'.
+    list of str: List of IPv4 addresses for this machine
   """
   p = subprocess.Popen(["ifconfig"], stdout=subprocess.PIPE)
   out, _ = p.communicate()
@@ -168,6 +173,8 @@ def get_ipv4_addresses():
     ipAddresses.remove('127.0.0.1')
   except ValueError:
     pass
+  if isLocalhostSetup:
+    ipAddresses.append('127.0.0.1')
   return ipAddresses
 
 def construct_docker_run_args(dockerRunArgv, myIPv4Addresses):
@@ -263,7 +270,8 @@ if __name__ == "__main__":
   # Prepend port forwarding args to args list
   remArgList[:0] = portArgs
 
-  ipv4Addresses = get_ipv4_addresses()
+  stormConfig = get_storm_config()
+  ipv4Addresses = get_ipv4_addresses(stormConfig["is_localhost_setup"])
   dockerRunArgsString = construct_docker_run_args(remArgList, ipv4Addresses)
   dockerRunCmd = "docker run {}".format(dockerRunArgsString)
   print(dockerRunCmd)

@@ -11,8 +11,10 @@ import sys
 from . import docker_run
 
 if __name__ == "__main__":
-  ipv4Addresses = docker_run.get_ipv4_addresses()
   stormConfig = docker_run.get_storm_config()
+  ipv4Addresses = docker_run.get_ipv4_addresses(
+    stormConfig["is_localhost_setup"]
+  )
   foundCurrentServer = False
   for zkIpAddress in stormConfig["storm.yaml"]["storm.zookeeper.servers"]:
     if zkIpAddress in ipv4Addresses:

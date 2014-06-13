@@ -1,3 +1,7 @@
+# Set this to true if and only if you are running every Storm component on a
+# single machine using 127.0.0.1 as the IP address
+is_localhost_setup: true
+
 # Hosts running storm-supervisor.
 #
 # Each item in this array represents a single storm-supervisor node running in

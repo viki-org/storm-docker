@@ -12,8 +12,10 @@ import yaml
 from . import docker_run
 
 if __name__ == "__main__":
-  ipv4Addresses = docker_run.get_ipv4_addresses()
   stormConfig = docker_run.get_storm_config()
+  ipv4Addresses = docker_run.get_ipv4_addresses(
+    stormConfig["is_localhost_setup"]
+  )
   dockerHostname = None
   for supervisorConfig in stormConfig["storm.supervisor.hosts"]:
     if supervisorConfig["ip"] in ipv4Addresses:
