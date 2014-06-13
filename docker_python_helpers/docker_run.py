@@ -170,8 +170,7 @@ def get_ipv4_addresses():
     pass
   return ipAddresses
 
-def construct_docker_run_args(dockerRunArgv,
-    myIPv4Addresses=get_ipv4_addresses()):
+def construct_docker_run_args(dockerRunArgv, myIPv4Addresses):
   """Returns a string containing arguments for `docker run`, assuming that the
   entrypoint of the Dockerfile is the `base-storm/run-supervisord.py` script.
 
@@ -179,7 +178,7 @@ def construct_docker_run_args(dockerRunArgv,
     dockerRunArgv(list of str, optional): Actual arguments to `docker run`
       (not to the entrypoint of the Dockerfile). Please DO NOT include
       `docker run` in this list.
-    myIPv4Addresses(list of str, optional): List of IPv4 addresses of the
+    myIPv4Addresses(list of str): List of IPv4 addresses of the
       current machine.
 
   Returns:
@@ -264,7 +263,8 @@ if __name__ == "__main__":
   # Prepend port forwarding args to args list
   remArgList[:0] = portArgs
 
-  dockerRunArgsString = construct_docker_run_args(remArgList)
+  ipv4Addresses = get_ipv4_addresses()
+  dockerRunArgsString = construct_docker_run_args(remArgList, ipv4Addresses)
   dockerRunCmd = "docker run {}".format(dockerRunArgsString)
   print(dockerRunCmd)
   # execute `docker run` with the generated args

@@ -26,10 +26,9 @@ if __name__ == "__main__":
     )
 
   dockerRunArgs = docker_run.construct_docker_run_args(
-    myIPv4Addresses=ipv4Addresses,
     # See the usage of this script at the top of the file... and you'll
     # understand why we need to subscript `sys.argv` from 2
-    dockerRunArgv=sys.argv[2:],
+    sys.argv[2:], ipv4Addresses
   )
   # construct appropriate port arguments for Storm supervisor and logviewer
   # since we run those 2 services in the `storm-supervisor` container

@@ -27,10 +27,9 @@ if __name__ == "__main__":
     )
 
   dockerRunArgs = docker_run.construct_docker_run_args(
-    myIPv4Addresses=ipv4Addresses,
     # See the usage of this script at the top of the file... and you'll
     # understand why we need to subscript `sys.argv` from 2
-    dockerRunArgv=sys.argv[2:],
+    sys.argv[2:], ipv4Addresses
   )
   dockerPortArgs = docker_run.construct_docker_run_port_args(["zookeeper"])
   dockerRunCmd = "docker run {} {}".format(" ".join(dockerPortArgs),
