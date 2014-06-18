@@ -3,9 +3,6 @@
     -
       title: README
       filename: index
-    -
-      title: storm-setup.yaml Configuration
-      filename: docs/storm_setup_yaml
 
 - title: Dockerfiles
   docs:
