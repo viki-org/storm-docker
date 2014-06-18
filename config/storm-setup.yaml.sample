@@ -36,9 +36,14 @@ storm.supervisor.hosts:
       - "balut-fever"
 
 # Port configuration for a multiple server Zookeeper setup.
-# I know this is separate from the `storm.zookeeper.port` under `storm.yaml` but
-# yea...
-# This is NOT required if you are running a single Zookeeper.
+# The ports here are used to construct the `server.X` entries for the Zookeeper
+# configuration file.
+#
+# See http://zookeeper.apache.org/doc/trunk/zookeeperAdmin.html#sc_zkMulitServerSetup
+# for more information.
+#
+# This section is NOT required if you are running a single Zookeeper; however
+# there is no harm to leave it around.
 zookeeper.multiple.setup:
   follower.port: 2888
   election.port: 3888
