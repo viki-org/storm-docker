@@ -21,6 +21,9 @@
     -
       title: storm-ui
       filename: docs/docker/storm-ui
+    -
+      title: storm-supervisor
+      filename: docs/docker/storm-supervisor
 
 - title: Execution
   docs:
