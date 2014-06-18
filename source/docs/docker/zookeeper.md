@@ -9,7 +9,7 @@ Dockerfile: `zookeeper/Dockerfile`
 
 Entrypoint source file: `zookeeper/run-zookeeper.py`
 
-This is used for running 1 instance of
+The zookeeper Docker is used to run 1 instance of
 [Zookeeper](http://zookeeper.apache.org/). Storm uses Zookeeper for
 coordinating a cluster.
 
