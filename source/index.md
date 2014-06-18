@@ -1,7 +1,5 @@
 ---
 title: storm-docker - Making distributed, multiple server Storm setups easy, in Docker
-heading: storm-docker
-summary: Making distributed, multiple server Storm setups easy, in Docker
 ---
 
 storm-docker
