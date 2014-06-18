@@ -48,6 +48,17 @@
         <ul></ul>
       </nav>
 
+      <aside>
+        <% data.docs.each do |d| %>
+          <ul>
+            <h4><%= d.title %></h4>
+            <% d.docs.each do |d| %>
+              <li><a href="/<%= d.filename %>.html"><%= d.title %></a></li>
+            <% end %>
+          </ul>
+        <% end %>
+      </aside>
+
       <section>
         <%= yield %>
       </section>
