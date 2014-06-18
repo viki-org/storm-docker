@@ -5,6 +5,8 @@ title: zookeeper Docker
 zookeeper Docker
 ================
 
+Dockerfile: `zookeeper/Dockerfile`
+
 Entrypoint source file: `zookeeper/run-zookeeper.py`
 
 This is used for running 1 instance of
