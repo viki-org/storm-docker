@@ -9,7 +9,7 @@ Dockerfile: `zookeeper/Dockerfile`
 
 Entrypoint source file: `zookeeper/run-zookeeper.py`
 
-The zookeeper Docker is used to run 1 instance of
+The `zookeeper` Docker is used to run 1 instance of
 [Zookeeper](http://zookeeper.apache.org/). Storm uses Zookeeper for
 coordinating a cluster.
 
@@ -20,14 +20,14 @@ coordinating a cluster.
 
 ### SSH Daemon
 
-The SSH daemon allows you to SSH into the Zookeeper Docker and take a look at
+The SSH daemon allows you to SSH into the `zookeeper` Docker and take a look at
 what's going on. It was added due to the difficulty we faced in getting
 Zookeeper to run on Docker.
 
 The SSH daemon runs on port 22 of the Docker container and is mapped to port
 49022 of the host machine.
 
-To access it from the machine running the Zookeeper Docker:
+To access it from the machine running the `zookeeper` Docker:
 
     ssh -p 49122 root@localhost
 
@@ -67,5 +67,5 @@ for you.
 ## For Hackers
 
 For machines which run multiple components of the storm-docker repository,
-the Zookeeper Docker has to be started first, since the `storm-nimbus` and
-`storm-ui` Docker link to the Zookeeper Docker.
+the `zookeeper` Docker has to be started first, since the `storm-nimbus` and
+`storm-ui` Docker link to the `zookeeper` Docker.
