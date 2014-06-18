@@ -67,5 +67,5 @@ for you.
 ## For Hackers
 
 For machines which run multiple components of the storm-docker repository,
-the Zookeeper Docker has to be started first, since the storm-nimbus and
-storm-ui Docker link to the Zookeeper Docker.
+the Zookeeper Docker has to be started first, since the `storm-nimbus` and
+`storm-ui` Docker link to the Zookeeper Docker.
