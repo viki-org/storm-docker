@@ -22,9 +22,18 @@ storm-ui Docker link to the Zookeeper Docker.
 - SSH daemon (accessible only from the machine running the Docker)
 - Zookeeper
 
+### SSH Daemon
+
 The SSH daemon allows you to SSH into the Zookeeper Docker and take a look at
 what's going on. It was added due to the difficulty we faced in getting
 Zookeeper to run on Docker.
+
+The SSH daemon runs on port 22 of the Docker container and is mapped to port
+49022 of the host machine.
+
+To access it from the machine running the Zookeeper Docker:
+
+    ssh -p 49122 root@localhost
 
 ## Overview of Entrypoint
 
