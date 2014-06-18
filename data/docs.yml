@@ -15,6 +15,9 @@
     -
       title: Zookeeper
       filename: docs/docker/zookeeper
+    -
+      title: Storm Nimbus
+      filename: docs/docker/storm-nimbus
 
 - title: Execution
   docs:
