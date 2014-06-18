@@ -7,6 +7,8 @@ storm-ui Docker
 
 Dockerfile: `storm-ui/Dockerfile`
 
+Entrypoint source file: `base-storm/run-supervisord.py`
+
 ## Services running in this Docker
 
 - Storm UI

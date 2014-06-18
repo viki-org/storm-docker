@@ -5,6 +5,8 @@ title: zookeeper Docker
 zookeeper Docker
 ================
 
+Entrypoint source file: `zookeeper/run-zookeeper.py`
+
 This is used for running 1 instance of
 [Zookeeper](http://zookeeper.apache.org/). Storm uses Zookeeper for
 coordinating a cluster.
