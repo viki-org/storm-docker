@@ -3,25 +3,26 @@
 # Otherwise, set it to false.
 is_localhost_setup: true
 
-# Hosts running storm-supervisor.
+# Hosts running the `storm-supervisor` Docker container.
 #
-# Each item in this array represents a single storm-supervisor node running in
-# a Docker container.
+# You will need to add an entry for each `storm-supervisor` Docker container
+# that will be run in your Storm cluster.
 #
-# Each item should have the following keys:
+# Each entry should have the following keys:
 #
-# - `ip`: An IP address for the node/machine running storm-supervisor.
+# - `ip`: An IP address for the machine running the `storm-supervisor` Docker
+#         container.
 #         NOTE: This IP address must be accessible by ALL storm components.
 #
-# - `aliases`: A list of aliases that can be used to identify the
-#              storm-supervisor node.
+# - `aliases`: A list of aliases that can be used to identify the machine
+#              running the `storm-supervisor` Docker container.
 #
 #              This is needed for the Storm Supervisor nodes to identify one
-#              another; supplying one unique identifier for each
-#              Storm Supervisor host will do the trick.
+#              another; supplying one unique identifier for each entry will do
+#              the trick.
 #
-#              The 0th alias will be used as the hostname for the Docker
-#              container running the storm-supervisor.
+#              The 0th alias of an entry will be used as the hostname for that
+#              storm-supervisor Docker container.
 storm.supervisor.hosts:
   -
     ip: "10.0.52.1"
