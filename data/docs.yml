@@ -12,6 +12,9 @@
     -
       title: Overview and Organization
       filename: docs/docker/overview
+    -
+      title: Zookeeper
+      filename: docs/docker/zookeeper
 
 - title: Execution
   docs:
