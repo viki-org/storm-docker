@@ -13,10 +13,10 @@
       title: Overview and Organization
       filename: docs/docker/overview
     -
-      title: Zookeeper
+      title: zookeeper
       filename: docs/docker/zookeeper
     -
-      title: Storm Nimbus
+      title: storm-nimbus
       filename: docs/docker/storm-nimbus
 
 - title: Execution

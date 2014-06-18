@@ -1,8 +1,8 @@
 ---
-title: Zookeeper Docker
+title: zookeeper Docker
 ---
 
-Zookeeper Docker
+zookeeper Docker
 ================
 
 This is used for running 1 instance of
