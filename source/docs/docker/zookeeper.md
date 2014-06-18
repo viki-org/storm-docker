@@ -53,7 +53,7 @@ section in the Zookeeper Administrator's Guide:
 
 [http://zookeeper.apache.org/doc/r3.4.6/zookeeperAdmin.html#sc_zkMulitServerSetup](http://zookeeper.apache.org/doc/r3.4.6/zookeeperAdmin.html#sc_zkMulitServerSetup)
 
-The `myid` file is probably used for each Zoookeeper instance to identify itself
+The `myid` file is probably used for each Zookeeper instance to identify itself
 in the server.X entries and is easily missed out (refer to point 5 of the link
 above). This is one of those subtle things that the storm-docker repository
 takes care of.
