@@ -13,10 +13,6 @@ This is used for running 1 instance of
 [Zookeeper](http://zookeeper.apache.org/). Storm uses Zookeeper for
 coordinating a cluster.
 
-For machines which run multiple components of the storm-docker repository,
-the Zookeeper Docker has to be started first, since the storm-nimbus and
-storm-ui Docker link to the Zookeeper Docker.
-
 ## Services Running in this Docker
 
 - SSH daemon (accessible only from the machine running the Docker)
@@ -67,3 +63,9 @@ IP address for the current Zookeeper's entry must be converted to the Docker's
 IP address, otherwise the Zookeeper cluster will not be able to carry out
 elections and Storm will not run. Once again, storm-docker takes care of that
 for you.
+
+## For Hackers
+
+For machines which run multiple components of the storm-docker repository,
+the Zookeeper Docker has to be started first, since the storm-nimbus and
+storm-ui Docker link to the Zookeeper Docker.
