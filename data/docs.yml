@@ -18,6 +18,9 @@
     -
       title: storm-nimbus
       filename: docs/docker/storm-nimbus
+    -
+      title: storm-ui
+      filename: docs/docker/storm-ui
 
 - title: Execution
   docs:
