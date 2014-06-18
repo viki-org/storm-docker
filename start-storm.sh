@@ -32,7 +32,7 @@ function start_storm_docker {
       echo "storm supervisor Docker container already running"
     else
       SKIP_PIP_INSTALL=$SKIP_PIP_INSTALL scripts/run-storm-supervisor.sh \
-        --dns 127.0.0.1 --dns 8.8.8.8 --dns 8.8.8.4 \
+        --dns 127.0.0.1 --dns 8.8.8.8 --dns 8.8.4.4 \
         -p 127.0.0.1:49022:22 \
         --name supervisor \
         -d viki_data/storm-supervisor
