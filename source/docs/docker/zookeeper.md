@@ -63,9 +63,3 @@ IP address for the current Zookeeper's entry must be converted to the Docker's
 IP address, otherwise the Zookeeper cluster will not be able to carry out
 elections and Storm will not run. Once again, storm-docker takes care of that
 for you.
-
-## For Hackers
-
-For machines which run multiple components of the storm-docker repository,
-the `zookeeper` Docker has to be started first, since the `storm-nimbus` and
-`storm-ui` Docker link to the `zookeeper` Docker.
