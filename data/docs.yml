@@ -3,6 +3,9 @@
     -
       title: README
       filename: index
+    -
+      title: Building
+      filename: docs/building
 
 - title: Dockerfiles
   docs:
