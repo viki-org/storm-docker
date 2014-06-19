@@ -1,9 +1,9 @@
 ---
-title: Building
+title: Build Process
 ---
 
-Building
-========
+Build Process
+=============
 
 This page discusses the build process of storm-docker.
 

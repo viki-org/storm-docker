@@ -4,8 +4,8 @@
       title: README
       path: ""
     -
-      title: Building
-      path: docs/building
+      title: Build Process
+      path: docs/build-process
 
 - title: Dockerfiles
   docs:
