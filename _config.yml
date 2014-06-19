@@ -1,7 +1,7 @@
 name: storm-docker Documentation
 baseurl: /storm-docker
 markdown: redcarpet
-pygments: true
+highlighter: pygments
 
 defaults:
   -
