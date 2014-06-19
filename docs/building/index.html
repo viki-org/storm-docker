@@ -152,8 +152,21 @@ same file in the <code>config</code> folder. In this case, the configuration fil
 <code>config</code> folder is copied to the destination folder.</li>
 </ul>
 
-<p>Hence, the configuration file is only copied when necessary. This allows Docker
-to make use of the cache as much as it can.</p>
+<p>Hence, the configuration files are only copied when necessary.
+Doing so allows Docker to make use of the cache as much as possible.
+Not surprisingly, the code needed to perform this &quot;conditional copying&quot; takes
+up the bulk of the complexity of our <code>Makefile</code>.</p>
+
+<h2>docker build</h2>
+
+<p>The default goal of the <code>Makefile</code> is the <code>build-storm-docker-containers</code> rule.
+Within the body of the goal are several <code>docker build</code> commands like the
+following:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">docker build -t=&quot;viki_data/storm-nimbus&quot; storm-nimbus
+</code></pre></div>
+<p>The default goal has prerequisites which build other Docker images. Ultimately,
+things boil down to executing <code>docker build</code> commands for the Docker images
+prescribed by <code>Dockerfile</code>s in this repository.</p>
 
       </section>
 
