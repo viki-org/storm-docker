@@ -6,6 +6,9 @@
     -
       title: Build Process
       path: docs/build-process
+    -
+      title: Execution
+      path: docs/execution
 
 - title: Dockerfiles
   docs:
@@ -24,9 +27,3 @@
     -
       title: storm-supervisor
       path: docs/storm-supervisor
-
-- title: Execution
-  docs:
-    -
-      title: Overview
-      path: docs/execution
