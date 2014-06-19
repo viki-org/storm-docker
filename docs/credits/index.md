@@ -16,8 +16,8 @@ organizations/people.
 storm-docker was originally an internal project started to meet the demands of
 our Storm cluster. Subsequently it was deemed sufficiently generic and useful
 enough to the community (this _should_ be true, especially after the kind of
-time effort we spent on getting Storm to work within Docker) and allowed to be
-open source.
+time effort we spent on getting Storm to work within Docker) and made open
+source.
 
 ## wurstmeister/storm-docker
 
