@@ -5,12 +5,12 @@
     <!-- Always force latest IE rendering engine or request Chrome Frame -->
     <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
 
-    <!-- Use title if it's in the page YAML frontmatter -->
     <title>storm-docker - Making distributed, multiple server Storm setups easy, in Docker</title>
+    <link rel="stylesheet" href="/storm-docker/stylesheets/styles.css" />
+    <link rel="stylesheet" href="/storm-docker/stylesheets/pygment_trac.css" />
 
-    <link href="stylesheets/styles.css" rel="stylesheet" type="text/css" /><link href="stylesheets/pygment_trac.css" rel="stylesheet" type="text/css" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-    <script src="javascripts/all.js" type="text/javascript"></script>
+    <script src="/storm-docker/javascripts/main.js"></script>
 
     <!--[if lt IE 9]>
       <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -19,7 +19,7 @@
   </head>
   
 
-  <body class="index">
+  <body>
     <header>
       <a href="">
         <h1>storm-docker</h1>
@@ -49,23 +49,38 @@
       </nav>
 
       <aside>
+        
           <ul>
             <h4>Getting Started</h4>
-              <li><a href="/index.html">README</a></li>
-              <li><a href="/docs/building.html">Building</a></li>
+            
+              <li><a href="/storm-docker/">README</a></li>
+            
+              <li><a href="/storm-docker/docs/building">Building</a></li>
+            
           </ul>
+        
           <ul>
             <h4>Dockerfiles</h4>
-              <li><a href="/docs/docker/overview.html">Overview and Organization</a></li>
-              <li><a href="/docs/docker/zookeeper.html">zookeeper</a></li>
-              <li><a href="/docs/docker/storm-nimbus.html">storm-nimbus</a></li>
-              <li><a href="/docs/docker/storm-ui.html">storm-ui</a></li>
-              <li><a href="/docs/docker/storm-supervisor.html">storm-supervisor</a></li>
+            
+              <li><a href="/storm-docker/docs/docker-overview">Overview and Organization</a></li>
+            
+              <li><a href="/storm-docker/docs/zookeeper">zookeeper</a></li>
+            
+              <li><a href="/storm-docker/docs/storm-nimbus">storm-nimbus</a></li>
+            
+              <li><a href="/storm-docker/docs/storm-ui">storm-ui</a></li>
+            
+              <li><a href="/storm-docker/docs/storm-supervisor">storm-supervisor</a></li>
+            
           </ul>
+        
           <ul>
             <h4>Execution</h4>
-              <li><a href="/docs/execution/overview.html">Overview</a></li>
+            
+              <li><a href="/storm-docker/docs/execution">Overview</a></li>
+            
           </ul>
+        
       </aside>
 
       <section>
@@ -95,11 +110,9 @@ for some of the Python scripts in this repository. We also make use of the
 files.</p>
 
 <p>On a Ubuntu-like system:</p>
-
-<pre><code>sudo apt-get install python-virtualenv
+<div class="highlight"><pre><code class="language-text" data-lang="text">sudo apt-get install python-virtualenv
 sudo apt-get install python-dev
-</code></pre>
-
+</code></pre></div>
 <h3>Install Docker</h3>
 
 <p>For Ubuntu Precise 12.04 (LTS), ensure that your Linux Kernel is a relatively
@@ -108,29 +121,21 @@ http://docs.docker.io/installation/ubuntulinux/ for more information).</p>
 
 <p>Use the following command from the top of the script at http://get.docker.io
 to install Docker</p>
-
-<pre><code>wget -qO- https://get.docker.io/ | bash
-</code></pre>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text">wget -qO- https://get.docker.io/ | bash
+</code></pre></div>
 <p>Verify your Docker installation:</p>
-
-<pre><code>docker info
-</code></pre>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text">docker info
+</code></pre></div>
 <h3>Cloning this repository</h3>
 
 <p>Clone this repository, preferrably to <code>$HOME/workspace/storm-docker</code>.
 At <code>$HOME/workspace</code>:</p>
-
-<pre><code>git clone git@github.com:viki-org/storm-docker.git
-</code></pre>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text">git clone git@github.com:viki-org/storm-docker.git
+</code></pre></div>
 <p>The next few commands will be run from the <code>storm-docker</code> repository. Let us
 go there:</p>
-
-<pre><code>cd storm-docker
-</code></pre>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text">cd storm-docker
+</code></pre></div>
 <h2>Configuration</h2>
 
 <h3>Configuring the Storm setup</h3>
@@ -140,10 +145,8 @@ topology.</p>
 
 <p>Copy the sample configuration files to concrete configuration files (this does
 not overwrite any existing concrete configuration files):</p>
-
-<pre><code>./copy-sample-config.sh
-</code></pre>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text">./copy-sample-config.sh
+</code></pre></div>
 <p>Carry on by editing the following concrete configuration files:</p>
 
 <ul>
@@ -165,10 +168,8 @@ highly recommend reading
 configuration files in the above subsection.</p>
 
 <p>Run the <strong>GNU</strong> <code>make</code> command. The default goal builds the Docker images:</p>
-
-<pre><code>make
-</code></pre>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text">make
+</code></pre></div>
 <p>If this is the first time the Docker images are being built, this script will
 take some time to complete.</p>
 
@@ -177,35 +178,27 @@ take some time to complete.</p>
 <h3>Run the Docker containers</h3>
 
 <p>To run all Docker containers for this repository on your current machine:</p>
-
-<pre><code>./start-storm.sh
-</code></pre>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text">./start-storm.sh
+</code></pre></div>
 <p>You should not see any errors if configuration is done correctly.</p>
 
 <p>For more information on running individual containers, run:</p>
-
-<pre><code>./start-storm.sh --help
-</code></pre>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text">./start-storm.sh --help
+</code></pre></div>
 <h2>Stopping Docker containers</h2>
 
 <p>To stop all running Docker containers for this repository:</p>
-
-<pre><code>./destroy-storm.sh
-</code></pre>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text">./destroy-storm.sh
+</code></pre></div>
 <p>To stop individual containers, supply them as arguments to the
 <code>destroy-storm.sh</code> script, for instance to stop the <code>ui</code> and <code>zookeeper</code>
 containers:</p>
-
-<pre><code>./destroy-storm.sh ui zookeeper
-</code></pre>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text">./destroy-storm.sh ui zookeeper
+</code></pre></div>
 <h2>Motivation</h2>
 
 <p>This project was started to address the need to increase the scalability and
-fault tolerance of Viki&rsquo;s Storm cluster. A lot of effort was spent figuring out
+fault tolerance of Viki&#39;s Storm cluster. A lot of effort was spent figuring out
 how to run multiple Storm Supervisor and Zookeeper in Docker.</p>
 
 <p>This repository should be viewed more as a foundation on which you can build
