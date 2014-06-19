@@ -6,6 +6,8 @@ This repository makes it easy to run **distributed, multiple server**
 [Storm](http://storm.incubator.apache.org/) topologies within
 [Docker](https://www.docker.io/).
 
+More documentation on Github pages: http://dev.viki.com/storm-docker
+
 ## System Requirements
 
 - GNU Make
