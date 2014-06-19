@@ -5,7 +5,7 @@
     <!-- Always force latest IE rendering engine or request Chrome Frame -->
     <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
 
-    <title>storm-ui</title>
+    <title>Credits</title>
     <link rel="stylesheet" href="/storm-docker/stylesheets/styles.css" />
     <link rel="stylesheet" href="/storm-docker/stylesheets/pygment_trac.css" />
 
@@ -90,43 +90,41 @@
       </aside>
 
       <section>
-        <h1>storm-ui Docker</h1>
+        <h1>Credits</h1>
 
-<p>Dockerfile: <code>storm-ui/Dockerfile</code></p>
+<p>This project would not have been possible without the following
+organizations/people.</p>
 
-<p>Entrypoint source file: <code>base-storm/run-supervisord.py</code></p>
-
-<h2>Services running in this Docker</h2>
+<h2>Viki Inc.</h2>
 
 <ul>
-<li>Storm UI</li>
+<li>Website: <a href="http://www.viki.com">http://www.viki.com</a></li>
+<li>Engineering Page: <a href="http://engineering.viki.com">http://engineering.viki.com</a></li>
 </ul>
 
-<h2>Setup specific to storm-docker</h2>
+<p>storm-docker was originally an internal project started to meet the demands of
+our Storm cluster. Subsequently it was deemed sufficiently generic and useful
+enough to the community (this <em>should</em> be true, especially after the kind of
+time effort we spent on getting Storm to work within Docker) and allowed to be
+open source.</p>
 
-<p>In <code>start-storm.sh</code>, we can see the <code>--link nimbus:nimbus</code> and
-<code>--link zookeeper:zk</code> flags passed to <code>scripts/run-storm-docker-component.sh</code>.
-These flags are subsequently passed down to
-<code>docker_python_helpers/docker_run.py</code> and eventually form part of the generated
-<code>docker run</code> command for <code>storm-ui</code>.</p>
+<h2>wurstmeister/storm-docker</h2>
 
-<p>As such, the <code>storm-ui</code> Docker in this repository links to a running
-<code>storm-nimbus</code> Docker container and a running <code>zookeeper</code> Docker container.
-Take note of that before running the <code>storm-ui</code> Docker container. You will need
-to hack this repository if you do not want those Docker links to be made when
-starting the <code>storm-ui</code> container; the necessary edits will not be difficult to
-identify and correctly make.</p>
+<p>storm-docker is based on
+<a href="https://github.com/wurstmeister/storm-docker">wurstmeister/storm-docker</a>.
+We&#39;ve learnt a lot about Docker studying the Dockerfiles in that repository.</p>
 
-<h2>Additional Information</h2>
+<p>Big thanks to wurstmeister for making his work open source!</p>
 
-<p>Storm UI gives you a web interface for viewing Storm settings (obtained from
-Storm Nimbus), viewing running Storm toplogies, killing running Storm
-topologies, etc. It is accessible using a web browser via the <code>ui.port</code>
-supplied in the <code>config/storm-setup.yaml</code>, defaulting to port 8080.</p>
+<h2>Leap Day theme</h2>
 
-<p>For instance, if the global IP address of the machine running the <code>storm-ui</code>
-Docker is <code>192.216.200.32</code> and <code>ui.port</code> is 8572, then the Storm UI is
-accessible via <code>http://192.216.200.32:8572</code>.</p>
+<p>The github pages theme is a slightly modified
+<a href="https://github.com/mattgraham/Leap-Day">Leap Day</a> by
+<a href="http://madebygraham.com/">Matt Graham</a>.</p>
+
+<p>While the sunny feeling of the Leap Day theme does not quite fit with Storm
+(it should be dark, cloudy and there should be thunder), it is a very beautiful
+theme.</p>
 
       </section>
 

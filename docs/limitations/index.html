@@ -5,7 +5,7 @@
     <!-- Always force latest IE rendering engine or request Chrome Frame -->
     <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
 
-    <title>storm-ui</title>
+    <title>Limitations</title>
     <link rel="stylesheet" href="/storm-docker/stylesheets/styles.css" />
     <link rel="stylesheet" href="/storm-docker/stylesheets/pygment_trac.css" />
 
@@ -90,43 +90,56 @@
       </aside>
 
       <section>
-        <h1>storm-ui Docker</h1>
+        <h1>storm-docker Limitations</h1>
 
-<p>Dockerfile: <code>storm-ui/Dockerfile</code></p>
+<p>storm-docker is by no means a perfect piece of software.
+As stated in the README, it is meant as a starting point for distributed,
+multiple server setups.
+In fact, you are highly encouraged to dig into the source code and hack on it
+until it suits your use case.</p>
 
-<p>Entrypoint source file: <code>base-storm/run-supervisord.py</code></p>
-
-<h2>Services running in this Docker</h2>
+<p>Recently, there&#39;s an article written by <a href="https://devopsu.com/">Matt Jaynes</a>
+that addresses misconceptions about Docker and some mistakes that beginners
+make when writing Dockerfiles for their applications.</p>
 
 <ul>
-<li>Storm UI</li>
+<li>Link to the article: <a href="https://devopsu.com/blog/docker-misconceptions/">https://devopsu.com/blog/docker-misconceptions/</a></li>
+<li>Hacker News discussion: <a href="https://news.ycombinator.com/item?id=7869904">https://news.ycombinator.com/item?id=7869904</a></li>
 </ul>
 
-<h2>Setup specific to storm-docker</h2>
+<p>After reading Matt Jaynes&#39; article, I can&#39;t help but feel that I&#39;ve overlooked
+many things he mentioned in the
+<strong>Misconception: If I learn Docker then I don&#39;t have to learn the other systems
+stuff!</strong> section.</p>
 
-<p>In <code>start-storm.sh</code>, we can see the <code>--link nimbus:nimbus</code> and
-<code>--link zookeeper:zk</code> flags passed to <code>scripts/run-storm-docker-component.sh</code>.
-These flags are subsequently passed down to
-<code>docker_python_helpers/docker_run.py</code> and eventually form part of the generated
-<code>docker run</code> command for <code>storm-ui</code>.</p>
+<p>Not long after I happened to chance across this:</p>
 
-<p>As such, the <code>storm-ui</code> Docker in this repository links to a running
-<code>storm-nimbus</code> Docker container and a running <code>zookeeper</code> Docker container.
-Take note of that before running the <code>storm-ui</code> Docker container. You will need
-to hack this repository if you do not want those Docker links to be made when
-starting the <code>storm-ui</code> container; the necessary edits will not be difficult to
-identify and correctly make.</p>
+<ul>
+<li><a href="http://phusion.github.io/baseimage-docker/">http://phusion.github.io/baseimage-docker/</a></li>
+<li><a href="https://github.com/phusion/baseimage-docker">Github repository for the above</a></li>
+</ul>
 
-<h2>Additional Information</h2>
+<p>and it confirmed my suspicions.</p>
 
-<p>Storm UI gives you a web interface for viewing Storm settings (obtained from
-Storm Nimbus), viewing running Storm toplogies, killing running Storm
-topologies, etc. It is accessible using a web browser via the <code>ui.port</code>
-supplied in the <code>config/storm-setup.yaml</code>, defaulting to port 8080.</p>
+<p>So I shall highlight some major limitations of storm-docker here.</p>
 
-<p>For instance, if the global IP address of the machine running the <code>storm-ui</code>
-Docker is <code>192.216.200.32</code> and <code>ui.port</code> is 8572, then the Storm UI is
-accessible via <code>http://192.216.200.32:8572</code>.</p>
+<h2>Managing Logging</h2>
+
+<p>This is probably the most serious issue not addressed by storm-docker.
+While there are log files for various Storm components and Zookeeper, they will
+be gone once their Docker container is stopped.</p>
+
+<h2>Non persistent storage</h2>
+
+<p>Similar in spirit to the <strong>Managing Logging</strong> section. There may be other files
+that we want to preserve on more persistent storage, but this is currently not
+being taken care of.</p>
+
+<h2>Configuration Management</h2>
+
+<p>For storm-docker, all configuration is done within the Dockerfiles.
+There is no provisioning tool used to manage configuration of the various
+Docker containers.</p>
 
       </section>
 

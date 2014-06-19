@@ -5,7 +5,7 @@
     <!-- Always force latest IE rendering engine or request Chrome Frame -->
     <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
 
-    <title>storm-ui</title>
+    <title>Recommended Reading</title>
     <link rel="stylesheet" href="/storm-docker/stylesheets/styles.css" />
     <link rel="stylesheet" href="/storm-docker/stylesheets/pygment_trac.css" />
 
@@ -90,43 +90,35 @@
       </aside>
 
       <section>
-        <h1>storm-ui Docker</h1>
+        <h1>Recommended Reading</h1>
 
-<p>Dockerfile: <code>storm-ui/Dockerfile</code></p>
+<p>If you&#39;re new to Storm and/or Docker, here are some good articles that will
+greatly enhance your knowledge.</p>
 
-<p>Entrypoint source file: <code>base-storm/run-supervisord.py</code></p>
+<h2>Storm</h2>
 
-<h2>Services running in this Docker</h2>
+<p>The official Storm documentation. Recently shifted to the Apache Storm website
+from Storm&#39;s Github wiki:</p>
 
 <ul>
-<li>Storm UI</li>
+<li><a href="http://storm.incubator.apache.org/documentation/Home.html">http://storm.incubator.apache.org/documentation/Home.html</a></li>
 </ul>
 
-<h2>Setup specific to storm-docker</h2>
+<p>The <strong>Manual</strong> page contains a lot of useful information on Storm.</p>
 
-<p>In <code>start-storm.sh</code>, we can see the <code>--link nimbus:nimbus</code> and
-<code>--link zookeeper:zk</code> flags passed to <code>scripts/run-storm-docker-component.sh</code>.
-These flags are subsequently passed down to
-<code>docker_python_helpers/docker_run.py</code> and eventually form part of the generated
-<code>docker run</code> command for <code>storm-ui</code>.</p>
+<p><a href="http://www.michael-noll.com/">Michael Noll</a> has written some good tutorials on
+Storm. Here are the ones we&#39;ve read and found very useful:</p>
 
-<p>As such, the <code>storm-ui</code> Docker in this repository links to a running
-<code>storm-nimbus</code> Docker container and a running <code>zookeeper</code> Docker container.
-Take note of that before running the <code>storm-ui</code> Docker container. You will need
-to hack this repository if you do not want those Docker links to be made when
-starting the <code>storm-ui</code> container; the necessary edits will not be difficult to
-identify and correctly make.</p>
+<ul>
+<li><a href="http://www.michael-noll.com/blog/2012/10/16/understanding-the-parallelism-of-a-storm-topology/">http://www.michael-noll.com/blog/2012/10/16/understanding-the-parallelism-of-a-storm-topology/</a></li>
+<li><a href="http://www.michael-noll.com/tutorials/running-multi-node-storm-cluster/">http://www.michael-noll.com/tutorials/running-multi-node-storm-cluster/</a></li>
+</ul>
 
-<h2>Additional Information</h2>
+<h2>Docker</h2>
 
-<p>Storm UI gives you a web interface for viewing Storm settings (obtained from
-Storm Nimbus), viewing running Storm toplogies, killing running Storm
-topologies, etc. It is accessible using a web browser via the <code>ui.port</code>
-supplied in the <code>config/storm-setup.yaml</code>, defaulting to port 8080.</p>
+<p><a href="https://docs.docker.com/">https://docs.docker.com/</a></p>
 
-<p>For instance, if the global IP address of the machine running the <code>storm-ui</code>
-Docker is <code>192.216.200.32</code> and <code>ui.port</code> is 8572, then the Storm UI is
-accessible via <code>http://192.216.200.32:8572</code>.</p>
+<p>Seriously. The official docs are just that good.</p>
 
       </section>
 
