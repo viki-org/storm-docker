@@ -14,4 +14,7 @@ This will watch for changes, including for sass files.
 
 ## Building
 
-    jekyll build
+    ./build.sh
+
+This creates a `_site` directory, whose contents are ready to be committed to
+the master branch.
