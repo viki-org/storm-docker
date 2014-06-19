@@ -33,3 +33,9 @@
     -
       title: storm-supervisor
       path: docs/storm-supervisor
+
+- title: Credits
+  docs:
+    -
+      title: Credits
+      path: docs/credits
