@@ -119,16 +119,41 @@ overwritten) using:</p>
 <p>One of the major steps the <code>make</code> command does is to copy the configuration
 files to their destination folders before the Dockerfiles are executed by the
 Docker daemon. The <code>base-storm</code> and <code>zookeeper</code> Dockerfiles will add the
-required configuration files to the built Docker image, which makes them
-available to the running Docker containers.</p>
+required configuration files to the Docker image being built, which makes the
+configuration files available to the running Docker containers.</p>
 
-<p>Some advantages of adding the configuration files like this include:</p>
+<p>By doing so, we allow the user to perform very fine grained configuration of
+the Storm cluster using the sample configuration files as a starting point.</p>
+
+<h3>Micro Optimization for copying configuration files</h3>
+
+<p>Whenever Docker encounters an <code>ADD</code> instruction in a Dockerfile, it checks the
+timestamp of the file being added to determine whether it can make use of its
+cache (this is just a guess).</p>
+
+<p>Because of this, even if we override a configuration file in say the
+<code>base-storm</code> folder with a configuration file with the exact same contents from
+the <code>config</code> folder, Docker will treat the overriden file as new even though
+the contents are unchanged.
+Hence, on a new <code>docker build</code>, when Docker reaches the step of <code>ADD</code>ing the
+configuration file, it will not make use of the cache and repeats the steps
+after the <code>ADD</code> instruction, which can be very time consuming.</p>
+
+<p>storm-docker solves this problem by only performing a copy of a configuration
+file from the <code>config</code> folder to a destination folder on any one of the
+following conditions:</p>
 
 <ul>
-<li>Allowing the user to perform very fine grained configuration of the Storm
-cluster while providing a starting point through sample configuration files</li>
-<li></li>
+<li>the destination configuration file does not exist
+(eg. <code>config/storm-setup.yaml</code> has not been copied to
+<code>base-storm/storm-setup.yaml</code>)</li>
+<li>the destination configuration file exists, but its contents differ from the
+same file in the <code>config</code> folder. In this case, the configuration file in the
+<code>config</code> folder is copied to the destination folder.</li>
 </ul>
+
+<p>Hence, the configuration file is only copied when necessary. This allows Docker
+to make use of the cache as much as it can.</p>
 
       </section>
 
