@@ -9,6 +9,9 @@
     -
       title: Execution
       path: docs/execution
+    -
+      title: Recommended Reading
+      path: docs/recommended-reading
 
 - title: Dockerfiles
   docs:
