@@ -12,6 +12,9 @@
     -
       title: Recommended Reading
       path: docs/recommended-reading
+    -
+      title: Limitations
+      path: docs/limitations
 
 - title: Dockerfiles
   docs:
