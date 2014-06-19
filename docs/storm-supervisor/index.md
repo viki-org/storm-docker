@@ -7,7 +7,7 @@ storm-supervisor Docker
 
 Dockerfile: `storm-supervisor/Dockerfile`
 
-Entrypoint: `base-storm/run-supervisord.py`
+Entrypoint source file: `base-storm/run-supervisord.py`
 
 ## Services running in this Docker
 
