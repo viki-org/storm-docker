@@ -2,31 +2,31 @@
   docs:
     -
       title: README
-      filename: index
+      path: ""
     -
       title: Building
-      filename: docs/building
+      path: docs/building
 
 - title: Dockerfiles
   docs:
     -
       title: Overview and Organization
-      filename: docs/docker/overview
+      path: docs/docker-overview
     -
       title: zookeeper
-      filename: docs/docker/zookeeper
+      path: docs/zookeeper
     -
       title: storm-nimbus
-      filename: docs/docker/storm-nimbus
+      path: docs/storm-nimbus
     -
       title: storm-ui
-      filename: docs/docker/storm-ui
+      path: docs/storm-ui
     -
       title: storm-supervisor
-      filename: docs/docker/storm-supervisor
+      path: docs/storm-supervisor
 
 - title: Execution
   docs:
     -
       title: Overview
-      filename: docs/execution/overview
+      path: docs/execution

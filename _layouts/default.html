@@ -5,12 +5,12 @@
     <!-- Always force latest IE rendering engine or request Chrome Frame -->
     <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
 
-    <!-- Use title if it's in the page YAML frontmatter -->
-    <title><%= current_page.data.title || "The Middleman" %></title>
+    <title>{{ page.title }}</title>
+    <link rel="stylesheet" href="{{ site.baseurl }}/stylesheets/styles.css" />
+    <link rel="stylesheet" href="{{ site.baseurl }}/stylesheets/pygment_trac.css" />
 
-    <%= stylesheet_link_tag "styles", "pygment_trac" %>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-    <%= javascript_include_tag  "all" %>
+    <script src="{{ site.baseurl }}/javascripts/main.js"></script>
 
     <!--[if lt IE 9]>
       <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -19,11 +19,11 @@
   </head>
   
 
-  <body class="<%= page_classes %>">
+  <body>
     <header>
       <a href="">
-        <h1><%= data.defaults.heading %></h1>
-        <p><%= data.defaults.summary %></p>
+        <h1>{{ site.data.defaults.heading }}</h1>
+        <p>{{ site.data.defaults.summary }}</p>
       </a>
     </header>
 
@@ -31,12 +31,12 @@
       <div class="banner-inner">
         <span id="logo"></span>
 
-        <a href="<%= data.github.url %>" class="button fork"><strong>Fork On GitHub</strong></a>
+        <a href="{{ site.data.github.url }}" class="button fork"><strong>Fork On GitHub</strong></a>
         <div class="downloads">
           <span>Downloads:</span>
           <ul>
-            <li><a href="<%= data.github.zipball %>" class="button">ZIP</a></li>
-            <li><a href="<%= data.github.tarball %>" class="button">TAR</a></li>
+            <li><a href="{{ site.data.github.zipball }}" class="button">ZIP</a></li>
+            <li><a href="{{ site.data.github.tarball }}" class="button">TAR</a></li>
           </ul>
         </div>
       </div>
@@ -49,18 +49,18 @@
       </nav>
 
       <aside>
-        <% data.docs.each do |d| %>
+        {% for section in site.data.docs %}
           <ul>
-            <h4><%= d.title %></h4>
-            <% d.docs.each do |d| %>
-              <li><a href="/<%= d.filename %>.html"><%= d.title %></a></li>
-            <% end %>
+            <h4>{{ section.title }}</h4>
+            {% for d in section.docs %}
+              <li><a href="{{ site.baseurl }}{{ d.path | prepend: '/' }}">{{ d.title }}</a></li>
+            {% endfor %}
           </ul>
-        <% end %>
+        {% endfor %}
       </aside>
 
       <section>
-        <%= yield %>
+        {{ content }}
       </section>
 
       <footer>

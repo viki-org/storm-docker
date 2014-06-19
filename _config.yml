@@ -1,0 +1,12 @@
+name: storm-docker Documentation
+baseurl: /storm-docker
+markdown: redcarpet
+pygments: true
+
+defaults:
+  -
+    # defaults for all files
+    scope:
+      path: "" # empty string applies this for all files
+    values:
+      layout: "default"

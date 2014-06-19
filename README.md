@@ -6,14 +6,12 @@ http://dev.viki.com/storm-docker/
 
 ## Development
 
-    bundle exec middleman server
+Run:
 
-Once you have a browser accessing the page, live reload is done on the browser
-upon any saved changes.
+    script/server
+
+This will watch for changes, including for sass files.
 
 ## Building
 
-    bundle exec middleman build
-
-This builds everything in a `build` folder. The files inside the `build` folder
-are what we commit to the `gh-pages` branch.
+    jekyll build
