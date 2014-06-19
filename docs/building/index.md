@@ -37,11 +37,36 @@ overwritten) using:
 One of the major steps the `make` command does is to copy the configuration
 files to their destination folders before the Dockerfiles are executed by the
 Docker daemon. The `base-storm` and `zookeeper` Dockerfiles will add the
-required configuration files to the built Docker image, which makes them
-available to the running Docker containers.
+required configuration files to the Docker image being built, which makes the
+configuration files available to the running Docker containers.
 
-Some advantages of adding the configuration files like this include:
+By doing so, we allow the user to perform very fine grained configuration of
+the Storm cluster using the sample configuration files as a starting point.
 
-- Allowing the user to perform very fine grained configuration of the Storm
-cluster while providing a starting point through sample configuration files
-- 
+### Micro Optimization for copying configuration files
+
+Whenever Docker encounters an `ADD` instruction in a Dockerfile, it checks the
+timestamp of the file being added to determine whether it can make use of its
+cache (this is just a guess).
+
+Because of this, even if we override a configuration file in say the
+`base-storm` folder with a configuration file with the exact same contents from
+the `config` folder, Docker will treat the overriden file as new even though
+the contents are unchanged.
+Hence, on a new `docker build`, when Docker reaches the step of `ADD`ing the
+configuration file, it will not make use of the cache and repeats the steps
+after the `ADD` instruction, which can be very time consuming.
+
+storm-docker solves this problem by only performing a copy of a configuration
+file from the `config` folder to a destination folder on any one of the
+following conditions:
+
+- the destination configuration file does not exist
+(eg. `config/storm-setup.yaml` has not been copied to
+`base-storm/storm-setup.yaml`)
+- the destination configuration file exists, but its contents differ from the
+same file in the `config` folder. In this case, the configuration file in the
+`config` folder is copied to the destination folder.
+
+Hence, the configuration file is only copied when necessary. This allows Docker
+to make use of the cache as much as it can.
