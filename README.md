@@ -99,7 +99,7 @@ take some time to complete.
 
 To run all Docker containers for this repository on your current machine:
 
-    ./start-storm.sh
+    ./start-storm.sh all
 
 You should not see any errors if configuration is done correctly.
 

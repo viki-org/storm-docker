@@ -76,14 +76,7 @@ function start_storm_docker {
 }
 
 # Execution of this bash script starts from here
-if [ $# -eq 0 ]
-then
-  # No arguments supplied to this script; run every component
-  start_storm_docker "zookeeper"
-  start_storm_docker "nimbus"
-  start_storm_docker "ui"
-  start_storm_docker "supervisor"
-elif [ "$1" = "--help" ]
+if [ $# -eq 0 ] || [ "$1" = "--help" ]
 then
   echo "Runs a Docker container built by this repository."
   echo "You can supply one or more of the following args:"
@@ -94,11 +87,19 @@ then
     "Storm Supervisor, Storm Logviewer)"
   echo "    ui         - Runs the ui container (components: Storm UI)"
   echo "    zookeeper  - Runs the zookeeper container (components: Zookeeper)"
+  echo "    all        - Runs all the above"
   echo ""
   echo "For example, to run the zookeeper and ui containers, run:"
   echo ""
   echo "    ./start-storm.sh zookeeper ui"
   echo ""
+elif [ "$1" = "all" ]
+then
+  # No arguments supplied to this script; run every component
+  start_storm_docker "zookeeper"
+  start_storm_docker "nimbus"
+  start_storm_docker "ui"
+  start_storm_docker "supervisor"
 else
   # At least one argument was supplied to this script.
   # We start each Docker container in the arguments.
