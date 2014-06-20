@@ -10,6 +10,8 @@ This repository makes it easy to run **distributed, multiple server**
 [Storm](http://storm.incubator.apache.org/) topologies within
 [Docker](https://www.docker.io/).
 
+More documentation on Github pages: http://dev.viki.com/storm-docker
+
 ## System Requirements
 
 - GNU Make
@@ -101,13 +103,24 @@ take some time to complete.
 
 To run all Docker containers for this repository on your current machine:
 
-    ./start-storm.sh
+    ./start-storm.sh all
 
 You should not see any errors if configuration is done correctly.
 
 For more information on running individual containers, run:
 
     ./start-storm.sh --help
+
+#### Skipping `pip install` step for startup scripts
+
+The `start-storm.sh` script calls some startup scripts in the `scripts` folder
+which invoke `pip install` to setup the virtualenv for this repository.
+We have sometimes experienced extremely an extremely slow cleanup step
+that comes at the end of `pip install`s.
+Truth to be told, the `pip install` only needs to be carried out once.
+
+To prevent the startup scripts from running `pip install`, create a file named
+`SKIP_PIP_INSTALL`. To enable `pip install`, remove the `SKIP_PIP_INSTALL` file.
 
 ## Stopping Docker containers
 
