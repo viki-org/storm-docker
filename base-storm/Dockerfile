@@ -2,6 +2,7 @@ FROM ubuntu
 MAINTAINER viki-data data@viki.com
 
 RUN echo "deb http://archive.ubuntu.com/ubuntu precise universe" >> /etc/apt/sources.list
+RUN echo "deb http://mirrors.ccs.neu.edu/ubuntu precise universe" >> /etc/apt/sources.list
 RUN apt-get update
 RUN apt-get install -y unzip openjdk-6-jdk wget supervisor python-dev python-pip
 RUN pip install PyYAML==3.11
