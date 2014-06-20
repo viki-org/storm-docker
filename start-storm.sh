@@ -9,6 +9,14 @@ function is_docker_container_running {
   docker ps | tail -n+2 | awk '{print $2}' | grep --quiet $1
 }
 
+# Skip `pip install` step for scripts in the `scripts` folder if the
+# `SKIP_PIP_INSTALL` file is present.
+SKIP_PIP_INSTALL="false"
+if [[ -f SKIP_PIP_INSTALL ]]
+then
+  SKIP_PIP_INSTALL="true"
+fi
+
 # Starts a given storm-docker Docker container
 function start_storm_docker {
   case $1 in

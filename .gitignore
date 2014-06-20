@@ -3,6 +3,7 @@
 *.pyc
 *.swo
 *.swp
+SKIP_PIP_INSTALL
 /base-storm/cluster.xml
 /base-storm/storm-setup.yaml
 /config/storm-setup.yaml

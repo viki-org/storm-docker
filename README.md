@@ -107,6 +107,17 @@ For more information on running individual containers, run:
 
     ./start-storm.sh --help
 
+#### Skipping `pip install` step for startup scripts
+
+The `start-storm.sh` script calls some startup scripts in the `scripts` folder
+which invoke `pip install` to setup the virtualenv for this repository.
+We have sometimes experienced extremely an extremely slow cleanup step
+that comes at the end of `pip install`s.
+Truth to be told, the `pip install` only needs to be carried out once.
+
+To prevent the startup scripts from running `pip install`, create a file named
+`SKIP_PIP_INSTALL`. To enable `pip install`, remove the `SKIP_PIP_INSTALL` file.
+
 ## Stopping Docker containers
 
 To stop all running Docker containers for this repository:

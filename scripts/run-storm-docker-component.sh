@@ -6,8 +6,7 @@ then
 fi
 
 . venv/bin/activate && \
-  ([[ -n $SKIP_PIP_INSTALL && $SKIP_PIP_INSTALL ]] || \
-    pip install -r requirements.txt) && \
+  ($SKIP_PIP_INSTALL || pip install -r requirements.txt) && \
   python -m docker_python_helpers.docker_run \
     docker_python_helpers/docker_run.py $@ && \
   deactivate
