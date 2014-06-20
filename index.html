@@ -97,6 +97,8 @@
 <a href="http://storm.incubator.apache.org/">Storm</a> topologies within
 <a href="https://www.docker.io/">Docker</a>.</p>
 
+<p>More documentation on Github pages: http://dev.viki.com/storm-docker</p>
+
 <h2>System Requirements</h2>
 
 <ul>
@@ -184,13 +186,24 @@ take some time to complete.</p>
 <h3>Run the Docker containers</h3>
 
 <p>To run all Docker containers for this repository on your current machine:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">./start-storm.sh
+<div class="highlight"><pre><code class="language-text" data-lang="text">./start-storm.sh all
 </code></pre></div>
 <p>You should not see any errors if configuration is done correctly.</p>
 
 <p>For more information on running individual containers, run:</p>
 <div class="highlight"><pre><code class="language-text" data-lang="text">./start-storm.sh --help
 </code></pre></div>
+<h4>Skipping <code>pip install</code> step for startup scripts</h4>
+
+<p>The <code>start-storm.sh</code> script calls some startup scripts in the <code>scripts</code> folder
+which invoke <code>pip install</code> to setup the virtualenv for this repository.
+We have sometimes experienced extremely an extremely slow cleanup step
+that comes at the end of <code>pip install</code>s.
+Truth to be told, the <code>pip install</code> only needs to be carried out once.</p>
+
+<p>To prevent the startup scripts from running <code>pip install</code>, create a file named
+<code>SKIP_PIP_INSTALL</code>. To enable <code>pip install</code>, remove the <code>SKIP_PIP_INSTALL</code> file.</p>
+
 <h2>Stopping Docker containers</h2>
 
 <p>To stop all running Docker containers for this repository:</p>
