@@ -96,6 +96,11 @@ Storm cluster unless otherwise stated.
 **NOTE:** This step is **critical** to the correct functioning of the Storm
 topology.
 
+**NOTE:** storm-docker assumes that all machines in the Storm cluster make use
+of the same configuration files.
+As such, you can perform this step of editing the configuration files once
+(on any machine) and copy the files to all the machines of your Storm cluster.
+
 Copy the sample configuration files to concrete configuration files (this does
 not overwrite any existing concrete configuration files):
 
