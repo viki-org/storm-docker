@@ -137,6 +137,11 @@ take some time to complete.
 
 ### Run the Docker containers
 
+**NOTE:** You should only start the required components based on the "role"
+you assigned to each server.
+For a multiple-server Storm setup, you will very likely not run the
+same components on all machines.
+
 To run all Docker containers for this repository on your current machine:
 
     ./start-storm.sh all
