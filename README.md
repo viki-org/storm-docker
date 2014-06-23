@@ -59,10 +59,6 @@ On a Ubuntu-like system:
 
 ### Install Docker
 
-For Ubuntu Precise 12.04 (LTS), ensure that your Linux Kernel is a relatively
-recent version (check the docs here:
-http://docs.docker.io/installation/ubuntulinux/ for more information).
-
 Use the following command from the top of the script at http://get.docker.io
 to install Docker
 
