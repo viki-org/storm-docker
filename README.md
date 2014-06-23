@@ -8,6 +8,34 @@ This repository makes it easy to run **distributed, multiple server**
 
 More documentation on Github pages: http://dev.viki.com/storm-docker
 
+## What's Special?
+
+If we do a search of the word `storm` on the
+[Docker Registry](https://registry.hub.docker.com/), we see several pages of
+results. What makes our storm-docker special compared to similar offerings?
+
+1. Supports multiple server Storm setups, in particular Zookeeper and
+Storm Supervisor.
+2. High level of configurability through **documented** configuration files
+3. Same configuration files used for **all** machines in the Storm cluster
+4. Instructions on this `README` showing you how to setup the repository
+5. Important parts of codebase is extensively documented to aid hacking.
+No need to guess what the original author is thinking.
+6. [Github pages](http://dev.viki.com/storm-docker) with more documentation;
+a slight redesign and walkthrough is in the works
+7. Tested and used in production.
+
+Point 1 is probably the single biggest reason why you should use our
+storm-docker, even if you're running everything on a single machine initially
+(which storm-docker **does** support, btw).
+When you need to add new machines to your Storm cluster, you'll find the
+transition smooth and leverage on the work we did in figuring out how to run
+multiple Zookeeper and Storm Supervisor in Docker.
+
+At this point in time (23 June 2014), our storm-docker repository is probably
+the first and only open source Docker setup that supports distributed,
+multi-server Storm clusters out of the box.
+
 ## System Requirements
 
 - GNU Make
