@@ -101,8 +101,9 @@ of the same configuration files.
 As such, you can perform this step of editing the configuration files once
 (on any machine) and copy the files to all the machines of your Storm cluster.
 
-Copy the sample configuration files to concrete configuration files (this does
-not overwrite any existing concrete configuration files):
+Copy the sample configuration files to concrete configuration files (the
+`copy-sample-config.sh` script **does not** overwrite any existing concrete
+configuration files):
 
     ./copy-sample-config.sh
 
