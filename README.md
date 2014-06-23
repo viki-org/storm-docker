@@ -38,12 +38,18 @@ multi-server Storm clusters out of the box.
 
 ## System Requirements
 
+The following software is required for running the `storm-docker` repository.
+In other words, for machines which are going to form your Storm cluster:
+
 - GNU Make
 - Docker
 - python 2.7.x
 - virtualenv
 
 ## Software Setup
+
+**NOTE:** The steps here must be carried out for **all** machines in your
+Storm cluster.
 
 ### Python setup
 
