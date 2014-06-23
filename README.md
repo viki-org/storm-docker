@@ -88,6 +88,9 @@ go there:
 
 ## Configuration
 
+**NOTE:** The steps here must be carried out for **all** machines of your
+Storm cluster unless otherwise stated.
+
 ### Configuring the Storm setup
 
 **NOTE:** This step is **critical** to the correct functioning of the Storm
