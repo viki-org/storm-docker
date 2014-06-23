@@ -16,7 +16,8 @@ results. What makes our storm-docker special compared to similar offerings?
 
 1. Supports multiple server Storm setups, in particular Zookeeper and
 Storm Supervisor.
-2. High level of configurability through **documented** configuration files
+2. High level of configurability through **documented** sample configuration
+files
 3. Same configuration files used for **all** machines in the Storm cluster
 4. Instructions on this `README` showing you how to setup the repository
 5. Important parts of codebase is extensively documented to aid hacking.
