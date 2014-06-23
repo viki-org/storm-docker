@@ -166,7 +166,7 @@ To prevent the startup scripts from running `pip install`, create a file named
 
 ## Stopping Docker containers
 
-To stop all running Docker containers for this repository:
+To stop all running Docker containers:
 
     ./destroy-storm.sh
 
