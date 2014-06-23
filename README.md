@@ -114,8 +114,9 @@ Carry on by editing the following concrete configuration files:
 - `config/zoo.cfg`
 
 Documentation is available in the copied concrete configuration files, except
-the `config/cluster.xml` file used for logback configuration. For that, we
-highly recommend reading
+the `config/cluster.xml` file used for logback configuration.
+A default set of configuration has been set; for more fine-grained
+configuration, we highly recommend reading
 [The logback manual](http://logback.qos.ch/manual/).
 
 Once done with your edits, we can continue with building the Docker images.
