@@ -6,6 +6,8 @@ This repository makes it easy to run **distributed, multiple server**
 [Storm](http://storm.incubator.apache.org/) topologies within
 [Docker](https://www.docker.io/).
 
+Read our [storm-docker blog post on the Viki Engineering blog](http://engineering.viki.com/blog/2014/announcing-storm-docker-making-distributed-multiple-server-storm-setups-easy-in-docker/)
+
 More documentation on Github pages: http://dev.viki.com/storm-docker
 
 ## What's Special?
