@@ -1,6 +1,6 @@
 # Forked from jplock/zookeeper (https://index.docker.io/u/jplock/zookeeper/)
 
-FROM ubuntu
+FROM ubuntu:14.04
 MAINTAINER viki-data data@viki.com
 
 RUN echo "deb http://archive.ubuntu.com/ubuntu precise universe" >> /etc/apt/sources.list
