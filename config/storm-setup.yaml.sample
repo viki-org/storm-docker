@@ -3,6 +3,37 @@
 # Otherwise, set it to false.
 is_localhost_setup: true
 
+# Set this to `True` if there is at least 1 Amazon EC2 instance in your Storm
+# cluster - a future patch may allow for more fine-grained toggling of this
+# option. For now, please use one of the following setups for your Storm
+# cluster:
+# (A) No machine is an Amazon EC2 instance
+# (B) All machines are Amazon EC2 instances in the same security group
+#
+# DO NOT mix usage of Amazon EC2 instances and non-Amazon EC2 instances in the
+# same Storm cluster.
+#
+# If set to `True`, all machines in the Storm cluster will be deemed to be
+# Amazon EC2 instances and a `curl` command will be run on each machine to
+# retrieve its private and public IP address using instance metadata (see the
+# link http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-instance-addressing.html
+# for more information).
+#
+# If this key is missing, it will default to the value `False`.
+#
+# If set to `True`, machines which are not Amazon EC2 instances may experience
+# issues (see https://github.com/viki-org/storm-docker/issues/1) even though we
+# pass the `--connect-timeout` flag to `curl`; in that case this field should
+# be set to `False` to disable the `curl` command.
+#
+# A discovery made on 6 August 2014 while implementing a partial fix for
+# https://github.com/viki-org/storm-docker/issues/1 is that it seems that we
+# no longer have to perform a `curl` command to retrieve the private/internal
+# IP address of an Amazon EC2 instance; an `ifconfig` will do the job.
+# As such, it is OK to set this to `False` if ALL the machines in the
+# Storm cluster are Amazon EC2 instances inside the same security group.
+all_machines_are_ec2_instances: False
+
 # Hosts running the `storm-supervisor` Docker container.
 #
 # You will need to add an entry for each `storm-supervisor` Docker container

@@ -139,7 +139,8 @@ def ec2_get_ip(public=True):
     # Most probably this server is not an EC2 instance
     return None
 
-def get_ipv4_addresses(isLocalhostSetup=False):
+def get_ipv4_addresses(isLocalhostSetup=False,
+    allMachinesAreEC2Instances=False):
   """Returns all possible IPv4 addresses for the machine based on the output of
   the `ifconfig` command. `127.0.0.1` will be included if True is supplied for
   the `isLocalhostSetup` parameter, it will be excluded otherwise.
@@ -163,12 +164,13 @@ def get_ipv4_addresses(isLocalhostSetup=False):
     matchObj = inetAddrRegex.match(line)
     if matchObj is not None:
       ipAddresses.append(matchObj.group(1))
-  ec2PublicIp = ec2_get_ip(public=True)
-  if ec2PublicIp is not None:
-    ipAddresses.append(ec2PublicIp)
-  ec2PrivateIp = ec2_get_ip(public=False)
-  if ec2PrivateIp is not None:
-    ipAddresses.append(ec2PrivateIp)
+  if allMachinesAreEC2Instances:
+    ec2PublicIp = ec2_get_ip(public=True)
+    if ec2PublicIp is not None:
+      ipAddresses.append(ec2PublicIp)
+    ec2PrivateIp = ec2_get_ip(public=False)
+    if ec2PrivateIp is not None:
+      ipAddresses.append(ec2PrivateIp)
   try:
     ipAddresses.remove('127.0.0.1')
   except ValueError:
@@ -271,7 +273,9 @@ if __name__ == "__main__":
   remArgList[:0] = portArgs
 
   stormConfig = get_storm_config()
-  ipv4Addresses = get_ipv4_addresses(stormConfig["is_localhost_setup"])
+  ipv4Addresses = get_ipv4_addresses(stormConfig["is_localhost_setup"],
+    stormConfig.get("all_machines_are_ec2_instances", False)
+  )
   dockerRunArgsString = construct_docker_run_args(remArgList, ipv4Addresses)
   dockerRunCmd = "docker run {}".format(dockerRunArgsString)
   print(dockerRunCmd)

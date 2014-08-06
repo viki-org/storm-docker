@@ -14,7 +14,8 @@ from . import docker_run
 if __name__ == "__main__":
   stormConfig = docker_run.get_storm_config()
   ipv4Addresses = docker_run.get_ipv4_addresses(
-    stormConfig["is_localhost_setup"]
+    stormConfig["is_localhost_setup"],
+    stormConfig.get("all_machines_are_ec2_instances", False)
   )
   dockerHostname = None
   for supervisorConfig in stormConfig["storm.supervisor.hosts"]:

@@ -39,6 +39,26 @@ At this point in time (23 June 2014), our storm-docker repository is probably
 the first and only open source Docker setup that supports distributed,
 multi-server Storm clusters out of the box.
 
+## Important Note on machines in your Storm cluster
+
+The storm-docker project is tested using Amazon EC2 instances; we make use of
+the `curl` command to obtain the public and private IP addresses of the
+machines. This may be a problem for machines which are not Amazon EC2 instances
+(even though we have not faced any similar issues at Viki), as seen by this
+Github issue:
+
+https://github.com/viki-org/storm-docker/issues/1
+
+As such, please use one of the following 2 setups for the machines in your
+Storm cluster if you're using the storm-docker project:
+
+1. None of the machines in your Storm cluster are Amazon EC2 instances
+2. ALL the machines in your Storm cluster are Amazon EC2 instances in the same
+security group
+
+Refer to the documentation for the `all_machines_are_ec2_instances` key in the
+`config/storm-setup.yaml.sample` file for more information.
+
 ## System Requirements
 
 The following software is required for running the `storm-docker` repository.
