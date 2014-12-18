@@ -7,7 +7,7 @@ RUN apt-get update
 RUN apt-get install -y unzip openjdk-6-jdk wget supervisor python-dev python-pip
 RUN pip install PyYAML==3.11
 
-RUN wget -q -N http://mirror.reverse.net/pub/apache/incubator/storm/apache-storm-0.9.2-incubating/apache-storm-0.9.2-incubating.zip
+RUN wget -q -N http://mirrors.gigenet.com/apache/storm/apache-storm-0.9.2-incubating/apache-storm-0.9.2-incubating.zip
 RUN unzip -o /apache-storm-0.9.2-incubating.zip -d /usr/share/
 RUN rm /apache-storm-0.9.2-incubating.zip
 
