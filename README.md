@@ -199,6 +199,14 @@ containers:
 
     ./destroy-storm.sh ui zookeeper
 
+## Deploying from your own machine
+
+NOTE: This is currently a WIP and is NOT stable. Expect more changes soon.
+Currently it only works for running Zookeeper containers on the remote(s).
+
+    . venv/bin/activate
+    python docker_python_helpers/remote.py --zk
+
 ## Motivation
 
 This project was started to address the need to increase the scalability and

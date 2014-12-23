@@ -52,6 +52,13 @@ if parsedArgs.is_storm_supervisor:
 # `$STORM_HOME/conf/storm.yaml` file
 stormYamlConfig = stormSetupConfig["storm.yaml"]
 
+# Build the storm.zookeeper.servers section of the `storm.yaml` file
+# by replacing the SSH hostnames with actual IP addresses
+storm_yaml_zk_servers_section = [
+  stormSetupConfig["servers"][zk_server] for
+    zk_server in stormYamlConfig["storm.zookeeper.servers"]
+]
+
 # We're gonna check if a Zookeeper runs on the server hosting our current
 # Docker container.
 #
@@ -60,27 +67,27 @@ stormYamlConfig = stormSetupConfig["storm.yaml"]
 # Zookeeper Docker container.
 # We use the IP address of the Zookeeper Docker container in place of its
 # global IP address.
-zkServerIpToReplace = None
+zk_server_ip_to_replace = None
 # Loop through the Zookeeper server IP addresses
-for zkServer in stormYamlConfig["storm.zookeeper.servers"]:
-  if zkServer in myIpAddresses:
+for zk_server_ip in storm_yaml_zk_servers_section:
+  if zk_server_ip in myIpAddresses:
     # The server hosting our current Docker container has a Zookeeper running.
-    zkServerIpToReplace = zkServer
+    zk_server_ip_to_replace = zk_server_ip
     break
 
 # Zookeeper is running on the same server
-if zkServerIpToReplace is not None:
+if zk_server_ip_to_replace is not None:
   # Obtain the index of the Zookeeper IP address we're replacing
-  idx = stormYamlConfig["storm.zookeeper.servers"].index(zkServerIpToReplace)
+  idx = storm_yaml_zk_servers_section.index(zk_server_ip_to_replace)
   # Obtain the environment variable name for `storm.zookeeper.port` because
   # we allow the user to choose the port (so it is no longer the default 2181)
-  zkPortEnvVar = "ZK_PORT_{}_TCP_ADDR".format(
+  zk_port_env_var = "ZK_PORT_{}_TCP_ADDR".format(
     stormYamlConfig["storm.zookeeper.port"]
   )
-  stormYamlConfig["storm.zookeeper.servers"].remove(zkServerIpToReplace)
-  stormYamlConfig["storm.zookeeper.servers"].insert(idx,
-    os.environ[zkPortEnvVar]
-  )
+  storm_yaml_zk_servers_section.remove(zk_server_ip_to_replac)
+  storm_yaml_zk_servers_section.insert(idx, os.environ[zk_port_env_var])
+
+stormYamlConfig["storm.zookeeper.servers"] = storm_yaml_zk_servers_section
 
 # We're gonna check if Storm Nimbus runs on the server hosting our current
 # Docker container.

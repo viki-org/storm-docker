@@ -39,7 +39,10 @@ parsedArgs = parser.parse_args()
 myIpAddresses = parsedArgs.my_ip_addresses
 
 # Get list of Zookeeper servers from the STORM_SETUP_YAML file
-zkIpAddresses = stormSetupConfig["storm.yaml"]["storm.zookeeper.servers"]
+zkIpAddresses = [
+  stormSetupConfig["servers"][zk_server] for zk_server in
+    stormSetupConfig["storm.yaml"]["storm.zookeeper.servers"]
+]
 
 # Check the index of the current Zookeeper server.
 # While this is only truly absolutely necessary for a multiple Zookeeper setup,

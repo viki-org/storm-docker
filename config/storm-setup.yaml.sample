@@ -3,6 +3,35 @@
 # Otherwise, set it to false.
 is_localhost_setup: true
 
+# A dictionary of SSH host to IP address.
+# All servers in the Storm cluster MUST be listed in this section.
+#
+# Each key should be a Host that is inside your SSH config entry.
+# Each value should be its IP address. Each IP address given must be accessible
+# by each host.
+#
+# For instance, if your `servers` dict looks like the following:
+#
+#     servers:
+#       "server-one": "10.124.17.82"
+#       "server-two": "10.124.17.83"
+#
+# Then entries along the following lines should be inside your SSH config file:
+#
+#     Host server-one
+#         Hostname some-url.for.server.one
+#         User some_user
+#         IdentityFile ~/.ssh/server_one_key.pem
+#
+#     Hostname
+#         Hostname some-url.for.server.two
+#         User root
+#         IdentityFile ~/.ssh/server_two_key.pem
+servers:
+  "server-one": "10.124.17.82"
+  "server-two": "10.124.17.83"
+  "server-three": "10.124.17.84"
+
 # Set this to `True` if there is at least 1 Amazon EC2 instance in your Storm
 # cluster - a future patch may allow for more fine-grained toggling of this
 # option. For now, please use one of the following setups for your Storm
@@ -84,6 +113,7 @@ zookeeper.multiple.setup:
 ################################################################################
 # Stuff nested under the `storm.yaml` key mirror those in the actual
 # `storm.yaml` configuration file for Storm.
+# NOTE: There are exceptions but they will be documented.
 #
 # Please place ALL settings you want to be in the actual `storm.yaml` file here.
 #
@@ -97,8 +127,13 @@ zookeeper.multiple.setup:
 storm.yaml:
   storm.local.dir: "/mnt/storm"
 
+  # NOTE: The `storm.zookeeper.servers` section configuration is an exception.
+  #       You should use the host names in the `servers` section above instead
+  #       of using IP addresses.
   storm.zookeeper.servers:
-    - "1.2.3.4"
+    - "server-one"
+    - "server-two"
+    - "server-three"
   storm.zookeeper.port: 2181
 
   nimbus.host: "1.2.3.4"

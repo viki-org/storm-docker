@@ -17,8 +17,9 @@ if __name__ == "__main__":
     stormConfig.get("all_machines_are_ec2_instances", False)
   )
   foundCurrentServer = False
-  for zkIpAddress in stormConfig["storm.yaml"]["storm.zookeeper.servers"]:
-    if zkIpAddress in ipv4Addresses:
+  for zk_server in stormConfig["storm.yaml"]["storm.zookeeper.servers"]:
+    if zk_server in stormConfig["servers"] and \
+        stormConfig["servers"][zk_server] in ipv4Addresses:
       foundCurrentServer = True
       break
   if not foundCurrentServer:
