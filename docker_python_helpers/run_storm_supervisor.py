@@ -51,8 +51,8 @@ if __name__ == "__main__":
     zookeeperLink = "--link zookeeper:zk"
 
   nimbusLink = ""
-  if any([(myIpAddress == stormYamlConfig["nimbus.host"])
-      for myIpAddress in ipv4Addresses]):
+  nimbus_ip_address = stormConfig["servers"][stormYamlConfig["nimbus.host"]]
+  if any([(myIpAddress == nimbus_ip_address) for myIpAddress in ipv4Addresses]):
     nimbusLink = "--link nimbus:nimbus"
   dockerRunCmd = re.sub(r"""\s+""", " ",
     """docker run -h {docker_hostname} {zookeeper_link} {nimbus_link}

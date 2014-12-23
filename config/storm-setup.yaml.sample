@@ -112,7 +112,9 @@ storm.yaml:
     - "server-three"
   storm.zookeeper.port: 2181
 
-  nimbus.host: "1.2.3.4"
+  # NOTE: Exception for `nimbus.host`. You should use a host name in the
+  #       `servers` section in this YAML file instead of using an IP address.
+  nimbus.host: "server-one"
   nimbus.thrift.port: 6627
 
   ui.port: 8080

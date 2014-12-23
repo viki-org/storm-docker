@@ -94,7 +94,7 @@ stormYamlConfig["storm.zookeeper.servers"] = storm_yaml_zk_servers_section
 # If so, we can replace the globally accessible "nimbus.host" IP address with
 # a "more efficient" IP address (the IP address of the Docker container running
 # the Storm Nimbus).
-if stormYamlConfig["nimbus.host"] in myIpAddresses:
+if stormSetupConfig["servers"][stormYamlConfig["nimbus.host"]] in myIpAddresses:
   # This server has a Storm Nimbus running.
   # There are 2 possibilities:
   # 1. This Docker container is the one running the Storm Nimbus.
@@ -125,6 +125,11 @@ if stormYamlConfig["nimbus.host"] in myIpAddresses:
     )
     out, _ = p.communicate()
     stormYamlConfig["nimbus.host"] = out.strip()
+else:
+  # Storm Nimbus not running on the same physical machine.
+  # But we have to replace the hostname with the IP address from the server list
+  stormYamlConfig["nimbus.host"] = \
+    stormSetupConfig["servers"][stormYamlConfig["nimbus.host"]]
 
 # Write out to `$STORM_HOME/conf/storm.yaml`
 with open(os.path.join(STORM_HOME, "conf", "storm.yaml"), "w") as f:

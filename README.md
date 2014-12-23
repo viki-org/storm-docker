@@ -206,6 +206,13 @@ NOTE: This is currently a WIP and is NOT stable. Expect more changes soon.
     . venv/bin/activate
     # Run zookeeper images
     python docker_python_helpers/remote.py --zk
+
+    # Run Storm Nimbus image
+    python docker_python_helpers/remote.py --nimbus
+
+    # Run Storm UI image
+    python docker_python_helpers/remote.py --ui
+
     # Run Storm supervisor images
     python docker_python_helpers/remote.py --supervisor
 
