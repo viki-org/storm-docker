@@ -42,11 +42,11 @@ myIpAddresses = parsedArgs.my_ip_addresses
 if parsedArgs.is_storm_supervisor:
   with open("/etc/dnsmasq-extra-hosts", "w") as f:
     stormSupervisorHosts = stormSetupConfig["storm.supervisor.hosts"]
-    for stormSupervisorConfig in stormSupervisorHosts:
-      ipAddress = stormSupervisorConfig["ip"]
-      aliasList = stormSupervisorConfig["aliases"]
-      if ipAddress not in myIpAddresses:
-        f.write("{} {}\n".format(ipAddress, " ".join(aliasList)))
+    for supervisor_host in stormSupervisorHosts:
+      ip_address = stormSetupConfig["servers"][supervisor_host]
+      alias = "{}-supervisor".format(supervisor_host)
+      if ip_address not in myIpAddresses:
+        f.write("{} {}\n".format(ip_address, alias))
 
 # This dict contains everything that should be written to the
 # `$STORM_HOME/conf/storm.yaml` file
@@ -84,7 +84,7 @@ if zk_server_ip_to_replace is not None:
   zk_port_env_var = "ZK_PORT_{}_TCP_ADDR".format(
     stormYamlConfig["storm.zookeeper.port"]
   )
-  storm_yaml_zk_servers_section.remove(zk_server_ip_to_replac)
+  storm_yaml_zk_servers_section.remove(zk_server_ip_to_replace)
   storm_yaml_zk_servers_section.insert(idx, os.environ[zk_port_env_var])
 
 stormYamlConfig["storm.zookeeper.servers"] = storm_yaml_zk_servers_section

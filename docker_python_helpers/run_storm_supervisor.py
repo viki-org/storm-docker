@@ -18,9 +18,9 @@ if __name__ == "__main__":
     stormConfig.get("all_machines_are_ec2_instances", False)
   )
   dockerHostname = None
-  for supervisorConfig in stormConfig["storm.supervisor.hosts"]:
-    if supervisorConfig["ip"] in ipv4Addresses:
-      dockerHostname = supervisorConfig["aliases"][0]
+  for supervisor_host in stormConfig["storm.supervisor.hosts"]:
+    if stormConfig["servers"][supervisor_host] in ipv4Addresses:
+      dockerHostname = "{}-supervisor".format(supervisor_host)
   if dockerHostname is None:
     raise RuntimeError(re.sub("\s+", " ",
       """IP address of this machine does not match any IP address supplied in
@@ -43,8 +43,11 @@ if __name__ == "__main__":
   # If so, add links to those Docker containers.
   zookeeperLink = ""
   stormYamlConfig = stormConfig["storm.yaml"]
-  if any([(myIpAddress in stormYamlConfig["storm.zookeeper.servers"])
-      for myIpAddress in ipv4Addresses]):
+  zk_server_ips = [
+    stormConfig["servers"][zk_server] for zk_server in
+      stormYamlConfig["storm.zookeeper.servers"]
+  ]
+  if any([(myIpAddress in zk_server_ips) for myIpAddress in ipv4Addresses]):
     zookeeperLink = "--link zookeeper:zk"
 
   nimbusLink = ""

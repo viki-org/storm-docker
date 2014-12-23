@@ -202,10 +202,12 @@ containers:
 ## Deploying from your own machine
 
 NOTE: This is currently a WIP and is NOT stable. Expect more changes soon.
-Currently it only works for running Zookeeper containers on the remote(s).
 
     . venv/bin/activate
+    # Run zookeeper images
     python docker_python_helpers/remote.py --zk
+    # Run Storm supervisor images
+    python docker_python_helpers/remote.py --supervisor
 
 ## Motivation
 

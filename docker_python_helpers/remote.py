@@ -14,6 +14,9 @@ parser = argparse.ArgumentParser(
 parser.add_argument("--zk", "--zookeeper", action="store_true",
   dest="zookeeper", help="Run Zookeeper Docker images"
 )
+parser.add_argument("--supervisor", action="store_true",
+  dest="supervisor", help="Run Storm supervisor Docker images"
+)
 
 # Use settings in SSH config file
 env.use_ssh_config = True
@@ -29,6 +32,11 @@ def _main():
   if args.zookeeper:
     zk_server_list = d["storm.yaml"]["storm.zookeeper.servers"]
     execute(_run_docker_component, "zookeeper", hosts=zk_server_list)
+  if args.supervisor:
+    execute(
+      _run_docker_component, "supervisor",
+      hosts=d["storm.supervisor.hosts"]
+    )
 
 @task
 def _run_docker_component(component):

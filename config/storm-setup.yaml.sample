@@ -31,6 +31,8 @@ servers:
   "server-one": "10.124.17.82"
   "server-two": "10.124.17.83"
   "server-three": "10.124.17.84"
+  "server-four": "10.124.17.85"
+  "server-five": "10.124.17.86"
 
 # Set this to `True` if there is at least 1 Amazon EC2 instance in your Storm
 # cluster - a future patch may allow for more fine-grained toggling of this
@@ -63,38 +65,12 @@ servers:
 # Storm cluster are Amazon EC2 instances inside the same security group.
 all_machines_are_ec2_instances: False
 
-# Hosts running the `storm-supervisor` Docker container.
-#
-# You will need to add an entry for each `storm-supervisor` Docker container
-# that will be run in your Storm cluster.
-#
-# Each entry should have the following keys:
-#
-# - `ip`: An IP address for the machine running the `storm-supervisor` Docker
-#         container.
-#         NOTE: This IP address must be accessible by ALL storm components.
-#
-# - `aliases`: A list of aliases that can be used to identify the machine
-#              running the `storm-supervisor` Docker container.
-#
-#              This is needed for the Storm Supervisor nodes to identify one
-#              another; supplying one unique identifier for each entry will do
-#              the trick.
-#
-#              The 0th alias of an entry will be used as the hostname for that
-#              storm-supervisor Docker container.
+# Hosts running the `storm-supervisor` Docker container. Each host must be
+# present in the `servers` dictionary.
 storm.supervisor.hosts:
-  -
-    ip: "10.0.52.1"
-    aliases:
-      - "machine-B-storm-supervisor"
-      - "mB-storm-supervisor"
-      - "storm-supervisor-B"
-  -
-    ip: "172.92.1.156"
-    aliases:
-      - "machine-C-storm-supervisor"
-      - "balut-fever"
+  - "server-one"
+  - "server-four"
+  - "server-five"
 
 # Port configuration for a multiple server Zookeeper setup.
 # The ports here are used to construct the `server.X` entries for the Zookeeper
