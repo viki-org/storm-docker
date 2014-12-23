@@ -23,6 +23,9 @@ parser.add_argument("--nimbus", action="store_true",
 parser.add_argument("--ui", action="store_true",
   dest="ui", help="Run Storm UI Docker image"
 )
+parser.add_argument("--all", action="store_true", dest="all",
+  help="Run all available Docker images"
+)
 
 # Use settings in SSH config file
 env.use_ssh_config = True
@@ -35,6 +38,8 @@ def _main():
   with open(yaml_file_path, "r") as f:
     d = yaml.load(f.read())
   args = parser.parse_args()
+  if args.all:
+    args.zookeeper = args.nimbus = args.ui = args.supervisor = True
   if args.zookeeper:
     zk_server_list = d["storm.yaml"]["storm.zookeeper.servers"]
     execute(_run_docker_component, "zookeeper", hosts=zk_server_list)
