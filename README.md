@@ -203,7 +203,21 @@ containers:
 
 NOTE: This is currently a WIP and is NOT stable. Expect more changes soon.
 
+You might want to verify that all servers used in various sections of the
+`config/storm-setup.yaml` file are listed under the `servers` dictionary
+(located in the same file) by running the `scripts/verify_storm_setup_yaml.py`
+script:
+
     . venv/bin/activate
+    python scripts/verify_storm_setup_yaml.py
+
+Warnings will be printed to stderr should some servers be missing from the
+`servers` dictionary.
+
+How to automatically launch the various docker images from your own machine
+
+    . venv/bin/activate
+
     # Run zookeeper images
     python docker_python_helpers/remote.py --zk
 
