@@ -28,14 +28,14 @@ def _main():
   args = parser.parse_args()
   if args.zookeeper:
     zk_server_list = d["storm.yaml"]["storm.zookeeper.servers"]
-    execute(_run_zookeeper_docker, hosts=zk_server_list)
+    execute(_run_docker_component, "zookeeper", hosts=zk_server_list)
 
 @task
-def _run_zookeeper_docker():
+def _run_docker_component(component):
   with cd("$HOME"):
     with cd("storm-docker"):
-      run("./destroy-storm.sh zookeeper")
-      run("./start-storm.sh zookeeper")
+      run("./destroy-storm.sh {}".format(component))
+      run("./start-storm.sh {}".format(component))
 
 if __name__ == "__main__":
   _main()
