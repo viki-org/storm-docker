@@ -42,7 +42,7 @@ def _main():
 def _run_docker_component(component):
   with cd("$HOME"):
     with cd("storm-docker"):
-      run("./destroy-storm.sh {}".format(component))
+      run("./destroy-storm.sh {}".format(component), warn_only=True)
       run("./start-storm.sh {}".format(component))
 
 if __name__ == "__main__":
