@@ -258,11 +258,14 @@ def construct_docker_run_port_args(stormComponentList):
         portExposeArgs.append("--expose {}".format(portNum))
   return portForwardArgs + portExposeArgs
 
-# When run as a main program
-if __name__ == "__main__":
-  # This script is used like `python -m docker_python_helpers <ARGS>`, hence
-  # the need for subscripting sys.argv from 2
-  parsedArgs, remArgList = parser.parse_known_args(args=sys.argv[2:])
+def main(args=None):
+  if args is None:
+    # No args provided, so this script is run as a main program.
+    # This script is used like `python -m docker_python_helpers <ARGS>`, hence
+    # the need for subscripting sys.argv from 2
+    args = sys.argv[2:]
+
+  parsedArgs, remArgList = parser.parse_known_args(args)
 
   # Construct port forwarding command line args. These port forwarding args are
   # added here to allow users to choose the Docker and host ports to use in the
@@ -281,3 +284,7 @@ if __name__ == "__main__":
   print(dockerRunCmd)
   # execute `docker run` with the generated args
   os.system(dockerRunCmd)
+
+# When run as a main program
+if __name__ == "__main__":
+  main()

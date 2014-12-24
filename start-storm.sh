@@ -34,6 +34,48 @@ function start_storm_docker {
         --storm-docker-component drpc
     fi
     ;;
+  nimbus-with-zookeeper-ambassador)
+    # Implemented for https://github.com/viki-org/storm-docker/issues/5
+    # which lets the user run the Nimbus docker container on a separate physical
+    # machine from any of the machine(s) running a Zookeeper docker container.
+
+    # This server will run a Zookeeper along with an ambassador.
+    # We add a `--dont-expose-ports` argument to get the
+    # `docker_python_helpers/run-zookeeper.py` script to generate a `docker run`
+    # command without `-p` flags that expose the ports on the host machine.
+    if is_docker_container_running "viki_data/storm-nimbus" && \
+        is_docker_container_running "zk_ambassador"
+    then
+      echo "storm nimbus Docker container already running"
+      echo "zookeeper ambassador Docker container already running"
+    elif is_docker_container_running "viki_data/storm-nimbus"
+    then
+      echo "storm nimbus Docker container already running"
+      SKIP_PIP_INSTALL=$SKIP_PIP_INSTALL scripts/run-storm-nimbus.sh \
+        --name zk_ambassador -h zk_ambassador -d svendowideit/ambassador
+    elif is_docker_container_running "zk_ambassador"
+    then
+      echo "zookeeper ambassador Docker container already running"
+      SKIP_PIP_INSTALL=$SKIP_PIP_INSTALL scripts/run-storm-nimbus.sh \
+        --nimbus-args-after-this \
+        --name nimbus \
+        --link zk_ambassador:zk \
+        -h nimbus \
+        -d viki_data/storm-nimbus \
+        --storm-docker-component nimbus \
+        --storm-docker-component drpc
+    else
+      SKIP_PIP_INSTALL=$SKIP_PIP_INSTALL scripts/run-storm-nimbus.sh \
+        --name zk_ambassador -h zk_ambassador -d svendowideit/ambassador \
+        --nimbus-args-after-this \
+        --name nimbus \
+        --link zk_ambassador:zk \
+        -h nimbus \
+        -d viki_data/storm-nimbus \
+        --storm-docker-component nimbus \
+        --storm-docker-component drpc
+    fi
+    ;;
   supervisor)
     if is_docker_container_running "viki_data/storm-supervisor"
     then
@@ -58,6 +100,18 @@ function start_storm_docker {
         --storm-docker-component ui
     fi
     ;;
+  ui-on-zk-ambassador-machine)
+    if is_docker_container_running "viki_data/storm-ui"
+    then
+      echo "storm ui Docker container already running"
+    else
+      SKIP_PIP_INSTALL=$SKIP_PIP_INSTALL scripts/run-storm-docker-component.sh \
+        --name ui \
+        --link nimbus:nimbus --link zk_ambassador:zk \
+        -d viki_data/storm-ui \
+        --storm-docker-component ui
+    fi
+    ;;
   zookeeper)
     if is_docker_container_running "viki_data/zookeeper"
     then
@@ -67,6 +121,39 @@ function start_storm_docker {
         -p 127.0.0.1:49122:22 \
         -h zookeeper --name zookeeper \
         -d viki_data/zookeeper
+    fi
+    ;;
+  zookeeper-with-ambassador)
+    # This server will run a Zookeeper along with an ambassador.
+    # We add a `--dont-expose-ports` argument to get the
+    # `docker_python_helpers/run-zookeeper.py` script to generate a `docker run`
+    # command without `-p` flags that expose the ports on the host machine.
+    if is_docker_container_running "viki_data/zookeeper" && \
+        is_docker_container_running "zk_ambassador"
+    then
+      echo "zookeeper Docker container already running"
+      echo "zookeeper ambassador Docker container already running"
+    elif is_docker_container_running "viki_data/zookeeper"
+    then
+      SKIP_PIP_INSTALL=$SKIP_PIP_INSTALL scripts/run-zookeeper.sh \
+        --no-zookeeper \
+        -- \
+        --link zookeeper:zk --name zk_ambassador -d svendowideit/ambassador
+    elif is_docker_container_running "zk_ambassador"
+    then
+      SKIP_PIP_INSTALL=$SKIP_PIP_INSTALL scripts/run-zookeeper.sh \
+        -p 127.0.0.1:49122:22 \
+        -h zookeeper --name zookeeper \
+        -d viki_data/zookeeper \
+        --no-dash-p
+    else
+      SKIP_PIP_INSTALL=$SKIP_PIP_INSTALL scripts/run-zookeeper.sh \
+        -p 127.0.0.1:49122:22 \
+        -h zookeeper --name zookeeper \
+        -d viki_data/zookeeper \
+        --no-dash-p \
+        -- \
+        --link zookeeper:zk --name zk_ambassador -d svendowideit/ambassador
     fi
     ;;
   *)

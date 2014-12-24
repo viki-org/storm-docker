@@ -19,10 +19,26 @@ then
   stop_storm_docker ui
   stop_storm_docker supervisor
   stop_storm_docker nimbus
+  stop_storm_docker zk_ambassador
   stop_storm_docker zookeeper
 else
   for component in "$@"
   do
-    stop_storm_docker $component
+    case $component in
+      zookeeper-with-ambassador)
+        stop_storm_docker zk_ambassador
+        stop_storm_docker zookeeper
+        ;;
+      nimbus-with-zookeeper-ambassador)
+        stop_storm_docker nimbus
+        stop_storm_docker zk_ambassador
+        ;;
+      ui-on-zk-ambassador-machine)
+        stop_storm_docker ui
+        ;;
+      *)
+        stop_storm_docker $component
+        ;;
+    esac
   done
 fi
