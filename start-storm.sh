@@ -9,14 +9,6 @@ function is_docker_container_running {
   docker ps | tail -n+2 | awk '{print $2}' | grep --quiet $1
 }
 
-# Skip `pip install` step for scripts in the `scripts` folder if the
-# `SKIP_PIP_INSTALL` file is present.
-SKIP_PIP_INSTALL="false"
-if [[ -f SKIP_PIP_INSTALL ]]
-then
-  SKIP_PIP_INSTALL="true"
-fi
-
 # Starts a given storm-docker Docker container
 function start_storm_docker {
   case $1 in
@@ -25,7 +17,7 @@ function start_storm_docker {
     then
       echo "storm nimbus Docker container already running"
     else
-      SKIP_PIP_INSTALL=$SKIP_PIP_INSTALL scripts/run-storm-docker-component.sh \
+      scripts/run-storm-docker-component.sh \
         --name nimbus \
         --link zookeeper:zk \
         -h nimbus \
@@ -51,12 +43,12 @@ function start_storm_docker {
     elif is_docker_container_running "viki_data/storm-nimbus"
     then
       echo "storm nimbus Docker container already running"
-      SKIP_PIP_INSTALL=$SKIP_PIP_INSTALL scripts/run-storm-nimbus.sh \
+      scripts/run-storm-nimbus.sh \
         --name zk_ambassador -h zk_ambassador -d svendowideit/ambassador
     elif is_docker_container_running "zk_ambassador"
     then
       echo "zookeeper ambassador Docker container already running"
-      SKIP_PIP_INSTALL=$SKIP_PIP_INSTALL scripts/run-storm-nimbus.sh \
+      scripts/run-storm-nimbus.sh \
         --nimbus-args-after-this \
         --name nimbus \
         --link zk_ambassador:zk \
@@ -65,7 +57,7 @@ function start_storm_docker {
         --storm-docker-component nimbus \
         --storm-docker-component drpc
     else
-      SKIP_PIP_INSTALL=$SKIP_PIP_INSTALL scripts/run-storm-nimbus.sh \
+      scripts/run-storm-nimbus.sh \
         --name zk_ambassador -h zk_ambassador -d svendowideit/ambassador \
         --nimbus-args-after-this \
         --name nimbus \
@@ -81,7 +73,7 @@ function start_storm_docker {
     then
       echo "storm supervisor Docker container already running"
     else
-      SKIP_PIP_INSTALL=$SKIP_PIP_INSTALL scripts/run-storm-supervisor.sh \
+      scripts/run-storm-supervisor.sh \
         --dns 127.0.0.1 --dns 8.8.8.8 --dns 8.8.4.4 \
         -p 127.0.0.1:49022:22 \
         --name supervisor \
@@ -93,7 +85,7 @@ function start_storm_docker {
     then
       echo "storm ui Docker container already running"
     else
-      SKIP_PIP_INSTALL=$SKIP_PIP_INSTALL scripts/run-storm-docker-component.sh \
+      scripts/run-storm-docker-component.sh \
         --name ui \
         --link nimbus:nimbus --link zookeeper:zk \
         -d viki_data/storm-ui \
@@ -105,7 +97,7 @@ function start_storm_docker {
     then
       echo "storm ui Docker container already running"
     else
-      SKIP_PIP_INSTALL=$SKIP_PIP_INSTALL scripts/run-storm-docker-component.sh \
+      scripts/run-storm-docker-component.sh \
         --name ui \
         --link nimbus:nimbus --link zk_ambassador:zk \
         -d viki_data/storm-ui \
@@ -117,7 +109,7 @@ function start_storm_docker {
     then
       echo "zookeeper Docker container already running"
     else
-      SKIP_PIP_INSTALL=$SKIP_PIP_INSTALL scripts/run-zookeeper.sh \
+      scripts/run-zookeeper.sh \
         -p 127.0.0.1:49122:22 \
         -h zookeeper --name zookeeper \
         -d viki_data/zookeeper
@@ -135,19 +127,19 @@ function start_storm_docker {
       echo "zookeeper ambassador Docker container already running"
     elif is_docker_container_running "viki_data/zookeeper"
     then
-      SKIP_PIP_INSTALL=$SKIP_PIP_INSTALL scripts/run-zookeeper.sh \
+      scripts/run-zookeeper.sh \
         --no-zookeeper \
         -- \
         --link zookeeper:zk --name zk_ambassador -d svendowideit/ambassador
     elif is_docker_container_running "zk_ambassador"
     then
-      SKIP_PIP_INSTALL=$SKIP_PIP_INSTALL scripts/run-zookeeper.sh \
+      scripts/run-zookeeper.sh \
         -p 127.0.0.1:49122:22 \
         -h zookeeper --name zookeeper \
         -d viki_data/zookeeper \
         --no-dash-p
     else
-      SKIP_PIP_INSTALL=$SKIP_PIP_INSTALL scripts/run-zookeeper.sh \
+      scripts/run-zookeeper.sh \
         -p 127.0.0.1:49122:22 \
         -h zookeeper --name zookeeper \
         -d viki_data/zookeeper \
