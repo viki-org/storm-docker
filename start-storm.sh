@@ -168,13 +168,26 @@ then
   echo "Runs a Docker container built by this repository."
   echo "You can supply one or more of the following args:"
   echo ""
-  echo "    nimbus     - Runs the nimbus container (components:" \
-    "Storm Nimbus, Storm DRPC)"
-  echo "    supervisor - Runs the supervisor container (components:" \
-    "Storm Supervisor, Storm Logviewer)"
-  echo "    ui         - Runs the ui container (components: Storm UI)"
-  echo "    zookeeper  - Runs the zookeeper container (components: Zookeeper)"
-  echo "    all        - Runs all the above"
+  echo -e "    nimbus                              - Runs the nimbus" \
+    "container. This is for a machine which already has a running Zookeeper" \
+    "container. (components: Storm Nimbus, Storm DRPC)\n"
+  echo -e "    nimbus-with-zookeeper-ambassador    - Runs the nimbus" \
+    "container AND a Zookeeper ambassador container. This is for a machine" \
+    "which does NOT have a running Zookeeper container.\n"
+  echo -e "    supervisor                          - Runs the supervisor" \
+    "container (components: Storm Supervisor, Storm Logviewer)\n"
+  echo -e "    ui                                  - Runs the ui container." \
+    "This option should be used on the same machine where the 'nimbus'" \
+    "argument was used. (components: Storm UI)\n"
+  echo -e "    ui-on-zk-ambassador-machine         - Runs the ui container." \
+    "This option should be used on the same machine where the" \
+    "'nimbus-with-zookeeper-ambassador' argument was used.\n"
+  echo -e "    zookeeper                           - Runs the zookeeper" \
+    "container (components: Zookeeper)\n"
+  echo -e "    zookeeper-with-ambassador           - Runs a Zookeeper" \
+    "container and an ambassador container for Zookeeper\n"
+  echo -e "    all                                 - Similar to running the" \
+    "zookeeper, nimbus, ui and supervisor commands separately (in order)"
   echo ""
   echo "For example, to run the zookeeper and ui containers, run:"
   echo ""

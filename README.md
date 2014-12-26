@@ -160,21 +160,28 @@ take some time to complete.
 
 ### Run the Docker containers
 
-**NOTE:** You should only start the required components based on the "role"
-you assigned to each server.
-For a multiple-server Storm setup, you will very likely not run the
-same components on all machines.
+Before actually running the various Docker containers, you might want to verify
+that all servers used in various sections of the `config/storm-setup.yaml` file
+are listed under the `servers` dictionary (located in the same file) by running
+the `scripts/verify_storm_setup_yaml.py` script:
 
-To run all Docker containers for this repository on your current machine
-(this is the command to run for a 1 machine setup):
+    . venv/bin/activate
+    python scripts/verify_storm_setup_yaml.py
 
-    ./start-storm.sh all
+Warnings will be printed to stderr should some servers be missing from the
+`servers` dictionary.
 
-You should not see any errors if configuration is done correctly.
+As at 26 December 2014, it is highly recommended to run the
+`docker_python_helpers/remote.py` file to automatically spin up the various
+Docker containers on your Storm cluster (instead of manually running the
+`start-storm.sh` script on each server), like this:
 
-For more information on running individual containers, run:
+    . venv/bin/activate
+    python docker_python_helpers/remote.py --all
 
-    ./start-storm.sh --help
+[Fabric](http://fabfile.org) is used to run the `start-storm.sh` script on the
+various servers and spin up the correct Docker containers, depending on your
+configuration in the `config/storm-setup.yaml` file.
 
 #### Skipping `pip install` step for startup scripts
 
@@ -198,37 +205,6 @@ To stop individual containers, supply them as arguments to the
 containers:
 
     ./destroy-storm.sh ui zookeeper
-
-## Deploying from your own machine
-
-NOTE: This is currently a WIP and is NOT stable. Expect more changes soon.
-
-You might want to verify that all servers used in various sections of the
-`config/storm-setup.yaml` file are listed under the `servers` dictionary
-(located in the same file) by running the `scripts/verify_storm_setup_yaml.py`
-script:
-
-    . venv/bin/activate
-    python scripts/verify_storm_setup_yaml.py
-
-Warnings will be printed to stderr should some servers be missing from the
-`servers` dictionary.
-
-How to automatically launch the various docker images from your own machine
-
-    . venv/bin/activate
-
-    # Run zookeeper images
-    python docker_python_helpers/remote.py --zk
-
-    # Run Storm Nimbus image
-    python docker_python_helpers/remote.py --nimbus
-
-    # Run Storm UI image
-    python docker_python_helpers/remote.py --ui
-
-    # Run Storm supervisor images
-    python docker_python_helpers/remote.py --supervisor
 
 ## Motivation
 
