@@ -6,6 +6,7 @@
 import os
 import os.path
 import re
+import subprocess
 import sys
 import yaml
 
@@ -49,6 +50,18 @@ if __name__ == "__main__":
   ]
   if any([(myIpAddress in zk_server_ips) for myIpAddress in ipv4Addresses]):
     zookeeperLink = "--link zookeeper:zk"
+  else:
+    # check if zookeeper ambassador runs here.
+    # We use a `docker ps | grep zk_ambassador`. Very crude but it should work.
+    check_zk_amb_proc = subprocess.Popen(
+      ["docker", "ps"], stdout=subprocess.PIPE
+    )
+    proc_output = subprocess.check_output(
+      ["grep", "zk_ambassador"], stdin=check_zk_amb_proc.stdout
+    )
+    check_zk_amb_proc.wait()
+    if len(proc_output) > 0:
+      zookeeperLink = "--link zk_ambassador:zk"
 
   nimbusLink = ""
   nimbus_ip_address = stormConfig["servers"][stormYamlConfig["nimbus.host"]]
