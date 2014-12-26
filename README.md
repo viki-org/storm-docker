@@ -171,13 +171,13 @@ the `scripts/verify_storm_setup_yaml.py` script:
 Warnings will be printed to stderr should some servers be missing from the
 `servers` dictionary.
 
-As at 26 December 2014, it is highly recommended to run the
-`docker_python_helpers/remote.py` file to automatically spin up the various
-Docker containers on your Storm cluster (instead of manually running the
-`start-storm.sh` script on each server), like this:
+As at 26 December 2014, it is highly recommended to run the `scripts/remote.py`
+file to automatically spin up the various Docker containers on your Storm
+cluster (instead of manually running the `start-storm.sh` script on each
+server), like this:
 
     . venv/bin/activate
-    python docker_python_helpers/remote.py --all
+    python scripts/remote.py --all
 
 [Fabric](http://fabfile.org) is used to run the `start-storm.sh` script on the
 various servers and spin up the correct Docker containers, depending on your
