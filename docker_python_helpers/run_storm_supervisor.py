@@ -56,9 +56,13 @@ if __name__ == "__main__":
     check_zk_amb_proc = subprocess.Popen(
       ["docker", "ps"], stdout=subprocess.PIPE
     )
-    proc_output = subprocess.check_output(
-      ["grep", "zk_ambassador"], stdin=check_zk_amb_proc.stdout
-    )
+    proc_output = b""
+    try:
+      proc_output = subprocess.check_output(
+        ["grep", "zk_ambassador"], stdin=check_zk_amb_proc.stdout
+      )
+    except subprocess.CalledProcessError:
+      pass
     check_zk_amb_proc.wait()
     if len(proc_output) > 0:
       zookeeperLink = "--link zk_ambassador:zk"
