@@ -62,11 +62,11 @@ def _main():
     need_ambassador = not _zk_and_nimbus_on_same_host(d)
 
   if args.zookeeper:
+    zk_server_list = d["storm.yaml"]["storm.zookeeper.servers"]
     if need_ambassador:
       # Launch ambassador along with zookeeper on the first zookeeper server
       # listed in `storm.yaml -> storm.zookeeper.servers` if the user wants to
       # run the Nimbus docker on a machine that is not running a Zookeeper server.
-      zk_server_list = d["storm.yaml"]["storm.zookeeper.servers"]
       execute(
         _run_docker_component, "zookeeper-with-ambassador",
         hosts=zk_server_list[:1]
